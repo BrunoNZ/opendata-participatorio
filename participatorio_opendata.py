@@ -22,9 +22,10 @@
 # USA.
 
 import MySQLdb
+from datetime import date
 
-from users_section_lib import write_users_section 
-from groups_section_lib import write_groups_section 
+from lib_user_section import write_users_section 
+from lib_group_section import write_groups_section 
 
 def main():
     
@@ -34,8 +35,12 @@ def main():
                         db='elgg', \
                         charset='utf8')
     
-    write_users_section(db,'secao_users.xml')
-    write_groups_section(db,'secao_groups.xml')
+    dir_results="/root/workdir_bnz07/xml_files/"
+    user_xml_file=dir_results+"usuarios_"+str(date.today())+".xml"
+    group_xml_file=dir_results+"comunidades_"+str(date.today())+".xml"
+    
+    write_users_section(db,user_xml_file)
+    write_groups_section(db,group_xml_file)
     
     db.close()   
     
