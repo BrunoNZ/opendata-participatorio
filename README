@@ -1,0 +1,8 @@
+This script processes the database of http://participatorio.juventude.gov.br/ website to filter public informations and write it on XML files that will be available for download.
+
+On Group's XML file is written the information about all the groups, for example: title, description, members and posts.
+
+On User's XML file is written the information about all the users, for example:
+name, friends and posts.
+
+The structures of these XML files are described on the files: user_xml_structure.xml and group_xml_structure.xml.
