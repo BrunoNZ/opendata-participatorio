@@ -184,10 +184,11 @@ def write_comments (db, xml, post_guid):
     for (user_id, user_name, string, time) in post_comments:
         
         xml.write(l5+"<comentario>\n")
-        xml.write(l6+"<usuario"+uidstr(user_id)+">"+\
-            user_name+"</usuario>\n")
-        xml.write(l6+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l6+"<mensagem>"+cdata(string)+"</mensagem>\n")
+        
+        write_tag(xml,l6,"usuario",user_name,uidstr(user_id))
+        write_tag(xml,l6,"data",datestr(time),'')
+        write_tag(xml,l6,"mensagem",cdata(string),'')
+        
         xml.write(l5+"</comentario>\n")
         
     xml.write(l4+"</comentarios>\n")
@@ -202,9 +203,7 @@ def write_userfriends_subsection (db, xml, user_guid):
     
     xml.write(l2+"<amigos>\n")
     for (friend_id, friend_name) in friends_info:
-        xml.write(l3+"<usuario"+uidstr(friend_id)+">"+\
-            friend_name+"</usuario>\n")
-    
+        write_tag(xml,l3,"usuario",friend_name,uidstr(friend_id))
     xml.write(l2+"</amigos>\n")
         
     friends_info.close()
@@ -217,8 +216,7 @@ def write_userowngroup_subsection (db, xml, user_guid):
         
     xml.write(l3+"<dono>\n")
     for (group_id, group_title) in user_owngroups:
-        xml.write(l4+"<comunidade"+cidstr(group_id)+">"+\
-            group_title+"</comunidade>\n")
+        write_tag(xml,l4,"comunidade",group_title,cidstr(group_id))
     xml.write(l3+"</dono>\n")
         
     user_owngroups.close()
@@ -231,8 +229,7 @@ def write_usermembergroup_subsection (db, xml, user_guid):
         
     xml.write(l3+"<membro>\n")
     for (group_id, group_title) in user_membergroups:
-        xml.write(l4+"<comunidade"+cidstr(group_id)+">"+\
-            group_title+"</comunidade>\n")
+        write_tag(xml,l4,"comunidade",group_title,cidstr(group_id))
     xml.write(l3+"</membro>\n")
         
     user_membergroups.close()
@@ -263,10 +260,10 @@ def write_userfiles_subsection (db, xml, user_guid):
         
         xml.write(l3+"<arquivo>\n")
         
-        xml.write(l4+"<titulo>"+post_title+"</titulo>\n")
-        xml.write(l4+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l4+"<link>"+file_link+"</link>\n")
-        xml.write(l4+"<descricao>"+cdata(post_desc)+"</descricao>\n")
+        write_tag(xml,l4,"titulo",post_title,'')
+        write_tag(xml,l4,"data",datestr(time),'')
+        write_tag(xml,l4,"link",file_link,'')
+        write_tag(xml,l4,"descricao",cdata(post_desc),'')
             
         write_comments(db,xml,post_guid)
         
@@ -295,10 +292,10 @@ def write_userblogs_subsection (db, xml, user_guid):
             
         xml.write(l3+"<blog>\n")
 
-        xml.write(l4+"<titulo>"+post_title+"</titulo>\n")
-        xml.write(l4+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l4+"<resumo>"+cdata(post_excerpt)+"</resumo>\n")
-        xml.write(l4+"<texto>"+cdata(post_desc)+"</texto>\n")
+        write_tag(xml,l4,"titulo",post_title,'')
+        write_tag(xml,l4,"data",datestr(time),'')
+        write_tag(xml,l4,"resumo",cdata(post_excerpt),'')
+        write_tag(xml,l4,"texto",cdata(post_desc),'')
                     
         write_comments(db,xml,post_guid)
         
@@ -326,10 +323,10 @@ def write_userbookmarks_subsection (db, xml, user_guid):
   
         xml.write(l3+"<favorito>\n")
 
-        xml.write(l4+"<titulo>"+post_title+"</titulo>\n")
-        xml.write(l4+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l4+"<link>"+bookmark_link+"</link>\n")
-        xml.write(l4+"<descricao>"+cdata(post_desc)+"</descricao>\n")
+        write_tag(xml,l4,"titulo",post_title,'')
+        write_tag(xml,l4,"data",datestr(time),'')
+        write_tag(xml,l4,"link",bookmark_link,'')
+        write_tag(xml,l4,"descricao",cdata(post_desc),'')
                     
         write_comments(db,xml,post_guid)
         
@@ -354,9 +351,9 @@ def write_userpages_subsection (db, xml, user_guid):
                         
         xml.write(l3+"<pagina>\n")
 
-        xml.write(l4+"<titulo>"+post_title+"</titulo>\n")
-        xml.write(l4+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l4+"<texto>"+cdata(post_desc)+"</texto>\n")
+        write_tag(xml,l4,"titulo",post_title,'')
+        write_tag(xml,l4,"data",datestr(time),'')
+        write_tag(xml,l4,"texto",cdata(post_desc),'')
                     
         write_comments(db,xml,post_guid)
         
@@ -384,10 +381,10 @@ def write_uservideos_subsection (db, xml, user_guid):
              
         xml.write(l3+"<video>\n")
         
-        xml.write(l4+"<titulo>"+post_title+"</titulo>\n")
-        xml.write(l4+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l4+"<link>"+video_link+"</link>\n")
-        xml.write(l4+"<descricao>"+cdata(post_desc)+"</descricao>\n")
+        write_tag(xml,l4,"titulo",post_title,'')
+        write_tag(xml,l4,"data",datestr(time),'')
+        write_tag(xml,l4,"link",video_link,'')
+        write_tag(xml,l4,"descricao",cdata(post_desc),'')
         
         write_comments(db,xml,post_guid)
         
@@ -430,19 +427,19 @@ def write_userevents_subsection (db, xml, user_guid):
         
         xml.write(l3+"<evento>\n")
         
-        xml.write(l4+"<titulo>"+post_title+"</titulo>\n")
-        xml.write(l4+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l4+"<organizador>"+organizer+"</organizador>\n")
-        xml.write(l4+"<contato>"+contact+"</contato>\n")
-        xml.write(l4+"<endereco>"+venue+"</endereco>\n")
-        xml.write(l4+"<data_inicio>"+datestr(time_start)+"</data_inicio>\n")
-        xml.write(l4+"<data_fim>"+datestr(time_end)+"</data_fim>\n")
-        xml.write(l4+"<taxa_participacao>"+fees+"</taxa_participacao>\n")
-        xml.write(l4+"<descricao>"+cdata(post_desc)+"</descricao>\n")
-        
-        xml.write(l3+"</evento>\n")
+        write_tag(xml,l4,"titulo",post_title,'')
+        write_tag(xml,l4,"data",datestr(time),'')
+        write_tag(xml,l4,"organizador",organizer,'')
+        write_tag(xml,l4,"contato",contact,'')
+        write_tag(xml,l4,"endereco",venue,'')
+        write_tag(xml,l4,"data_inicio",datestr(time_start),'')
+        write_tag(xml,l4,"data_fim",datestr(time_end),'')
+        write_tag(xml,l4,"taxa_participacao",fees,'')
+        write_tag(xml,l4,"descricao",cdata(post_desc),'')
         
         write_comments(db,xml,post_guid)
+        
+        xml.write(l3+"</evento>\n")
     
     xml.write(l2+"</eventos>\n")
     
@@ -466,7 +463,7 @@ def write_users_section (db, xml_file):
         xml.write(l1+"<usuario"+uidstr(guid)+">\n")
         
         # Write all user's information
-        xml.write(l2+"<nome>"+name+"</nome>\n")
+        write_tag(xml,l2,"nome",name,'')
             
         # Write a list of user friend's names
         write_userfriends_subsection(db, xml, guid)

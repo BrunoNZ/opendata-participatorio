@@ -217,6 +217,13 @@ def groupaccess_permission (db, group_guid):
 # Functions that write on XML file
 
 #--------------------------------------------------------------------#
+def write_tag (xml, level, tag_name, info_str, attr_str):
+    tag_begin=("<"+tag_name+attr_str+">")
+    tag_end=("</"+tag_name+">")
+    xml.write(level+tag_begin+info_str+tag_end+"\n")
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
 def write_comments (db, xml, post_guid):
     post_comments = db.cursor()
     post_comments.execute(qry_post_comments, (post_guid,))
@@ -225,9 +232,11 @@ def write_comments (db, xml, post_guid):
     for (user_id, user_name, string, time) in post_comments:
         
         xml.write(l5+"<comentario>\n")
-        xml.write(l6+"<usuario"+uidstr(user_id)+">"+user_name+"</usuario>\n")
-        xml.write(l6+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l6+"<mensagem>"+cdata(string)+"</mensagem>\n")
+        
+        write_tag(xml,l6,"usuario",user_name,uidstr(user_id))
+        write_tag(xml,l6,"data",datestr(time),'')
+        write_tag(xml,l6,"mensagem",cdata(string),'')
+        
         xml.write(l5+"</comentario>\n")
         
     xml.write(l4+"</comentarios>\n")
@@ -240,12 +249,11 @@ def write_groupmembers_subsection (db, xml, group_guid):
     group_members = db.cursor()
     group_members.execute(qry_group_members, (group_guid,))
     
-    xml.write(l2+"<quantidade_membros>"+str(group_members.rowcount)+\
-                                        "</quantidade_membros>\n")
+    write_tag(xml,l2,"quantidade_membros",str(group_members.rowcount),'')
                     
     xml.write(l2+"<membros>\n")
     for (user_id, user_name) in group_members:
-        xml.write(l3+"<usuario"+uidstr(user_id)+">"+user_name+"</usuario>\n")
+        write_tag(xml,l3,"usuario",user_name,uidstr(user_id))
     xml.write(l2+"</membros>\n")
     
     group_members.close()
@@ -271,11 +279,11 @@ def write_groupfiles_subsection (db, xml, group_guid):
         
         xml.write(l3+"<arquivo>\n")
 
-        xml.write(l4+"<autor"+uidstr(owner_id)+">"+owner_name+"</autor>\n")
-        xml.write(l4+"<titulo>"+post_title+"</titulo>\n")
-        xml.write(l4+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l4+"<link>"+file_link+"</link>\n")
-        xml.write(l4+"<descricao>"+cdata(post_desc)+"</descricao>\n")
+        write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
+        write_tag(xml,l4,"titulo",post_title,'')
+        write_tag(xml,l4,"data",datestr(time),'')
+        write_tag(xml,l4,"link",file_link,'')
+        write_tag(xml,l4,"descricao",cdata(post_desc),'')
                     
         write_comments(db,xml,post_guid)
         
@@ -303,10 +311,10 @@ def write_groupforumtopics_subsection (db, xml, group_guid):
             
         xml.write(l3+"<debate>\n")
 
-        xml.write(l4+"<autor"+uidstr(owner_id)+">"+owner_name+"</autor>\n")
-        xml.write(l4+"<titulo>"+post_title+"</titulo>\n")
-        xml.write(l4+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l4+"<texto>"+cdata(post_desc)+"</texto>\n")
+        write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
+        write_tag(xml,l4,"titulo",post_title,'')
+        write_tag(xml,l4,"data",datestr(time),'')
+        write_tag(xml,l4,"texto",cdata(post_desc),'')
             
         write_comments(db,xml,post_guid)
         
@@ -337,11 +345,11 @@ def write_groupbookmarks_subsection (db, xml, group_guid):
         
         xml.write(l3+"<favorito>\n")
 
-        xml.write(l4+"<autor"+uidstr(owner_id)+">"+owner_name+"</autor>\n")
-        xml.write(l4+"<titulo>"+post_title+"</titulo>\n")
-        xml.write(l4+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l4+"<link>"+bookmark_link+"</link>\n")
-        xml.write(l4+"<descricao>"+cdata(post_desc)+"</descricao>\n")
+        write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
+        write_tag(xml,l4,"titulo",post_title,'')
+        write_tag(xml,l4,"data",datestr(time),'')
+        write_tag(xml,l4,"link",bookmark_link,'')
+        write_tag(xml,l4,"descricao",cdata(post_desc),'')
                             
         write_comments(db,xml,post_guid)
         
@@ -369,10 +377,10 @@ def write_grouppages_subsection (db, xml, group_guid):
             
         xml.write(l3+"<pagina>\n")
 
-        xml.write(l4+"<autor"+uidstr(owner_id)+">"+owner_name+"</autor>\n")
-        xml.write(l4+"<titulo>"+post_title+"</titulo>\n")
-        xml.write(l4+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l4+"<texto>"+cdata(post_desc)+"</texto>\n")
+        write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
+        write_tag(xml,l4,"titulo",post_title,'')
+        write_tag(xml,l4,"data",datestr(time),'')
+        write_tag(xml,l4,"texto",cdata(post_desc),'')
                     
         write_comments(db,xml,post_guid)
         
@@ -403,11 +411,11 @@ def write_groupvideos_subsection (db, xml, group_guid):
             
         xml.write(l3+"<video>\n")
 
-        xml.write(l4+"<autor"+uidstr(owner_id)+">"+owner_name+"</autor>\n")
-        xml.write(l4+"<titulo>"+post_title+"</titulo>\n")
-        xml.write(l4+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l4+"<link>"+video_link+"</link>\n")
-        xml.write(l4+"<descricao>"+cdata(post_desc)+"</descricao>\n")
+        write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
+        write_tag(xml,l4,"titulo",post_title,'')
+        write_tag(xml,l4,"data",datestr(time),'')
+        write_tag(xml,l4,"link",video_link,'')
+        write_tag(xml,l4,"descricao",cdata(post_desc),'')
             
         write_comments(db,xml,post_guid)
         
@@ -452,16 +460,17 @@ def write_groupevents_subsection (db, xml, group_guid):
         organizer=post_content(db, post_guid, 30)
 
         xml.write(l3+"<evento>\n")
-        xml.write(l4+"<autor"+uidstr(owner_id)+">"+owner_name+"</autor>\n")
-        xml.write(l4+"<titulo>"+post_title+"</titulo>\n")
-        xml.write(l4+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l4+"<organizador>"+organizer+"</organizador>\n")
-        xml.write(l4+"<contato>"+contact+"</contato>\n")
-        xml.write(l4+"<endereco>"+venue+"</endereco>\n")
-        xml.write(l4+"<data_inicio>"+datestr(time_start)+"</data_inicio>\n")
-        xml.write(l4+"<data_fim>"+datestr(time_end)+"</data_fim>\n")
-        xml.write(l4+"<taxa_participacao>"+fees+"</taxa_participacao>\n")
-        xml.write(l4+"<descricao>"+cdata(post_desc)+"</descricao>\n")
+        
+        write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
+        write_tag(xml,l4,"titulo",post_title,'')
+        write_tag(xml,l4,"data",datestr(time),'')
+        write_tag(xml,l4,"organizador",organizer,'')
+        write_tag(xml,l4,"contato",contact,'')
+        write_tag(xml,l4,"endereco",venue,'')
+        write_tag(xml,l4,"data_inicio",datestr(time_start),'')
+        write_tag(xml,l4,"data_fim",datestr(time_end),'')
+        write_tag(xml,l4,"taxa_participacao",fees,'')
+        write_tag(xml,l4,"descricao",cdata(post_desc),'')
         
         xml.write(l3+"</evento>\n")
         
@@ -492,13 +501,11 @@ def write_groups_section(db, xml_file):
         xml.write(l1+"<comunidade"+cidstr(guid)+">\n")
 
         # Write all group's information
-        xml.write(l2+"<proprietario"+uidstr(owner_id)+">"+\
-                                    owner_name+"</proprietario>\n")
-        xml.write(l2+"<titulo>"+title+"</titulo>\n")
-        xml.write(l2+"<data>"+datestr(time)+"</data>\n")
-        xml.write(l2+"<descricao>"+cdata(desc)+"</descricao>\n")
-        xml.write(l2+"<breve_descricao>"+cdata(brief_desc)+\
-                                    "</breve_descricao>\n")
+        write_tag(xml,l2,"proprietario",owner_name,uidstr(owner_id))
+        write_tag(xml,l2,"titulo",title,'')
+        write_tag(xml,l2,"data",datestr(time),'')
+        write_tag(xml,l2,"descricao",cdata(desc),'')
+        write_tag(xml,l2,"breve_descricao",cdata(brief_desc),'')
                                     
         if groupaccess_permission(db, guid) == 'public':
             
