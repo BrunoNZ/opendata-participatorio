@@ -1,0 +1,125 @@
+<usuarios>
+
+	<usuario uid=''>
+
+		<nome>''</nome>
+
+		<quantidade_amigos>''</quantidade_amigos>
+		<amigos>
+			<usuario uid=''>''</usuario>
+		</amigos>
+
+		<comunidades>
+			<dono>
+				<comunidade cid=''>''</comunidade>
+			</dono>
+			<membro>
+				<comunidade cid=''>''</comunidade>
+			</membro>
+		</comunidades>
+
+		<arquivos>
+			<arquivo>
+				<titulo>''</titulo>
+				<data>''</data>
+				<link>''</link>
+				<descricao>''</descricao>
+				<comentarios>
+					<comentario>
+						<usuario uid=''>''</usuario>
+						<data>''</data>
+						<mensagem>''</mensagem>
+					</comentario>
+				</comentarios>
+			</arquivo>
+		</arquivos>
+
+		<blogs>
+			<blog>
+				<titulo>''</titulo>
+				<data>''</data>
+				<resumo>''</resumo>
+				<texto>''</texto>
+				<permissao_comentarios>''</permissao_comentarios>
+				<comentarios>
+					<comentario>
+						<usuario uid=''>''</usuario>
+						<data>''</data>
+						<mensagem>''</mensagem>
+					</comentario>
+				</comentarios>
+			</blog>
+		</blogs>
+
+		<favoritos>
+			<favorito>
+				<titulo>''</titulo>
+				<data>''</data>
+				<link>''</link>
+				<descricao>''</descricao>
+				<comentarios>
+					<comentario>
+						<usuario uid=''>''</usuario>
+						<data>''</data>
+						<mensagem>''</mensagem>
+					</comentario>
+				</comentarios>
+			</favorito>
+		</favoritos>
+
+		<paginas>
+			<pagina>
+				<titulo>''</titulo>
+				<data>''</data>
+				<permissao_escrita>''</permissao_escrita>
+				<texto>''</texto>
+				<comentarios>
+					<comentario>
+						<usuario uid=''>''</usuario>
+						<data>''</data>
+						<mensagem>''</mensagem>
+					</comentario>
+				</comentarios>
+			</pagina>
+		</paginas>
+
+		<videos>
+			<video>
+				<titulo>''</titulo>
+				<data>''</data>
+				<link>''</link>
+				<descricao>''</descricao>
+				<comentarios>
+					<comentario>
+						<usuario uid=''>''</usuario>
+						<data>''</data>
+						<mensagem>''</mensagem>
+					</comentario>
+				</comentarios>
+			</video>
+		</videos>
+
+		<eventos>
+			<evento>
+				<titulo>''</titulo>
+				<data>''</data>
+				<organizador>''</organizador>
+				<contato>''</contato>
+				<endereco>''</endereco>
+				<data_inicio>''</data_inicio>
+				<data_fim>''</data_fim>
+				<taxa_de_participacao>''</taxa_de_participacao>
+				<descricao>''</descricao>
+				<comentarios>
+					<comentario>
+						<usuario uid=''>''</usuario>
+						<data>''</data>
+						<mensagem>''</mensagem>
+					</comentario>
+				</comentarios>
+			</evento>
+		</eventos>
+
+	</usuario>
+
+</usuarios>

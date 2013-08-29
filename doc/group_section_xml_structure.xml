@@ -1,0 +1,124 @@
+<comunidades>
+
+	<comunidade cid=''>
+    
+		<proprietario uid=''>''</proprietario>
+		<titulo>''</titulo>
+		<data>''</data>
+		<breve_descricao>''</breve_descricao>
+		<descricao>''</descricao>
+
+		<quantidade_membros>''</quantidade_membros>
+		<membros>
+			<usuario uid=''>''</usuario>
+		</membros>
+
+		<arquivos habilitado='Sim'/'Nao'>
+			<arquivo>
+				<autor uid=''>''</autor>
+				<titulo>''</titulo>
+				<data>''</data>
+				<link>''</link>
+				<descricao>''</descricao>
+				<comentarios>
+					<comentario>
+						<usuario uid=''>''</usuario>
+						<data>''</data>
+						<mensagem>''</mensagem>
+					</comentario>
+				</comentarios>
+			</arquivo>
+		</arquivos>
+
+		<debates habilitado='Sim'/'Nao'>
+			<debate>
+				<autor uid=''>''</autor>
+				<titulo>=''</titulo>
+				<data>''</data>
+				<texto>''</texto>
+				<comentarios>
+					<comentario>
+						<usuario uid=''>''</usuario>
+						<data>''</data>
+						<mensagem>''</mensagem>
+					</comentario>
+				</comentarios>
+			</debate>
+		</debates>
+
+		<favoritos habilitado='Sim'/'Nao'>
+			<favorito>
+				<autor uid=''>''</autor>
+				<titulo>''</titulo>
+				<data>''</data>
+				<link>''</link>
+				<descricao>''</descricao>
+				<comentarios>
+					<comentario>
+						<usuario uid=''>''</usuario>
+						<data>''</data>
+						<mensagem>''</mensagem>
+					</comentario>
+				</comentarios>
+			</favorito>
+		</favoritos>
+
+		<paginas habilitado='Sim'/'Nao'>
+			<pagina>
+				<autor uid=''>''</autor>
+				<titulo>''</titulo>
+				<data>''</data>
+				<texto>''</texto>
+				<permissao_escrita>''</permissao_escrita>
+				<comentarios>
+					<comentario>
+						<usuario uid=''>''</usuario>
+						<data>''</data>
+						<mensagem>''</mensagem>
+					</comentario>
+				</comentarios>
+			</pagina>
+		</paginas>
+
+		<videos habilitado='Sim'/'Nao'>
+			<video>
+				<autor uid=''>''</autor>
+				<titulo>''</titulo>
+				<data>''</data>
+				<link>''</link>
+				<descricao>''</descricao>
+				<comentarios>
+					<comentario>
+						<usuario uid=''>''</usuario>
+						<data>''</data>
+						<mensagem>''</mensagem>
+					</comentario>
+				</comentarios>
+			</video>
+		</videos>
+
+		<eventos habilitado='Sim'/'Nao'>
+			<evento>
+				<autor uid=''>''</autor>
+				<titulo>''</titulo>
+				<data>''</data>
+				<organizador>''</organizador>
+				<contato>''</contato>
+				<endereco>''</endereco>
+				<data_inicio>''</data_inicio>
+				<data_fim>''</data_fim>
+				<taxa_de_participacao>''</taxa_de_participacao>
+				<descricao>''</descricao>
+				<comentarios>
+					<comentario>
+						<usuario uid=''>''</usuario>
+						<data>''</data>
+						<mensagem>''</mensagem>
+					</comentario>
+				</comentarios>
+			</evento>
+		</eventos>
+
+	</comunidade>
+
+</comunidades>
