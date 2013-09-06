@@ -38,9 +38,9 @@ def main():
     
     # Define directory and name of XML files
     date_today=str(datetime.date.today())
-    dir_results="/root/workdir_bnz07/xml_files/"
-    user_xml_file=dir_results+"usuarios_"+date_today+".xml"
-    group_xml_file=dir_results+"comunidades_"+date_today+".xml"
+    dir_results="/home/www/elgg/opendata_xmlfiles"
+    user_xml_file=dir_results+date_today+"_usuarios"+".xml"
+    group_xml_file=dir_results+date_today+"_comunidades"+".xml"
     
     # Get the execution start time information
     time_script_start=datetime.datetime.now()
