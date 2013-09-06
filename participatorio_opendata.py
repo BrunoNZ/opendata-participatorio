@@ -38,7 +38,7 @@ def main():
     
     # Define directory and name of XML files
     date_today=str(datetime.date.today())
-    dir_results="/home/www/elgg/opendata_xmlfiles"
+    dir_results="/home/www/elgg/opendata_xmlfiles/"
     user_xml_file=dir_results+date_today+"_usuarios"+".xml"
     group_xml_file=dir_results+date_today+"_comunidades"+".xml"
     
