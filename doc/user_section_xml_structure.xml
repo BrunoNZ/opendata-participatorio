@@ -1,32 +1,32 @@
 <usuarios>
 
-	<usuario uid=''>
+	<usuario uid='' href=''>
 
 		<nome>''</nome>
 
 		<quantidade_amigos>''</quantidade_amigos>
 		<amigos>
-			<usuario uid=''>''</usuario>
+			<usuario uid='' href=''>''</usuario>
 		</amigos>
 
 		<comunidades>
 			<dono>
-				<comunidade cid=''>''</comunidade>
+				<comunidade cid='' href=''>''</comunidade>
 			</dono>
 			<membro>
-				<comunidade cid=''>''</comunidade>
+				<comunidade cid='' href=''>''</comunidade>
 			</membro>
 		</comunidades>
 
 		<arquivos>
-			<arquivo>
+			<arquivo href=''>
 				<titulo>''</titulo>
 				<data>''</data>
-				<link>''</link>
+				<link href=''/>
 				<descricao>''</descricao>
 				<comentarios>
 					<comentario>
-						<usuario uid=''>''</usuario>
+						<usuario uid='' href=''>''</usuario>
 						<data>''</data>
 						<mensagem>''</mensagem>
 					</comentario>
@@ -35,7 +35,7 @@
 		</arquivos>
 
 		<blogs>
-			<blog>
+			<blog href=''>
 				<titulo>''</titulo>
 				<data>''</data>
 				<resumo>''</resumo>
@@ -43,7 +43,7 @@
 				<permissao_comentarios>''</permissao_comentarios>
 				<comentarios>
 					<comentario>
-						<usuario uid=''>''</usuario>
+						<usuario uid='' href=''>''</usuario>
 						<data>''</data>
 						<mensagem>''</mensagem>
 					</comentario>
@@ -52,14 +52,14 @@
 		</blogs>
 
 		<favoritos>
-			<favorito>
+			<favorito href=''>
 				<titulo>''</titulo>
 				<data>''</data>
-				<link>''</link>
+				<link href=''/>
 				<descricao>''</descricao>
 				<comentarios>
 					<comentario>
-						<usuario uid=''>''</usuario>
+						<usuario uid='' href=''>''</usuario>
 						<data>''</data>
 						<mensagem>''</mensagem>
 					</comentario>
@@ -68,14 +68,14 @@
 		</favoritos>
 
 		<paginas>
-			<pagina>
+			<pagina href=''>
 				<titulo>''</titulo>
 				<data>''</data>
 				<permissao_escrita>''</permissao_escrita>
 				<texto>''</texto>
 				<comentarios>
 					<comentario>
-						<usuario uid=''>''</usuario>
+						<usuario uid='' href=''>''</usuario>
 						<data>''</data>
 						<mensagem>''</mensagem>
 					</comentario>
@@ -84,14 +84,14 @@
 		</paginas>
 
 		<videos>
-			<video>
+			<video href=''>
 				<titulo>''</titulo>
 				<data>''</data>
-				<link>''</link>
+				<link href=''/>
 				<descricao>''</descricao>
 				<comentarios>
 					<comentario>
-						<usuario uid=''>''</usuario>
+						<usuario uid='' href=''>''</usuario>
 						<data>''</data>
 						<mensagem>''</mensagem>
 					</comentario>
@@ -100,7 +100,7 @@
 		</videos>
 
 		<eventos>
-			<evento>
+			<evento href=''>
 				<titulo>''</titulo>
 				<data>''</data>
 				<organizador>''</organizador>
@@ -112,7 +112,7 @@
 				<descricao>''</descricao>
 				<comentarios>
 					<comentario>
-						<usuario uid=''>''</usuario>
+						<usuario uid='' href=''>''</usuario>
 						<data>''</data>
 						<mensagem>''</mensagem>
 					</comentario>

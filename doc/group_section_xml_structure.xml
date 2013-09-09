@@ -1,8 +1,8 @@
 <comunidades>
 
-	<comunidade cid=''>
+	<comunidade cid='' href=''>
     
-		<proprietario uid=''>''</proprietario>
+		<proprietario uid='' href=''>''</proprietario>
 		<titulo>''</titulo>
 		<data>''</data>
 		<breve_descricao>''</breve_descricao>
@@ -10,19 +10,19 @@
 
 		<quantidade_membros>''</quantidade_membros>
 		<membros>
-			<usuario uid=''>''</usuario>
+			<usuario uid='' href=''>''</usuario>
 		</membros>
 
 		<arquivos habilitado='Sim'/'Nao'>
-			<arquivo>
-				<autor uid=''>''</autor>
+			<arquivo href=''>
+				<autor uid='' href=''>''</autor>
 				<titulo>''</titulo>
 				<data>''</data>
-				<link>''</link>
+				<link href=''/>
 				<descricao>''</descricao>
 				<comentarios>
 					<comentario>
-						<usuario uid=''>''</usuario>
+						<usuario uid='' href=''>''</usuario>
 						<data>''</data>
 						<mensagem>''</mensagem>
 					</comentario>
@@ -31,14 +31,14 @@
 		</arquivos>
 
 		<debates habilitado='Sim'/'Nao'>
-			<debate>
-				<autor uid=''>''</autor>
+			<debate href=''>
+				<autor uid='' href=''>''</autor>
 				<titulo>=''</titulo>
 				<data>''</data>
 				<texto>''</texto>
 				<comentarios>
 					<comentario>
-						<usuario uid=''>''</usuario>
+						<usuario uid='' href=''>''</usuario>
 						<data>''</data>
 						<mensagem>''</mensagem>
 					</comentario>
@@ -47,15 +47,15 @@
 		</debates>
 
 		<favoritos habilitado='Sim'/'Nao'>
-			<favorito>
-				<autor uid=''>''</autor>
+			<favorito href=''>
+				<autor uid='' href=''>''</autor>
 				<titulo>''</titulo>
 				<data>''</data>
-				<link>''</link>
+				<link href=''/>
 				<descricao>''</descricao>
 				<comentarios>
 					<comentario>
-						<usuario uid=''>''</usuario>
+						<usuario uid='' href=''>''</usuario>
 						<data>''</data>
 						<mensagem>''</mensagem>
 					</comentario>
@@ -64,15 +64,15 @@
 		</favoritos>
 
 		<paginas habilitado='Sim'/'Nao'>
-			<pagina>
-				<autor uid=''>''</autor>
+			<pagina href=''>
+				<autor uid='' href=''>''</autor>
 				<titulo>''</titulo>
 				<data>''</data>
 				<texto>''</texto>
 				<permissao_escrita>''</permissao_escrita>
 				<comentarios>
 					<comentario>
-						<usuario uid=''>''</usuario>
+						<usuario uid='' href=''>''</usuario>
 						<data>''</data>
 						<mensagem>''</mensagem>
 					</comentario>
@@ -81,15 +81,15 @@
 		</paginas>
 
 		<videos habilitado='Sim'/'Nao'>
-			<video>
-				<autor uid=''>''</autor>
+			<video href=''>
+				<autor uid='' href=''>''</autor>
 				<titulo>''</titulo>
 				<data>''</data>
-				<link>''</link>
+				<link href=''/>
 				<descricao>''</descricao>
 				<comentarios>
 					<comentario>
-						<usuario uid=''>''</usuario>
+						<usuario uid='' href=''>''</usuario>
 						<data>''</data>
 						<mensagem>''</mensagem>
 					</comentario>
@@ -98,8 +98,8 @@
 		</videos>
 
 		<eventos habilitado='Sim'/'Nao'>
-			<evento>
-				<autor uid=''>''</autor>
+			<evento href=''>
+				<autor uid='' href=''>''</autor>
 				<titulo>''</titulo>
 				<data>''</data>
 				<organizador>''</organizador>
@@ -111,7 +111,7 @@
 				<descricao>''</descricao>
 				<comentarios>
 					<comentario>
-						<usuario uid=''>''</usuario>
+						<usuario uid='' href=''>''</usuario>
 						<data>''</data>
 						<mensagem>''</mensagem>
 					</comentario>
