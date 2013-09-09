@@ -88,7 +88,7 @@ qry_post_content_permission = \
 # Argument: Post_ID
 # Return: All comments, and its info, made on the post.
 qry_post_comments = \
-("	SELECT u.guid, u.name, m.string, a.time_created \
+("	SELECT u.guid, u.name, u.username, m.string, a.time_created \
 	FROM elgg_annotations a, elgg_metastrings m, elgg_users_entity u \
 	WHERE a.value_id = m.id AND a.owner_guid = u.guid \
     AND (a.access_id = 1 OR a.access_id = 2) \
@@ -100,7 +100,7 @@ qry_post_comments = \
 # Argument: Group_ID
 # Return: All members' name from this group.
 qry_group_members = \
-("  SELECT u.guid, u.name \
+("  SELECT u.guid, u.name, u.username \
     FROM elgg_users_entity u, elgg_entity_relationships r \
     WHERE u.guid = r.guid_one \
     AND r.relationship = 'member' AND r.guid_two = %s; ")
@@ -150,6 +150,13 @@ def permstr(perm):
 def qtystr(quantity):
     qty_string=" quantidade="+"\'"+str(quantity)+"\'"
     return qty_string
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
+def hrefstr(prefix, guid):
+    http_str="http://participatorio.juventude.gov.br/"
+    href_string=" href="+"\'"+http_str+prefix+guid+"\'"
+    return href_string
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
@@ -229,11 +236,12 @@ def write_comments (db, xml, post_guid):
     post_comments.execute(qry_post_comments, (post_guid,))
             
     xml.write(l4+"<comentarios>\n")
-    for (user_id, user_name, string, time) in post_comments:
+    for (user_id, user_name, user_username, string, time) in post_comments:
         
         xml.write(l5+"<comentario>\n")
         
-        write_tag(xml,l6,"usuario",user_name,uidstr(user_id))
+        attr=uidstr(user_id)+hrefstr('profile/',user_username)
+        write_tag(xml,l6,"usuario",user_name,attr)
         write_tag(xml,l6,"data",datestr(time),'')
         write_tag(xml,l6,"mensagem",cdata(string),'')
         
@@ -252,8 +260,9 @@ def write_groupmembers_subsection (db, xml, group_guid):
     write_tag(xml,l2,"quantidade_membros",str(group_members.rowcount),'')
                     
     xml.write(l2+"<membros>\n")
-    for (user_id, user_name) in group_members:
-        write_tag(xml,l3,"usuario",user_name,uidstr(user_id))
+    for (user_id, user_name, user_username) in group_members:
+        attr=uidstr(user_id)+hrefstr('profile/',user_username)
+        write_tag(xml,l3,"usuario",user_name,attr)
     xml.write(l2+"</membros>\n")
     
     group_members.close()
@@ -277,7 +286,8 @@ def write_groupfiles_subsection (db, xml, group_guid):
         link_prefix="http://participatorio.juventude.gov.br/file/download/"
         file_link=str(link_prefix)+str(post_guid)
         
-        xml.write(l3+"<arquivo>\n")
+        attr=hrefstr('file/view/',str(post_guid))
+        xml.write(l3+"<arquivo"+attr+">\n")
 
         write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
         write_tag(xml,l4,"titulo",post_title,'')
@@ -308,8 +318,9 @@ def write_groupforumtopics_subsection (db, xml, group_guid):
     
     for (post_guid, post_title, post_desc, owner_id, owner_name, time)\
         in group_forumtopics:
-            
-        xml.write(l3+"<debate>\n")
+        
+        attr=hrefstr('discussion/view/',str(post_guid))
+        xml.write(l3+"<debate"+attr+">\n")
 
         write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
         write_tag(xml,l4,"titulo",post_title,'')
@@ -343,7 +354,8 @@ def write_groupbookmarks_subsection (db, xml, group_guid):
         # 90 = select * from elgg_metastrings where string='address';
         bookmark_link=post_content(db,post_guid,90)
         
-        xml.write(l3+"<favorito>\n")
+        attr=hrefstr('bookmarks/view/',str(post_guid))
+        xml.write(l3+"<favorito"+attr+">\n")
 
         write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
         write_tag(xml,l4,"titulo",post_title,'')
@@ -375,7 +387,8 @@ def write_grouppages_subsection (db, xml, group_guid):
     for (post_guid, post_title, post_desc, owner_id, owner_name, time)\
         in group_pages:
             
-        xml.write(l3+"<pagina>\n")
+        attr=hrefstr('pages/view/',str(post_guid))
+        xml.write(l3+"<pagina"+attr+">\n")
 
         write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
         write_tag(xml,l4,"titulo",post_title,'')
@@ -409,7 +422,8 @@ def write_groupvideos_subsection (db, xml, group_guid):
         # 477 = select * from elgg_metastrings where string='video_url';
         video_link=post_content(db,post_guid, 477)
             
-        xml.write(l3+"<video>\n")
+        attr=hrefstr('videos/view/',str(post_guid))
+        xml.write(l3+"<video"+attr+">\n")
 
         write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
         write_tag(xml,l4,"titulo",post_title,'')
@@ -459,7 +473,8 @@ def write_groupevents_subsection (db, xml, group_guid):
         # 30 = select * from elgg_metastrings where string='organizer';
         organizer=post_content(db, post_guid, 30)
 
-        xml.write(l3+"<evento>\n")
+        attr=hrefstr('event_calendar/view/',str(post_guid))
+        xml.write(l3+"<evento"+attr+">\n")
         
         write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
         write_tag(xml,l4,"titulo",post_title,'')
@@ -498,7 +513,8 @@ def write_groups_section(db, xml_file):
         # 45 = select * from elgg_metastrings where string='briefdescription';
         brief_desc=post_content(db,guid, 45)
         
-        xml.write(l1+"<comunidade"+cidstr(guid)+">\n")
+        attr=cidstr(guid)+hrefstr('groups/profile/',str(guid))
+        xml.write(l1+"<comunidade"+attr+">\n")
 
         # Write all group's information
         write_tag(xml,l2,"proprietario",owner_name,uidstr(owner_id))
