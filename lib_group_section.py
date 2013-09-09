@@ -45,7 +45,8 @@ l7="\t\t\t\t\t\t\t"
 # Argument: None
 # Return: All group instances, and its info, from database.
 qry_groups_info = \
-("	SELECT g.guid, g.name, g.description, u.guid, u.name, e.time_created \
+("	SELECT g.guid, g.name, g.description, \
+        u.guid, u.name, u.username, e.time_created \
 	FROM elgg_entities e, elgg_groups_entity g, elgg_users_entity u\
 	WHERE e.guid = g.guid AND e.owner_guid = u.guid \
     AND (e.access_id = 1 OR e.access_id = 2) \
@@ -56,7 +57,8 @@ qry_groups_info = \
 # Argument: Group_ID / InfoType_ID
 # Return: All InfoTypes' posts from this group.
 qry_group_posts = \
-("	SELECT o.guid, o.title, o.description, u.guid, u.name, e.time_created\
+("	SELECT o.guid, o.title, o.description, \
+        u.guid, u.name, u.username, e.time_created\
 	FROM elgg_entities e, elgg_objects_entity o, elgg_users_entity u\
 	WHERE e.guid = o.guid AND e.owner_guid = u.guid\
     AND (e.access_id = 1 OR e.access_id = 2) \
@@ -130,32 +132,38 @@ def cdata(string):
 
 #--------------------------------------------------------------------#
 def uidstr(guid):
-    uid_string=" uid="+"\'"+str(guid)+"\'"
+    uid_string=" uid="+"\""+str(guid)+"\""
     return uid_string
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def cidstr(guid):
-    uid_string=" cid="+"\'"+str(guid)+"\'"
+    uid_string=" cid="+"\""+str(guid)+"\""
     return uid_string
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def permstr(perm):
-    perm_string=" habilitado="+"\'"+str(perm)+"\'"
+    perm_string=" habilitado="+"\""+str(perm)+"\""
     return perm_string
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def qtystr(quantity):
-    qty_string=" quantidade="+"\'"+str(quantity)+"\'"
+    qty_string=" quantidade="+"\""+str(quantity)+"\""
     return qty_string
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
+def linkhrefstr(link):
+    link_href_string=" href="+"\""+link+"\""
+    return link_href_string
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def hrefstr(prefix, guid):
     http_str="http://participatorio.juventude.gov.br/"
-    href_string=" href="+"\'"+http_str+prefix+guid+"\'"
+    href_string=" href="+"\""+http_str+prefix+guid+"\""
     return href_string
 #--------------------------------------------------------------------#
 
@@ -177,6 +185,7 @@ def post_content(db, post_guid, content_typeid):
     else:
         post_content=''
         print "ERRO! Nenhum ou Mais do que um resultado para a query"
+        
     content.close()
     
     return post_content
@@ -225,9 +234,12 @@ def groupaccess_permission (db, group_guid):
 
 #--------------------------------------------------------------------#
 def write_tag (xml, level, tag_name, info_str, attr_str):
-    tag_begin=("<"+tag_name+attr_str+">")
-    tag_end=("</"+tag_name+">")
-    xml.write(level+tag_begin+info_str+tag_end+"\n")
+    if len(info_str) > 0:
+        tag_begin=("<"+tag_name+attr_str+">")
+        tag_end=("</"+tag_name+">")
+        xml.write(level+tag_begin+info_str+tag_end+"\n")
+    else:
+        xml.write(level+"<"+tag_name+attr_str+"/>"+"\n")
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
@@ -240,8 +252,8 @@ def write_comments (db, xml, post_guid):
         
         xml.write(l5+"<comentario>\n")
         
-        attr=uidstr(user_id)+hrefstr('profile/',user_username)
-        write_tag(xml,l6,"usuario",user_name,attr)
+        user_attr=uidstr(user_id)+hrefstr('profile/',user_username)
+        write_tag(xml,l6,"usuario",user_name,user_attr)
         write_tag(xml,l6,"data",datestr(time),'')
         write_tag(xml,l6,"mensagem",cdata(string),'')
         
@@ -261,8 +273,8 @@ def write_groupmembers_subsection (db, xml, group_guid):
                     
     xml.write(l2+"<membros>\n")
     for (user_id, user_name, user_username) in group_members:
-        attr=uidstr(user_id)+hrefstr('profile/',user_username)
-        write_tag(xml,l3,"usuario",user_name,attr)
+        user_attr=uidstr(user_id)+hrefstr('profile/',user_username)
+        write_tag(xml,l3,"usuario",user_name,user_attr)
     xml.write(l2+"</membros>\n")
     
     group_members.close()
@@ -280,19 +292,21 @@ def write_groupfiles_subsection (db, xml, group_guid):
     
     xml.write(l2+"<arquivos"+permstr(perm)+">\n")
     
-    for (post_guid, post_title, post_desc, owner_id, owner_name, time)\
+    for (post_guid, post_title, post_desc, \
+            owner_id, owner_name, owner_username, time)\
         in group_files:
         
         link_prefix="http://participatorio.juventude.gov.br/file/download/"
         file_link=str(link_prefix)+str(post_guid)
         
-        attr=hrefstr('file/view/',str(post_guid))
-        xml.write(l3+"<arquivo"+attr+">\n")
+        post_attr=hrefstr('file/view/',str(post_guid))
+        xml.write(l3+"<arquivo"+post_attr+">\n")
 
-        write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
+        owner_attr=uidstr(owner_id)+hrefstr('profile/',owner_username)
+        write_tag(xml,l4,"autor",owner_name,owner_attr)
         write_tag(xml,l4,"titulo",post_title,'')
         write_tag(xml,l4,"data",datestr(time),'')
-        write_tag(xml,l4,"link",file_link,'')
+        write_tag(xml,l4,"link",'',linkhrefstr(file_link))
         write_tag(xml,l4,"descricao",cdata(post_desc),'')
                     
         write_comments(db,xml,post_guid)
@@ -316,13 +330,15 @@ def write_groupforumtopics_subsection (db, xml, group_guid):
     
     xml.write(l2+"<debates"+permstr(perm)+">\n")
     
-    for (post_guid, post_title, post_desc, owner_id, owner_name, time)\
+    for (post_guid, post_title, post_desc, \
+        owner_id, owner_name, owner_username, time)\
         in group_forumtopics:
         
-        attr=hrefstr('discussion/view/',str(post_guid))
-        xml.write(l3+"<debate"+attr+">\n")
+        post_attr=hrefstr('discussion/view/',str(post_guid))
+        xml.write(l3+"<debate"+post_attr+">\n")
 
-        write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
+        owner_attr=uidstr(owner_id)+hrefstr('profile/',owner_username)
+        write_tag(xml,l4,"autor",owner_name,owner_attr)
         write_tag(xml,l4,"titulo",post_title,'')
         write_tag(xml,l4,"data",datestr(time),'')
         write_tag(xml,l4,"texto",cdata(post_desc),'')
@@ -348,19 +364,21 @@ def write_groupbookmarks_subsection (db, xml, group_guid):
     
     xml.write(l2+"<favoritos"+permstr(perm)+">\n")
     
-    for (post_guid, post_title, post_desc, owner_id, owner_name, time)\
+    for (post_guid, post_title, post_desc, \
+            owner_id, owner_name, owner_username, time)\
         in group_bookmarks:
             
         # 90 = select * from elgg_metastrings where string='address';
         bookmark_link=post_content(db,post_guid,90)
         
-        attr=hrefstr('bookmarks/view/',str(post_guid))
-        xml.write(l3+"<favorito"+attr+">\n")
+        post_attr=hrefstr('bookmarks/view/',str(post_guid))
+        xml.write(l3+"<favorito"+post_attr+">\n")
 
-        write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
+        owner_attr=uidstr(owner_id)+hrefstr('profile/',owner_username)
+        write_tag(xml,l4,"autor",owner_name,owner_attr)
         write_tag(xml,l4,"titulo",post_title,'')
         write_tag(xml,l4,"data",datestr(time),'')
-        write_tag(xml,l4,"link",bookmark_link,'')
+        write_tag(xml,l4,"link",'',linkhrefstr(bookmark_link))
         write_tag(xml,l4,"descricao",cdata(post_desc),'')
                             
         write_comments(db,xml,post_guid)
@@ -384,13 +402,15 @@ def write_grouppages_subsection (db, xml, group_guid):
     
     xml.write(l2+"<paginas"+permstr(perm)+">\n")
     
-    for (post_guid, post_title, post_desc, owner_id, owner_name, time)\
+    for (post_guid, post_title, post_desc,
+            owner_id, owner_name, owner_username, time)\
         in group_pages:
             
-        attr=hrefstr('pages/view/',str(post_guid))
-        xml.write(l3+"<pagina"+attr+">\n")
+        post_attr=hrefstr('pages/view/',str(post_guid))
+        xml.write(l3+"<pagina"+post_attr+">\n")
 
-        write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
+        owner_attr=uidstr(owner_id)+hrefstr('profile/',owner_username)
+        write_tag(xml,l4,"autor",owner_name,owner_attr)
         write_tag(xml,l4,"titulo",post_title,'')
         write_tag(xml,l4,"data",datestr(time),'')
         write_tag(xml,l4,"texto",cdata(post_desc),'')
@@ -416,19 +436,21 @@ def write_groupvideos_subsection (db, xml, group_guid):
     
     xml.write(l2+"<videos"+permstr(perm)+">\n")
     
-    for (post_guid, post_title, post_desc, owner_id, owner_name, time)\
+    for (post_guid, post_title, post_desc, \
+            owner_id, owner_name, owner_username, time)\
         in group_videos:
             
         # 477 = select * from elgg_metastrings where string='video_url';
         video_link=post_content(db,post_guid, 477)
             
-        attr=hrefstr('videos/view/',str(post_guid))
-        xml.write(l3+"<video"+attr+">\n")
+        post_attr=hrefstr('videos/view/',str(post_guid))
+        xml.write(l3+"<video"+post_attr+">\n")
 
-        write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
+        owner_attr=uidstr(owner_id)+hrefstr('profile/',owner_username)
+        write_tag(xml,l4,"autor",owner_name,owner_attr)
         write_tag(xml,l4,"titulo",post_title,'')
         write_tag(xml,l4,"data",datestr(time),'')
-        write_tag(xml,l4,"link",video_link,'')
+        write_tag(xml,l4,"link",'',linkhrefstr(video_link))
         write_tag(xml,l4,"descricao",cdata(post_desc),'')
             
         write_comments(db,xml,post_guid)
@@ -452,7 +474,8 @@ def write_groupevents_subsection (db, xml, group_guid):
     
     xml.write(l2+"<eventos"+permstr(perm)+">\n")
     
-    for (post_guid, post_title, post_desc, owner_id, owner_name, time)\
+    for (post_guid, post_title, post_desc, \
+            owner_id, owner_name, owner_username, time)\
         in group_events:
             
         # 18 = select * from elgg_metastrings where string='venue';
@@ -473,10 +496,11 @@ def write_groupevents_subsection (db, xml, group_guid):
         # 30 = select * from elgg_metastrings where string='organizer';
         organizer=post_content(db, post_guid, 30)
 
-        attr=hrefstr('event_calendar/view/',str(post_guid))
-        xml.write(l3+"<evento"+attr+">\n")
+        post_attr=hrefstr('event_calendar/view/',str(post_guid))
+        xml.write(l3+"<evento"+post_attr+">\n")
         
-        write_tag(xml,l4,"autor",owner_name,uidstr(owner_id))
+        owner_attr=uidstr(owner_id)+hrefstr('profile/',owner_username)
+        write_tag(xml,l4,"autor",owner_name,owner_attr)
         write_tag(xml,l4,"titulo",post_title,'')
         write_tag(xml,l4,"data",datestr(time),'')
         write_tag(xml,l4,"organizador",organizer,'')
@@ -508,16 +532,18 @@ def write_groups_section(db, xml_file):
     groups_info = db.cursor()
     groups_info.execute(qry_groups_info)
     
-    for (guid, title, desc, owner_id, owner_name, time) in groups_info:
+    for (guid, title, desc, owner_id, owner_name, owner_username, time)\
+        in groups_info:
         
         # 45 = select * from elgg_metastrings where string='briefdescription';
         brief_desc=post_content(db,guid, 45)
         
-        attr=cidstr(guid)+hrefstr('groups/profile/',str(guid))
-        xml.write(l1+"<comunidade"+attr+">\n")
+        group_attr=cidstr(guid)+hrefstr('groups/profile/',str(guid))
+        xml.write(l1+"<comunidade"+group_attr+">\n")
 
         # Write all group's information
-        write_tag(xml,l2,"proprietario",owner_name,uidstr(owner_id))
+        owner_attr=uidstr(owner_id)+hrefstr('profile/',owner_username)
+        write_tag(xml,l2,"proprietario",owner_name,owner_attr)
         write_tag(xml,l2,"titulo",title,'')
         write_tag(xml,l2,"data",datestr(time),'')
         write_tag(xml,l2,"descricao",cdata(desc),'')

@@ -129,20 +129,26 @@ def cdata(string):
 
 #--------------------------------------------------------------------#
 def uidstr(guid):
-    uid_string=" uid="+"\'"+str(guid)+"\'"
+    uid_string=" uid="+"\""+str(guid)+"\""
     return uid_string
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def cidstr(guid):
-    uid_string=" cid="+"\'"+str(guid)+"\'"
+    uid_string=" cid="+"\""+str(guid)+"\""
     return uid_string
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
+def linkhrefstr(link):
+    link_href_string=" href="+"\""+link+"\""
+    return link_href_string
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def hrefstr(prefix, guid):
     http_str="http://participatorio.juventude.gov.br/"
-    href_string=" href="+"\'"+http_str+prefix+guid+"\'"
+    href_string=" href="+"\""+http_str+prefix+guid+"\""
     return href_string
 #--------------------------------------------------------------------#
 
@@ -177,9 +183,12 @@ def post_content(db, post_guid, content_typeid):
 
 #--------------------------------------------------------------------#
 def write_tag (xml, level, tag_name, info_str, attr_str):
-    tag_begin=("<"+tag_name+attr_str+">")
-    tag_end=("</"+tag_name+">")
-    xml.write(level+tag_begin+info_str+tag_end+"\n")
+    if len(info_str) > 0:
+        tag_begin=("<"+tag_name+attr_str+">")
+        tag_end=("</"+tag_name+">")
+        xml.write(level+tag_begin+info_str+tag_end+"\n")
+    else:
+        xml.write(level+"<"+tag_name+attr_str+"/>"+"\n")
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
@@ -192,8 +201,8 @@ def write_comments (db, xml, post_guid):
         
         xml.write(l5+"<comentario>\n")
         
-        attr=uidstr(user_id)+hrefstr('profile/',user_username)
-        write_tag(xml,l6,"usuario",user_name,attr)
+        user_attr=uidstr(user_id)+hrefstr('profile/',user_username)
+        write_tag(xml,l6,"usuario",user_name,user_attr)
         write_tag(xml,l6,"data",datestr(time),'')
         write_tag(xml,l6,"mensagem",cdata(string),'')
         
@@ -211,8 +220,8 @@ def write_userfriends_subsection (db, xml, user_guid):
     
     xml.write(l2+"<amigos>\n")
     for (friend_id, friend_name, friend_username) in friends_info:
-        attr=uidstr(friend_id)+hrefstr('profile/',friend_username)
-        write_tag(xml,l3,"usuario",friend_name,attr)
+        friend_attr=uidstr(friend_id)+hrefstr('profile/',friend_username)
+        write_tag(xml,l3,"usuario",friend_name,friend_attr)
     xml.write(l2+"</amigos>\n")
         
     friends_info.close()
@@ -225,8 +234,8 @@ def write_userowngroup_subsection (db, xml, user_guid):
         
     xml.write(l3+"<dono>\n")
     for (group_id, group_title) in user_owngroups:
-        attr=cidstr(group_id)+hrefstr('groups/profile/',str(group_id))
-        write_tag(xml,l4,"comunidade",group_title,attr)
+        group_attr=cidstr(group_id)+hrefstr('groups/profile/',str(group_id))
+        write_tag(xml,l4,"comunidade",group_title,group_attr)
     xml.write(l3+"</dono>\n")
         
     user_owngroups.close()
@@ -239,8 +248,8 @@ def write_usermembergroup_subsection (db, xml, user_guid):
         
     xml.write(l3+"<membro>\n")
     for (group_id, group_title) in user_membergroups:
-        attr=cidstr(group_id)+hrefstr('groups/profile/',str(group_id))
-        write_tag(xml,l4,"comunidade",group_title,attr)
+        group_attr=cidstr(group_id)+hrefstr('groups/profile/',str(group_id))
+        write_tag(xml,l4,"comunidade",group_title,group_attr)
     xml.write(l3+"</membro>\n")
         
     user_membergroups.close()
@@ -269,12 +278,12 @@ def write_userfiles_subsection (db, xml, user_guid):
         link_prefix="http://participatorio.juventude.gov.br/file/download/"
         file_link=str(link_prefix)+str(post_guid)
         
-        attr=hrefstr('file/view/',str(post_guid))
-        xml.write(l3+"<arquivo"+attr+">\n")
+        post_attr=hrefstr('file/view/',str(post_guid))
+        xml.write(l3+"<arquivo"+post_attr+">\n")
         
         write_tag(xml,l4,"titulo",post_title,'')
         write_tag(xml,l4,"data",datestr(time),'')
-        write_tag(xml,l4,"link",file_link,'')
+        write_tag(xml,l4,"link",'',linkhrefstr(file_link))
         write_tag(xml,l4,"descricao",cdata(post_desc),'')
             
         write_comments(db,xml,post_guid)
@@ -302,8 +311,8 @@ def write_userblogs_subsection (db, xml, user_guid):
         # 64 = select * from elgg_metastrings where string='excerpt';
         post_excerpt=post_content(db,post_guid,64)
             
-        attr=hrefstr('blog/view/',str(post_guid))
-        xml.write(l3+"<blog"+attr+">\n")
+        post_attr=hrefstr('blog/view/',str(post_guid))
+        xml.write(l3+"<blog"+post_attr+">\n")
 
         write_tag(xml,l4,"titulo",post_title,'')
         write_tag(xml,l4,"data",datestr(time),'')
@@ -334,12 +343,12 @@ def write_userbookmarks_subsection (db, xml, user_guid):
         # 90 = select * from elgg_metastrings where string='address';
         bookmark_link=post_content(db,post_guid,90)
   
-        attr=hrefstr('bookmarks/view/',str(post_guid))
-        xml.write(l3+"<favorito"+attr+">\n")
+        post_attr=hrefstr('bookmarks/view/',str(post_guid))
+        xml.write(l3+"<favorito"+post_attr+">\n")
     
         write_tag(xml,l4,"titulo",post_title,'')
         write_tag(xml,l4,"data",datestr(time),'')
-        write_tag(xml,l4,"link",bookmark_link,'')
+        write_tag(xml,l4,"link",'',linkhrefstr(bookmark_link))
         write_tag(xml,l4,"descricao",cdata(post_desc),'')
                     
         write_comments(db,xml,post_guid)
@@ -363,8 +372,8 @@ def write_userpages_subsection (db, xml, user_guid):
     for (post_guid, post_title, post_desc, time)\
         in user_pages:
         
-        attr=hrefstr('pages/view/',str(post_guid))
-        xml.write(l3+"<pagina"+attr+">\n")
+        post_attr=hrefstr('pages/view/',str(post_guid))
+        xml.write(l3+"<pagina"+post_attr+">\n")
 
         write_tag(xml,l4,"titulo",post_title,'')
         write_tag(xml,l4,"data",datestr(time),'')
@@ -394,12 +403,12 @@ def write_uservideos_subsection (db, xml, user_guid):
         # 477 = select * from elgg_metastrings where string='video_url';
         video_link=post_content(db, post_guid, 477)
         
-        attr=hrefstr('videos/view/',str(post_guid))
-        xml.write(l3+"<video"+attr+">\n")
+        post_attr=hrefstr('videos/view/',str(post_guid))
+        xml.write(l3+"<video"+post_attr+">\n")
         
         write_tag(xml,l4,"titulo",post_title,'')
         write_tag(xml,l4,"data",datestr(time),'')
-        write_tag(xml,l4,"link",video_link,'')
+        write_tag(xml,l4,"link",'',linkhrefstr(video_link))
         write_tag(xml,l4,"descricao",cdata(post_desc),'')
         
         write_comments(db,xml,post_guid)
@@ -442,8 +451,8 @@ def write_userevents_subsection (db, xml, user_guid):
         # 30 = select * from elgg_metastrings where string='organizer';
         organizer=post_content(db, post_guid, 30)
         
-        attr=hrefstr('event_calendar/view/',str(post_guid))
-        xml.write(l3+"<evento"+attr+">\n")
+        post_attr=hrefstr('event_calendar/view/',str(post_guid))
+        xml.write(l3+"<evento"+post_attr+">\n")
         
         write_tag(xml,l4,"titulo",post_title,'')
         write_tag(xml,l4,"data",datestr(time),'')
@@ -478,8 +487,8 @@ def write_users_section (db, xml_file):
     
     for (guid, name, username) in users_info:
         
-        attr=uidstr(guid)+hrefstr('profile/',username)
-        xml.write(l1+"<usuario"+attr+">\n")
+        user_attr=uidstr(guid)+hrefstr('profile/',username)
+        xml.write(l1+"<usuario"+user_attr+">\n")
         
         # Write all user's information
         write_tag(xml,l2,"nome",name,'')
