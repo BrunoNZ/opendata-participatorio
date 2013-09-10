@@ -143,6 +143,12 @@ def cidstr(guid):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
+def pidstr(guid):
+    pid_string=" pid="+"\""+guid+"\""
+    return pid_string
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
 def permstr(perm):
     perm_string=" habilitado="+"\""+str(perm)+"\""
     return perm_string
@@ -299,7 +305,7 @@ def write_groupfiles_subsection (db, xml, group_guid):
         link_prefix="http://participatorio.juventude.gov.br/file/download/"
         file_link=str(link_prefix)+str(post_guid)
         
-        post_attr=hrefstr(urlparticipa('file/view/',str(post_guid)))
+        post_attr=pidstr(urlparticipa('file/view/',str(post_guid)))
         xml.write(l3+"<arquivo"+post_attr+">\n")
 
         owner_attr=uidstr(urlparticipa('profile/',owner_username))
@@ -334,7 +340,7 @@ def write_groupforumtopics_subsection (db, xml, group_guid):
         owner_id, owner_name, owner_username, time)\
         in group_forumtopics:
         
-        post_attr=hrefstr(urlparticipa('discussion/view/',str(post_guid)))
+        post_attr=pidstr(urlparticipa('discussion/view/',str(post_guid)))
         xml.write(l3+"<debate"+post_attr+">\n")
 
         owner_attr=uidstr(urlparticipa('profile/',owner_username))
@@ -371,7 +377,7 @@ def write_groupbookmarks_subsection (db, xml, group_guid):
         # 90 = select * from elgg_metastrings where string='address';
         bookmark_link=post_content(db,post_guid,90)
         
-        post_attr=hrefstr(urlparticipa('bookmarks/view/',str(post_guid)))
+        post_attr=pidstr(urlparticipa('bookmarks/view/',str(post_guid)))
         xml.write(l3+"<favorito"+post_attr+">\n")
 
         owner_attr=uidstr(urlparticipa('profile/',owner_username))
@@ -406,7 +412,7 @@ def write_grouppages_subsection (db, xml, group_guid):
             owner_id, owner_name, owner_username, time)\
         in group_pages:
             
-        post_attr=hrefstr(urlparticipa('pages/view/',str(post_guid)))
+        post_attr=pidstr(urlparticipa('pages/view/',str(post_guid)))
         xml.write(l3+"<pagina"+post_attr+">\n")
 
         owner_attr=uidstr(urlparticipa('profile/',owner_username))
@@ -443,7 +449,7 @@ def write_groupvideos_subsection (db, xml, group_guid):
         # 477 = select * from elgg_metastrings where string='video_url';
         video_link=post_content(db,post_guid, 477)
             
-        post_attr=hrefstr(urlparticipa('videos/view/',str(post_guid)))
+        post_attr=pidstr(urlparticipa('videos/view/',str(post_guid)))
         xml.write(l3+"<video"+post_attr+">\n")
 
         owner_attr=uidstr(urlparticipa('profile/',owner_username))
@@ -496,7 +502,7 @@ def write_groupevents_subsection (db, xml, group_guid):
         # 30 = select * from elgg_metastrings where string='organizer';
         organizer=post_content(db, post_guid, 30)
 
-        post_attr=hrefstr(urlparticipa('event_calendar/view/',str(post_guid)))
+        post_attr=pidstr(urlparticipa('event_calendar/view/',str(post_guid)))
         xml.write(l3+"<evento"+post_attr+">\n")
         
         owner_attr=uidstr(urlparticipa('profile/',owner_username))

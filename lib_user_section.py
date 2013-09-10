@@ -140,6 +140,12 @@ def cidstr(guid):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
+def pidstr(guid):
+    pid_string=" pid="+"\""+guid+"\""
+    return pid_string
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
 def urlparticipa(prefix, guid):
     http_str="http://participatorio.juventude.gov.br/"
     url_participa=http_str+prefix+guid
@@ -278,7 +284,7 @@ def write_userfiles_subsection (db, xml, user_guid):
         link_prefix="http://participatorio.juventude.gov.br/file/download/"
         file_link=str(link_prefix)+str(post_guid)
         
-        post_attr=hrefstr(urlparticipa('file/view/',str(post_guid)))
+        post_attr=pidstr(urlparticipa('file/view/',str(post_guid)))
         xml.write(l3+"<arquivo"+post_attr+">\n")
         
         write_tag(xml,l4,"titulo",post_title,'')
@@ -311,7 +317,7 @@ def write_userblogs_subsection (db, xml, user_guid):
         # 64 = select * from elgg_metastrings where string='excerpt';
         post_excerpt=post_content(db,post_guid,64)
             
-        post_attr=hrefstr(urlparticipa('blog/view/',str(post_guid)))
+        post_attr=pidstr(urlparticipa('blog/view/',str(post_guid)))
         xml.write(l3+"<blog"+post_attr+">\n")
 
         write_tag(xml,l4,"titulo",post_title,'')
@@ -343,7 +349,7 @@ def write_userbookmarks_subsection (db, xml, user_guid):
         # 90 = select * from elgg_metastrings where string='address';
         bookmark_link=post_content(db,post_guid,90)
   
-        post_attr=hrefstr(urlparticipa('bookmarks/view/',str(post_guid)))
+        post_attr=pidstr(urlparticipa('bookmarks/view/',str(post_guid)))
         xml.write(l3+"<favorito"+post_attr+">\n")
     
         write_tag(xml,l4,"titulo",post_title,'')
@@ -372,7 +378,7 @@ def write_userpages_subsection (db, xml, user_guid):
     for (post_guid, post_title, post_desc, time)\
         in user_pages:
         
-        post_attr=hrefstr(urlparticipa('pages/view/',str(post_guid)))
+        post_attr=pidstr(urlparticipa('pages/view/',str(post_guid)))
         xml.write(l3+"<pagina"+post_attr+">\n")
 
         write_tag(xml,l4,"titulo",post_title,'')
@@ -403,7 +409,7 @@ def write_uservideos_subsection (db, xml, user_guid):
         # 477 = select * from elgg_metastrings where string='video_url';
         video_link=post_content(db, post_guid, 477)
         
-        post_attr=hrefstr(urlparticipa('videos/view/',str(post_guid)))
+        post_attr=pidstr(urlparticipa('videos/view/',str(post_guid)))
         xml.write(l3+"<video"+post_attr+">\n")
         
         write_tag(xml,l4,"titulo",post_title,'')
@@ -451,7 +457,7 @@ def write_userevents_subsection (db, xml, user_guid):
         # 30 = select * from elgg_metastrings where string='organizer';
         organizer=post_content(db, post_guid, 30)
         
-        post_attr=hrefstr(urlparticipa('event_calendar/view/',str(post_guid)))
+        post_attr=pidstr(urlparticipa('event_calendar/view/',str(post_guid)))
         xml.write(l3+"<evento"+post_attr+">\n")
         
         write_tag(xml,l4,"titulo",post_title,'')
