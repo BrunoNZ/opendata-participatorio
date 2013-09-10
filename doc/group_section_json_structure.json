@@ -1,0 +1,164 @@
+{"comunidades": [
+	{
+		"cid": "xyz",
+		"proprietario": {
+			"uid": "xyz",
+			"nome": "xyz"
+		},
+		"titulo": "xyz",
+		"data": "xyz",
+		"breve_descricao": "xyz",
+		"descricao": "xyz",
+
+		"quantidade_membros": "xyz",
+		"membros": [
+			{
+				"uid": "xyz",
+				"nome": "xyz"
+			}
+		],
+
+		"arquivos_habilitado": "xyz",
+		"arquivos": [
+			{
+				"pid": "xyz",
+				"autor": {
+					"uid": "xyz",
+					"nome": "xyz"
+				},
+				"titulo": "xyz",
+				"data": "xyz",
+				"link": "xyz",
+				"descricao": "xyz",
+				"comentarios": [
+					{
+						"usuario": {
+							"uid": "xyz",
+							"nome": "xyz"
+						},
+						"data": "xyz",
+						"mensagem": "xyz"
+					}
+				]
+			}
+		],
+
+		"debates_habilitado": "xyz",
+		"debates": [
+			{
+				"pid": "xyz",
+				"autor": {
+					"uid": "xyz",
+					"nome": "xyz"
+				},
+				"titulo": "xyz",
+				"data": "xyz",
+				"texto": "xyz",
+				"comentarios": [
+					{
+						"usuario": {
+							"uid": "xyz",
+							"nome": "xyz"
+						},
+						"data": "xyz",
+						"mensagem": "xyz"
+					}
+				]
+			}
+		],
+
+		"favoritos_habilitado": "xyz",
+		"favoritos": [
+			{
+				"pid": "xyz",
+				"autor": {
+					"uid": "xyz",
+					"nome": "xyz"
+				},
+				"titulo": "xyz",
+				"data": "xyz",
+				"link": "xyz",
+				"descricao": "xyz",
+				"comentarios": [
+					{
+						"usuario": {
+							"uid": "xyz",
+							"nome": "xyz"
+						},
+						"data": "xyz",
+						"mensagem": "xyz"
+					}
+				]
+			}
+		],
+
+		"paginas_habilitado": "xyz",
+		"paginas": [
+			{
+				"pid": "xyz",
+				"titulo": "xyz",
+				"data": "xyz",
+				"permissao_escrita": "xyz",
+				"texto": "xyz",
+				"comentarios": [
+					{
+						"usuario": {
+							"uid": "xyz",
+							"nome": "xyz"
+						},
+						"data": "xyz",
+						"mensagem": "xyz"
+					}
+				]
+			}
+		],
+
+		"videos_habilitado": "xyz",
+		"videos": [
+			{
+				"pid": "xyz",
+				"titulo": "xyz",
+				"data": "xyz",
+				"link": "xyz",
+				"descricao": "xyz",
+				"comentarios": [
+					{
+						"usuario": {
+							"uid": "xyz",
+							"nome": "xyz"
+						},
+						"data": "xyz",
+						"mensagem": "xyz"
+					}
+				]
+			}
+		],
+
+		"eventos_habilitado": "xyz",
+		"eventos": [
+			{
+				"pid": "xyz",
+				"titulo": "xyz",
+				"data": "xyz",
+				"organizador": "xyz",
+				"contato": "xyz",
+				"endereco": "xyz",
+				"data_inicio": "xyz",
+				"data_fim": "xyz",
+				"taxa_de_participacao": "xyz",
+				"descricao": "xyz",
+				"comentarios": [
+					{
+						"usuario": {
+							"uid": "xyz",
+							"nome": "xyz"
+						},
+						"data": "xyz",
+						"mensagem": "xyz"
+					}
+				]
+			}
+		]
+
+	}
+]}

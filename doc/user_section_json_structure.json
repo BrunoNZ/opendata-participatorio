@@ -1,0 +1,156 @@
+{"usuarios": [
+	{
+		"uid": "xyz",
+		
+		"nome": "xyz",
+
+		"quantidade_amigos": "xyz",
+		"amigos": [
+			{
+				"uid": "xyz",
+				"nome": "xyz"
+			}
+		],
+
+		"comunidades": {
+			"dono": [
+				{
+					"cid": "xyz",
+					"nome": "xyz"
+				}
+			],
+			"membro": [
+				{
+					"cid": "xyz",
+					"nome": "xyz"
+				}
+			]
+		},
+
+		"arquivos": [
+			{
+				"pid": "xyz",
+				"titulo": "xyz",
+				"data": "xyz",
+				"link": "xyz",
+				"descricao": "xyz",
+				"comentarios": [
+					{
+						"usuario": {
+							"uid": "xyz",
+							"nome": "xyz"
+						},
+						"data": "xyz",
+						"mensagem": "xyz"
+					}
+				]
+			}
+		],
+
+		"blogs": [
+			{
+				"pid": "xyz",
+				"titulo": "xyz",
+				"data": "xyz",
+				"resumo": "xyz",
+				"texto": "xyz",
+				"permissao_comentarios": "xyz",
+				"comentarios": [
+					{
+						"usuario": {
+							"uid": "xyz",
+							"nome": "xyz"
+						},
+						"data": "xyz",
+						"mensagem": "xyz"
+					}
+				]
+			}
+		],
+		
+		"favoritos": [
+			{
+				"pid": "xyz",
+				"titulo": "xyz",
+				"data": "xyz",
+				"link": "xyz",
+				"descricao": "xyz",
+				"comentarios": [
+					{
+						"usuario": {
+							"uid": "xyz",
+							"nome": "xyz"
+						},
+						"data": "xyz",
+						"mensagem": "xyz"
+					}
+				]
+			}
+		],
+
+		"paginas": [
+			{
+				"pid": "xyz",
+				"titulo": "xyz",
+				"data": "xyz",
+				"permissao_escrita": "xyz",
+				"texto": "xyz",
+				"comentarios": [
+					{
+						"usuario": {
+							"uid": "xyz",
+							"nome": "xyz"
+						},
+						"data": "xyz",
+						"mensagem": "xyz"
+					}
+				]
+			}
+		],
+
+		"videos": [
+			{
+				"pid": "xyz",
+				"titulo": "xyz",
+				"data": "xyz",
+				"link": "xyz",
+				"descricao": "xyz",
+				"comentarios": [
+					{
+						"usuario": {
+							"uid": "xyz",
+							"nome": "xyz"
+						},
+						"data": "xyz",
+						"mensagem": "xyz"
+					}
+				]
+			}
+		],
+
+		"eventos": [
+			{
+				"pid": "xyz",
+				"titulo": "xyz",
+				"data": "xyz",
+				"organizador": "xyz",
+				"contato": "xyz",
+				"endereco": "xyz",
+				"data_inicio": "xyz",
+				"data_fim": "xyz",
+				"taxa_de_participacao": "xyz",
+				"descricao": "xyz",
+				"comentarios": [
+					{
+						"usuario": {
+							"uid": "xyz",
+							"nome": "xyz"
+						},
+						"data": "xyz",
+						"mensagem": "xyz"
+					}
+				]
+			}
+		]
+	}
+]}
