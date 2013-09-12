@@ -50,6 +50,11 @@ def lvl (l):
         return ""
 #--------------------------------------------------------------------#    
 
+#--------------------------------------------------------------------#    
+def replacebadchars (string):
+    return "xyz"
+#--------------------------------------------------------------------#    
+
 #--------------------------------------------------------------------#
 def cdata (string):
     cdata_string="<![CDATA["+string+"]]>"
@@ -203,7 +208,7 @@ def write_comments (db, xml, post_guid):
         write_tag(xml,6,"uid",user_attr,",")
         write_tag(xml,6,"usuario",user_name,",")
         write_tag(xml,6,"data",datestr(time),",")
-        write_tag(xml,6,"mensagem",cdata(string),"")
+        write_tag(xml,6,"mensagem",replacebadchars(string),"")
         
         write_close_tag(xml,5,"}",(row < post_comments.rowcount))
         

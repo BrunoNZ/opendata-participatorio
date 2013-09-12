@@ -149,8 +149,8 @@ def write_userfiles_subsection (db, xml, user_guid):
         wrt.write_tag(xml,4,"pid",post_attr,",")
         wrt.write_tag(xml,4,"titulo",post_title,",")
         wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
-        wrt.write_tag(xml,4,"link",wrt.hrefstr(file_link),",")
-        wrt.write_tag(xml,4,"descricao",wrt.cdata(post_desc),",")
+        wrt.write_tag(xml,4,"link",file_link,",")
+        wrt.write_tag(xml,4,"descricao",wrt.replacebadchars(post_desc),",")
             
         wrt.write_comments(db,xml,post_guid)
         
@@ -188,8 +188,8 @@ def write_userblogs_subsection (db, xml, user_guid):
         wrt.write_tag(xml,4,"pid",post_attr,",")
         wrt.write_tag(xml,4,"titulo",post_title,",")
         wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
-        wrt.write_tag(xml,4,"resumo",wrt.cdata(post_excerpt),",")
-        wrt.write_tag(xml,4,"texto",wrt.cdata(post_desc),",")
+        wrt.write_tag(xml,4,"resumo",wrt.replacebadchars(post_excerpt),",")
+        wrt.write_tag(xml,4,"texto",wrt.replacebadchars(post_desc),",")
                     
         wrt.write_comments(db,xml,post_guid)
         
@@ -225,8 +225,8 @@ def write_userbookmarks_subsection (db, xml, user_guid):
         wrt.write_tag(xml,4,"pid",post_attr,",")
         wrt.write_tag(xml,4,"titulo",post_title,",")
         wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
-        wrt.write_tag(xml,4,"link",wrt.hrefstr(bookmark_link),",")
-        wrt.write_tag(xml,4,"descricao",wrt.cdata(post_desc),",")
+        wrt.write_tag(xml,4,"link",bookmark_link,",")
+        wrt.write_tag(xml,4,"descricao",wrt.replacebadchars(post_desc),",")
                     
         wrt.write_comments(db,xml,post_guid)
         
@@ -260,7 +260,7 @@ def write_userpages_subsection (db, xml, user_guid):
         wrt.write_tag(xml,4,"pid",post_attr,",")
         wrt.write_tag(xml,4,"titulo",post_title,",")
         wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
-        wrt.write_tag(xml,4,"texto",wrt.cdata(post_desc),",")
+        wrt.write_tag(xml,4,"texto",wrt.replacebadchars(post_desc),",")
                     
         wrt.write_comments(db,xml,post_guid)
         
@@ -283,6 +283,8 @@ def write_uservideos_subsection (db, xml, user_guid):
     row=0
     for (post_guid, post_title, post_desc, time)\
         in user_videos:
+        
+        row=row+1
                     
         # 477 = select * from elgg_metastrings where string='video_url';
         video_link=wrt.post_content(db, post_guid, 477)
@@ -295,8 +297,8 @@ def write_uservideos_subsection (db, xml, user_guid):
         wrt.write_tag(xml,4,"pid",post_attr,",")
         wrt.write_tag(xml,4,"titulo",post_title,",")
         wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
-        wrt.write_tag(xml,4,"link",wrt.hrefstr(video_link),",")
-        wrt.write_tag(xml,4,"descricao",wrt.cdata(post_desc),",")
+        wrt.write_tag(xml,4,"link",video_link,",")
+        wrt.write_tag(xml,4,"descricao",wrt.replacebadchars(post_desc),",")
         
         wrt.write_comments(db,xml,post_guid)
         
@@ -355,7 +357,7 @@ def write_userevents_subsection (db, xml, user_guid):
         wrt.write_tag(xml,4,"data_inicio",wrt.datestr(time_start),",")
         wrt.write_tag(xml,4,"data_fim",wrt.datestr(time_end),",")
         wrt.write_tag(xml,4,"taxa_participacao",fees,",")
-        wrt.write_tag(xml,4,"descricao",wrt.cdata(post_desc),",")
+        wrt.write_tag(xml,4,"descricao",wrt.replacebadchars(post_desc),",")
         
         wrt.write_comments(db,xml,post_guid)
             
