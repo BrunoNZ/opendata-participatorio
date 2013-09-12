@@ -50,7 +50,7 @@ def write_groupmembers_subsection (db, xml, group_guid):
         wrt.write_open_tag(xml,3,"","{")
         
         prefix='profile/'
-        user_attr=wrt.uidstr(wrt.urlparticipa(prefix,user_username))
+        user_attr=wrt.urlparticipa(prefix,user_username)
         wrt.write_tag(xml,4,"uid",user_attr,",")
         wrt.write_tag(xml,4,"usuario",user_name,"")
         
@@ -87,11 +87,11 @@ def write_groupfiles_subsection (db, xml, group_guid):
         file_link=wrt.urlparticipa(prefix,str(post_guid))
         
         prefix='file/view/'
-        post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
+        post_attr=wrt.urlparticipa(prefix,str(post_guid))
         wrt.write_tag(xml,4,"pid",post_attr,",")
 
         prefix='profile/'
-        owner_attr=wrt.uidstr(wrt.urlparticipa(prefix,owner_username))
+        owner_attr=wrt.urlparticipa(prefix,owner_username)
         
         wrt.write_tag(xml,4,"uid",owner_attr,",")
         wrt.write_tag(xml,4,"autor",owner_name,",")
@@ -132,11 +132,11 @@ def write_groupforumtopics_subsection (db, xml, group_guid):
         wrt.write_open_tag(xml,3,"","{")
         
         prefix='discussion/view/'
-        post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
+        post_attr=wrt.urlparticipa(prefix,str(post_guid))
         wrt.write_tag(xml,4,"pid",post_attr,",")
 
         prefix='profile/'
-        owner_attr=wrt.uidstr(wrt.urlparticipa(prefix,owner_username))
+        owner_attr=wrt.urlparticipa(prefix,owner_username)
         
         wrt.write_tag(xml,4,"uid",owner_attr,",")
         wrt.write_tag(xml,4,"autor",owner_name,",")
@@ -179,11 +179,11 @@ def write_groupbookmarks_subsection (db, xml, group_guid):
         bookmark_link=wrt.post_content(db,post_guid,90)
         
         prefix='bookmarks/view/'
-        post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
+        post_attr=wrt.urlparticipa(prefix,str(post_guid))
         wrt.write_tag(xml,4,"pid",post_attr,",")
 
         prefix='profile/'
-        owner_attr=wrt.uidstr(wrt.urlparticipa(prefix,owner_username))
+        owner_attr=wrt.urlparticipa(prefix,owner_username)
         
         wrt.write_tag(xml,4,"uid",owner_attr,",")
         wrt.write_tag(xml,4,"autor",owner_name,",")
@@ -224,11 +224,11 @@ def write_grouppages_subsection (db, xml, group_guid):
         wrt.write_open_tag(xml,3,"","{")
         
         prefix='pages/view/'
-        post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
+        post_attr=wrt.urlparticipa(prefix,str(post_guid))
         wrt.write_tag(xml,4,"pid",post_attr,",")
 
         prefix='profile/'
-        owner_attr=wrt.uidstr(wrt.urlparticipa(prefix,owner_username))
+        owner_attr=wrt.urlparticipa(prefix,owner_username)
         
         wrt.write_tag(xml,4,"uid",owner_attr,",")
         wrt.write_tag(xml,4,"autor",owner_name,",")
@@ -271,11 +271,11 @@ def write_groupvideos_subsection (db, xml, group_guid):
         wrt.write_open_tag(xml,3,"","{")
             
         prefix='videos/view/'
-        post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
+        post_attr=wrt.urlparticipa(prefix,str(post_guid))
         wrt.write_tag(xml,4,"pid",post_attr,",")
         
         prefix='profile/'
-        owner_attr=wrt.uidstr(wrt.urlparticipa(prefix,owner_username))
+        owner_attr=wrt.urlparticipa(prefix,owner_username)
         
         wrt.write_tag(xml,4,"uid",owner_attr,",")
         wrt.write_tag(xml,4,"autor",owner_name,",")
@@ -334,11 +334,11 @@ def write_groupevents_subsection (db, xml, group_guid):
         organizer=wrt.post_content(db, post_guid, 30)
 
         prefix='event_calendar/view/'
-        post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
+        post_attr=wrt.urlparticipa(prefix,str(post_guid))
         wrt.write_tag(xml,4,"pid",post_attr,",")
                 
         prefix='profile/'
-        owner_attr=wrt.uidstr(wrt.urlparticipa(prefix,owner_username))
+        owner_attr=wrt.urlparticipa(prefix,owner_username)
         
         wrt.write_tag(xml,4,"uid",owner_attr,",")
         wrt.write_tag(xml,4,"autor",owner_name,",")
@@ -382,12 +382,12 @@ def write_groups_section(db, xml_file):
         wrt.write_open_tag(xml,1,"","{")
         
         prefix='groups/profile/'
-        group_attr=wrt.cidstr(wrt.urlparticipa(prefix,str(guid)))
+        group_attr=wrt.urlparticipa(prefix,str(guid))
         wrt.write_tag(xml,4,"cid",group_attr,",")
 
         # Write all group's information
         prefix='profile/'
-        owner_attr=wrt.uidstr(wrt.urlparticipa(prefix,owner_username))
+        owner_attr=wrt.urlparticipa(prefix,owner_username)
         
         wrt.write_tag(xml,2,"uid",owner_attr,",")
         wrt.write_tag(xml,2,"proprietario",owner_name,",")

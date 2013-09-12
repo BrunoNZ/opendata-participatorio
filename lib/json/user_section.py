@@ -47,11 +47,11 @@ def write_userfriends_subsection (db, xml, user_guid):
         wrt.write_open_tag(xml,3,"","{")
         
         prefix='profile/'
-        friend_attr=wrt.uidstr(wrt.urlparticipa(prefix,friend_username))
+        friend_attr=wrt.urlparticipa(prefix,friend_username)
+        
         wrt.write_tag(xml,4,"uid",friend_attr,",")
         wrt.write_tag(xml,4,"usuario",friend_name,"")
         
-        wrt.write_tag(xml,4,str(row),str(friends_info.rowcount),"")
         wrt.write_close_tag(xml,3,"}",(row < friends_info.rowcount))
         
     wrt.write_close_tag(xml,2,"]",True)
@@ -75,7 +75,8 @@ def write_userowngroup_subsection (db, xml, user_guid):
         wrt.write_open_tag(xml,4,"","{")
         
         prefix='groups/profile/'
-        group_attr=wrt.cidstr(wrt.urlparticipa(prefix,str(group_id)))
+        group_attr=wrt.urlparticipa(prefix,str(group_id))
+        
         wrt.write_tag(xml,5,"cid",group_attr,",")
         wrt.write_tag(xml,5,"titulo",group_title,"")
         
@@ -102,9 +103,10 @@ def write_usermembergroup_subsection (db, xml, user_guid):
         wrt.write_open_tag(xml,4,"","{")
         
         prefix='groups/profile/'
-        group_attr=wrt.cidstr(wrt.urlparticipa(prefix,str(group_id)))
+        group_attr=wrt.urlparticipa(prefix,str(group_id))
+        
         wrt.write_tag(xml,5,"cid",group_attr,",")
-        wrt.write_tag(xml,5,"titulo",group_title,",")
+        wrt.write_tag(xml,5,"titulo",group_title,"")
         
         wrt.write_close_tag(xml,4,"}",(row < user_membergroups.rowcount))
         
@@ -140,7 +142,7 @@ def write_userfiles_subsection (db, xml, user_guid):
         file_link=wrt.urlparticipa(prefix,str(post_guid))
         
         prefix='file/view/'
-        post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
+        post_attr=wrt.urlparticipa(prefix,str(post_guid))
         
         wrt.write_open_tag(xml,3,"","{")
         
@@ -180,7 +182,7 @@ def write_userblogs_subsection (db, xml, user_guid):
         post_excerpt=wrt.post_content(db,post_guid,64)
             
         prefix='blog/view/'
-        post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
+        post_attr=wrt.urlparticipa(prefix,str(post_guid))
         wrt.write_open_tag(xml,3,"","{")
 
         wrt.write_tag(xml,4,"pid",post_attr,",")
@@ -217,7 +219,7 @@ def write_userbookmarks_subsection (db, xml, user_guid):
         bookmark_link=wrt.post_content(db,post_guid,90)
   
         prefix='bookmarks/view/'
-        post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
+        post_attr=wrt.urlparticipa(prefix,str(post_guid))
         wrt.write_open_tag(xml,3,"","{")
     
         wrt.write_tag(xml,4,"pid",post_attr,",")
@@ -251,7 +253,8 @@ def write_userpages_subsection (db, xml, user_guid):
         row=row+1
         
         prefix='pages/view/'
-        post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
+        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        
         wrt.write_open_tag(xml,3,"","{")
 
         wrt.write_tag(xml,4,"pid",post_attr,",")
@@ -285,7 +288,8 @@ def write_uservideos_subsection (db, xml, user_guid):
         video_link=wrt.post_content(db, post_guid, 477)
         
         prefix='videos/view/'
-        post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
+        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        
         wrt.write_open_tag(xml,3,"","{")
         
         wrt.write_tag(xml,4,"pid",post_attr,",")
@@ -338,7 +342,8 @@ def write_userevents_subsection (db, xml, user_guid):
         organizer=wrt.post_content(db, post_guid, 30)
         
         prefix='event_calendar/view/'
-        post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
+        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        
         wrt.write_open_tag(xml,3,"","{")
         
         wrt.write_tag(xml,4,"pid",post_attr,",")
@@ -379,7 +384,8 @@ def write_users_section (db, xml_file):
         row=row+1
         
         prefix='profile/'
-        user_attr=wrt.uidstr(wrt.urlparticipa(prefix,username))
+        user_attr=wrt.urlparticipa(prefix,username)
+        
         wrt.write_open_tag(xml,1,"","{")
         
         # Write all user's information

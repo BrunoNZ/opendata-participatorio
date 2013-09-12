@@ -198,7 +198,8 @@ def write_comments (db, xml, post_guid):
         write_open_tag(xml,5,"","{")
         
         prefix='profile/'
-        user_attr=uidstr(urlparticipa(prefix,user_username))
+        user_attr=urlparticipa(prefix,user_username)
+        
         write_tag(xml,6,"uid",user_attr,",")
         write_tag(xml,6,"usuario",user_name,",")
         write_tag(xml,6,"data",datestr(time),",")
