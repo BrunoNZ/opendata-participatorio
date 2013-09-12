@@ -168,8 +168,11 @@ def write_open_tag (xml, l, tag_name, sep):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_close_tag (xml, l, sep):
-    xml.write(lvl(l)+sep+"\n")
+def write_close_tag (xml, l, sep, comma_flag):
+    if comma_flag == True:
+        xml.write(lvl(l)+sep+","+"\n")
+    else:
+        xml.write(lvl(l)+sep+"\n")    
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
@@ -184,11 +187,13 @@ def write_comments (db, xml, post_guid):
     post_comments = db.cursor()
     post_comments.execute(qry.qry_post_comments, (post_guid,))
     
-    row=0
-    
     write_open_tag(xml,4,"comentarios","[")
+    
+    row=0
     for (user_id, user_name, user_username, string, time)\
         in post_comments:
+        
+        row=row+1
         
         write_open_tag(xml,5,"","{")
         
@@ -199,17 +204,9 @@ def write_comments (db, xml, post_guid):
         write_tag(xml,6,"data",datestr(time),",")
         write_tag(xml,6,"mensagem",cdata(string),"")
         
-        # Increment the row number to be able to know wheter is the last
-        # row or not.
-        row=row+1
-        if (row < post_comments.rowcount):
-            sep="},"
-        else:
-            sep="}"
+        write_close_tag(xml,5,"}",(row < post_comments.rowcount))
         
-        write_close_tag(xml,5,sep)
-        
-    write_close_tag(xml,4,"]")
+    write_close_tag(xml,4,"]",False)
     
     post_comments.close()
 #--------------------------------------------------------------------#
