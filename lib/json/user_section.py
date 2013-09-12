@@ -36,13 +36,31 @@ def write_userfriends_subsection (db, xml, user_guid):
     friends_info = db.cursor()
     friends_info.execute(qry.qry_user_friends, (user_guid))
     
-    wrt.write_open_tag(xml,2,"amigos")
-    for (friend_id, friend_name, friend_username) in friends_info:
+    wrt.write_open_tag(xml,2,"amigos","[")
+    
+    row=0
+    for (friend_id, friend_name, friend_username)\
+        in friends_info:
+            
+        wrt.write_open_tag(xml,3,"","{")
+        
         prefix='profile/'
         friend_attr=wrt.uidstr(wrt.urlparticipa(prefix,friend_username))
-        wrt.write_tag(xml,3,"uid",friend_attr)
-        wrt.write_tag(xml,3,"usuario",friend_name)
-    wrt.write_close_tag(xml,2,"amigos")
+        wrt.write_tag(xml,4,"uid",friend_attr,",")
+        wrt.write_tag(xml,4,"usuario",friend_name,"")
+        
+        # Increment the row number to be able to know wheter is the last
+        # row or not.
+        row=row+1
+        if (row < friends_info.rowcount):
+            sep="},"
+        else:
+            sep="}"
+        
+        wrt.write_tag(xml,4,str(row),str(friends_info.rowcount),"")
+        wrt.write_close_tag(xml,3,sep)
+        
+    wrt.write_close_tag(xml,2,"],")
         
     friends_info.close()
 #--------------------------------------------------------------------#
@@ -52,13 +70,30 @@ def write_userowngroup_subsection (db, xml, user_guid):
     user_owngroups = db.cursor()
     user_owngroups.execute(qry.qry_user_owngroups, (user_guid, user_guid, ))
         
-    wrt.write_open_tag(xml,3,"dono")
-    for (group_id, group_title) in user_owngroups:
+    wrt.write_open_tag(xml,3,"dono","[")
+    
+    row=0
+    for (group_id, group_title)\
+        in user_owngroups:
+            
+        wrt.write_open_tag(xml,4,"","{")
+        
         prefix='groups/profile/'
         group_attr=wrt.cidstr(wrt.urlparticipa(prefix,str(group_id)))
-        wrt.write_tag(xml,3,"cid",group_attr)
-        wrt.write_tag(xml,4,"titulo",group_title)
-    wrt.write_close_tag(xml,3,"dono")
+        wrt.write_tag(xml,5,"cid",group_attr,",")
+        wrt.write_tag(xml,5,"titulo",group_title,"")
+        
+        # Increment the row number to be able to know wheter is the last
+        # row or not.
+        row=row+1
+        if (row < user_owngroups.rowcount):
+            sep="},"
+        else:
+            sep="}"
+        
+        wrt.write_close_tag(xml,4,sep)
+        
+    wrt.write_close_tag(xml,3,"],")
         
     user_owngroups.close()
 #--------------------------------------------------------------------#
@@ -68,23 +103,40 @@ def write_usermembergroup_subsection (db, xml, user_guid):
     user_membergroups = db.cursor()
     user_membergroups.execute(qry.qry_user_membergroups, (user_guid, ))
         
-    wrt.write_open_tag(xml,3,"membro")
-    for (group_id, group_title) in user_membergroups:
+    wrt.write_open_tag(xml,3,"membro","[")
+    
+    row=0
+    for (group_id, group_title)\
+        in user_membergroups:
+            
+        wrt.write_open_tag(xml,4,"","{")
+        
         prefix='groups/profile/'
         group_attr=wrt.cidstr(wrt.urlparticipa(prefix,str(group_id)))
-        wrt.write_tag(xml,3,"cid",group_attr)
-        wrt.write_tag(xml,4,"titulo",group_title)
-    wrt.write_close_tag(xml,3,"membro")
+        wrt.write_tag(xml,5,"cid",group_attr,",")
+        wrt.write_tag(xml,5,"titulo",group_title,",")
+        
+        # Increment the row number to be able to know wheter is the last
+        # row or not.
+        row=row+1
+        if (row < user_membergroups.rowcount):
+            sep="},"
+        else:
+            sep="}"
+        
+        wrt.write_close_tag(xml,4,sep)
+        
+    wrt.write_close_tag(xml,3,"]")
         
     user_membergroups.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def write_usergroups_subsection (db, xml, user_guid):
-    wrt.write_open_tag(xml,2,"comunidades")
+    wrt.write_open_tag(xml,2,"comunidades","{")
     write_userowngroup_subsection(db, xml, user_guid)
     write_usermembergroup_subsection(db, xml, user_guid)
-    wrt.write_close_tag(xml,2,"comunidades")
+    wrt.write_close_tag(xml,2,"},")
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
@@ -94,8 +146,9 @@ def write_userfiles_subsection (db, xml, user_guid):
     # 1 = select * from elgg_entity_subtypes where subtype='file';
     user_files.execute(qry.qry_user_posts, (user_guid, user_guid, 1,))
     
-    wrt.write_open_tag(xml,2,"arquivos")
+    wrt.write_open_tag(xml,2,"arquivos","[")
     
+    row=0
     for (post_guid, post_title, post_desc, time)\
         in user_files:
         
@@ -105,19 +158,27 @@ def write_userfiles_subsection (db, xml, user_guid):
         prefix='file/view/'
         post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
         
-        wrt.write_open_tag(xml,3,"arquivo")
+        wrt.write_open_tag(xml,3,"","{")
         
-        wrt.write_tag(xml,4,"pid",post_attr)
-        wrt.write_tag(xml,4,"titulo",post_title)
-        wrt.write_tag(xml,4,"data",wrt.datestr(time))
-        wrt.write_tag(xml,4,"link",wrt.hrefstr(file_link))
-        wrt.write_tag(xml,4,"descricao",wrt.cdata(post_desc))
+        wrt.write_tag(xml,4,"pid",post_attr,",")
+        wrt.write_tag(xml,4,"titulo",post_title,",")
+        wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(xml,4,"link",wrt.hrefstr(file_link),",")
+        wrt.write_tag(xml,4,"descricao",wrt.cdata(post_desc),",")
             
         wrt.write_comments(db,xml,post_guid)
         
-        wrt.write_close_tag(xml,3,"arquivo")
+        # Increment the row number to be able to know wheter is the last
+        # row or not.
+        row=row+1
+        if (row < user_files.rowcount):
+            sep="},"
+        else:
+            sep="}"
+        
+        wrt.write_close_tag(xml,3,sep)
     
-    wrt.write_close_tag(xml,2,"arquivos")
+    wrt.write_close_tag(xml,2,"],")
     
     user_files.close()
 #--------------------------------------------------------------------#
@@ -129,8 +190,9 @@ def write_userblogs_subsection (db, xml, user_guid):
     # 4 = select * from elgg_entity_subtypes where subtype='blog';
     user_blogs.execute(qry.qry_user_posts, (user_guid, user_guid, 4,))
     
-    wrt.write_open_tag(xml,2,"blogs")
+    wrt.write_open_tag(xml,2,"blogs","[")
     
+    row=0
     for (post_guid, post_title, post_desc, time)\
         in user_blogs:
                     
@@ -141,19 +203,27 @@ def write_userblogs_subsection (db, xml, user_guid):
             
         prefix='blog/view/'
         post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
-        wrt.write_open_tag(xml,3,"blog")
+        wrt.write_open_tag(xml,3,"","{")
 
-        wrt.write_tag(xml,4,"pid",post_attr)
-        wrt.write_tag(xml,4,"titulo",post_title)
-        wrt.write_tag(xml,4,"data",wrt.datestr(time))
-        wrt.write_tag(xml,4,"resumo",wrt.cdata(post_excerpt))
-        wrt.write_tag(xml,4,"texto",wrt.cdata(post_desc))
+        wrt.write_tag(xml,4,"pid",post_attr,",")
+        wrt.write_tag(xml,4,"titulo",post_title,",")
+        wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(xml,4,"resumo",wrt.cdata(post_excerpt),",")
+        wrt.write_tag(xml,4,"texto",wrt.cdata(post_desc),",")
                     
         wrt.write_comments(db,xml,post_guid)
         
-        wrt.write_close_tag(xml,3,"blog")
+        # Increment the row number to be able to know wheter is the last
+        # row or not.
+        row=row+1
+        if (row < user_blogs.rowcount):
+            sep="},"
+        else:
+            sep="}"
+        
+        wrt.write_close_tag(xml,3,sep)
             
-    wrt.write_close_tag(xml,2,"blogs")
+    wrt.write_close_tag(xml,2,"],")
     
     user_blogs.close()
 #--------------------------------------------------------------------#
@@ -165,8 +235,9 @@ def write_userbookmarks_subsection (db, xml, user_guid):
     # 13 = select * from elgg_entity_subtypes where subtype='bookmarks';
     user_bookmarks.execute(qry.qry_user_posts, (user_guid, user_guid, 13,))
     
-    wrt.write_open_tag(xml,2,"favoritos")
+    wrt.write_open_tag(xml,2,"favoritos","[")
     
+    row=0
     for (post_guid, post_title, post_desc, time)\
         in user_bookmarks:
                     
@@ -175,19 +246,27 @@ def write_userbookmarks_subsection (db, xml, user_guid):
   
         prefix='bookmarks/view/'
         post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
-        wrt.write_open_tag(xml,3,"favorito")
+        wrt.write_open_tag(xml,3,"","{")
     
-        wrt.write_tag(xml,4,"pid",post_attr)
-        wrt.write_tag(xml,4,"titulo",post_title)
-        wrt.write_tag(xml,4,"data",wrt.datestr(time))
-        wrt.write_tag(xml,4,"link",wrt.hrefstr(bookmark_link))
-        wrt.write_tag(xml,4,"descricao",wrt.cdata(post_desc))
+        wrt.write_tag(xml,4,"pid",post_attr,",")
+        wrt.write_tag(xml,4,"titulo",post_title,",")
+        wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(xml,4,"link",wrt.hrefstr(bookmark_link),",")
+        wrt.write_tag(xml,4,"descricao",wrt.cdata(post_desc),",")
                     
         wrt.write_comments(db,xml,post_guid)
         
-        wrt.write_close_tag(xml,3,"favorito")
+        # Increment the row number to be able to know wheter is the last
+        # row or not.
+        row=row+1
+        if (row < user_bookmarks.rowcount):
+            sep="},"
+        else:
+            sep="}"
+        
+        wrt.write_close_tag(xml,3,sep)
                 
-    wrt.write_close_tag(xml,2,"favoritos")
+    wrt.write_close_tag(xml,2,"],")
     
     user_bookmarks.close()
 #--------------------------------------------------------------------#
@@ -199,25 +278,34 @@ def write_userpages_subsection (db, xml, user_guid):
     # 14 = select * from elgg_entity_subtypes where subtype='page_top';
     user_pages.execute(qry.qry_user_posts, (user_guid, user_guid, 14,))
     
-    wrt.write_open_tag(xml,2,"paginas")
+    wrt.write_open_tag(xml,2,"paginas","[")
     
+    row=0
     for (post_guid, post_title, post_desc, time)\
         in user_pages:
         
         prefix='pages/view/'
         post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
-        wrt.write_open_tag(xml,3,"pagina")
+        wrt.write_open_tag(xml,3,"","{")
 
-        wrt.write_tag(xml,4,"pid",post_attr)
-        wrt.write_tag(xml,4,"titulo",post_title)
-        wrt.write_tag(xml,4,"data",wrt.datestr(time))
-        wrt.write_tag(xml,4,"texto",wrt.cdata(post_desc))
+        wrt.write_tag(xml,4,"pid",post_attr,",")
+        wrt.write_tag(xml,4,"titulo",post_title,",")
+        wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(xml,4,"texto",wrt.cdata(post_desc),",")
                     
         wrt.write_comments(db,xml,post_guid)
         
-        wrt.write_close_tag(xml,3,"pagina")
+        # Increment the row number to be able to know wheter is the last
+        # row or not.
+        row=row+1
+        if (row < user_pages.rowcount):
+            sep="},"
+        else:
+            sep="}"
         
-    wrt.write_close_tag(xml,2,"paginas")
+        wrt.write_close_tag(xml,3,sep)
+        
+    wrt.write_close_tag(xml,2,"],")
     
     user_pages.close()
 #--------------------------------------------------------------------#
@@ -229,8 +317,9 @@ def write_uservideos_subsection (db, xml, user_guid):
     # 12 = select * from elgg_entity_subtypes where subtype='videos';
     user_videos.execute(qry.qry_user_posts, (user_guid, user_guid, 12,))
     
-    wrt.write_open_tag(xml,2,"videos")
+    wrt.write_open_tag(xml,2,"videos","[")
     
+    row=0
     for (post_guid, post_title, post_desc, time)\
         in user_videos:
                     
@@ -239,19 +328,27 @@ def write_uservideos_subsection (db, xml, user_guid):
         
         prefix='videos/view/'
         post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
-        wrt.write_open_tag(xml,3,"video")
+        wrt.write_open_tag(xml,3,"","{")
         
-        wrt.write_tag(xml,4,"pid",post_attr)
-        wrt.write_tag(xml,4,"titulo",post_title)
-        wrt.write_tag(xml,4,"data",wrt.datestr(time))
-        wrt.write_tag(xml,4,"link",wrt.hrefstr(video_link))
-        wrt.write_tag(xml,4,"descricao",wrt.cdata(post_desc))
+        wrt.write_tag(xml,4,"pid",post_attr,",")
+        wrt.write_tag(xml,4,"titulo",post_title,",")
+        wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(xml,4,"link",wrt.hrefstr(video_link),",")
+        wrt.write_tag(xml,4,"descricao",wrt.cdata(post_desc),",")
         
         wrt.write_comments(db,xml,post_guid)
         
-        wrt.write_close_tag(xml,3,"video")
+        # Increment the row number to be able to know wheter is the last
+        # row or not.
+        row=row+1
+        if (row < user_videos.rowcount):
+            sep="},"
+        else:
+            sep="}"
         
-    wrt.write_close_tag(xml,2,"videos")
+        wrt.write_close_tag(xml,3,sep)
+        
+    wrt.write_close_tag(xml,2,"],")
     
     user_videos.close()
 #--------------------------------------------------------------------#
@@ -264,8 +361,9 @@ def write_userevents_subsection (db, xml, user_guid):
     user_events.execute(qry.qry_user_posts, (user_guid, user_guid, 6,))
     
     
-    wrt.write_open_tag(xml,2,"eventos")
+    wrt.write_open_tag(xml,2,"eventos","[")
     
+    row=0
     for (post_guid, post_title, post_desc, time)\
         in user_events:
             
@@ -289,24 +387,32 @@ def write_userevents_subsection (db, xml, user_guid):
         
         prefix='event_calendar/view/'
         post_attr=wrt.pidstr(wrt.urlparticipa(prefix,str(post_guid)))
-        wrt.write_open_tag(xml,3,"")
+        wrt.write_open_tag(xml,3,"","{")
         
-        wrt.write_tag(xml,4,"pid",post_attr)
-        wrt.write_tag(xml,4,"titulo",post_title)
-        wrt.write_tag(xml,4,"data",wrt.datestr(time))
-        wrt.write_tag(xml,4,"organizador",organizer)
-        wrt.write_tag(xml,4,"contato",contact)
-        wrt.write_tag(xml,4,"endereco",venue)
-        wrt.write_tag(xml,4,"data_inicio",wrt.datestr(time_start))
-        wrt.write_tag(xml,4,"data_fim",wrt.datestr(time_end))
-        wrt.write_tag(xml,4,"taxa_participacao",fees)
-        wrt.write_tag(xml,4,"descricao",wrt.cdata(post_desc))
+        wrt.write_tag(xml,4,"pid",post_attr,",")
+        wrt.write_tag(xml,4,"titulo",post_title,",")
+        wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(xml,4,"organizador",organizer,",")
+        wrt.write_tag(xml,4,"contato",contact,",")
+        wrt.write_tag(xml,4,"endereco",venue,",")
+        wrt.write_tag(xml,4,"data_inicio",wrt.datestr(time_start),",")
+        wrt.write_tag(xml,4,"data_fim",wrt.datestr(time_end),",")
+        wrt.write_tag(xml,4,"taxa_participacao",fees,",")
+        wrt.write_tag(xml,4,"descricao",wrt.cdata(post_desc),",")
         
         wrt.write_comments(db,xml,post_guid)
         
-        wrt.write_close_tag(xml,3,"")
+        # Increment the row number to be able to know wheter is the last
+        # row or not.
+        row=row+1
+        if (row < user_events.rowcount):
+            sep="},"
+        else:
+            sep="}"
+        
+        wrt.write_close_tag(xml,3,sep)
     
-    wrt.write_close_tag(xml,2,"eventos")
+    wrt.write_close_tag(xml,2,"]")
     
     user_events.close()
 #--------------------------------------------------------------------#
@@ -316,22 +422,23 @@ def write_users_section (db, xml_file):
     
     xml = codecs.open(xml_file,'w',encoding='utf-8')
     
-    xml.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-
-    wrt.write_open_tag(xml,0,"usuarios")
+    wrt.write_open_tag(xml,0,"","{")
+    wrt.write_open_tag(xml,0,"usuarios","[")
     
     users_info = db.cursor()
     users_info.execute(qry.qry_users_info)
     
-    for (guid, name, username) in users_info:
+    row=0
+    for (guid, name, username)\
+        in users_info:
         
         prefix='profile/'
         user_attr=wrt.uidstr(wrt.urlparticipa(prefix,username))
-        wrt.write_open_tag(xml,1,"")
+        wrt.write_open_tag(xml,1,"","{")
         
         # Write all user's information
-        wrt.write_tag(xml,2,"uid",user_attr)
-        wrt.write_tag(xml,2,"nome",name)
+        wrt.write_tag(xml,2,"uid",user_attr,",")
+        wrt.write_tag(xml,2,"nome",name,",")
             
         # Write a list of user friend's names
         write_userfriends_subsection(db, xml, guid)
@@ -347,9 +454,18 @@ def write_users_section (db, xml_file):
         write_uservideos_subsection(db, xml, guid)
         write_userevents_subsection(db, xml, guid)
         
-        wrt.write_close_tag(xml,1,"usuario")
+        # Increment the row number to be able to know wheter is the last
+        # row or not.
+        row=row+1
+        if (row < users_info.rowcount):
+            sep="},"
+        else:
+            sep="}"
+        
+        wrt.write_close_tag(xml,1,sep)
     
-    wrt.write_close_tag(xml,0,"usuarios")
+    wrt.write_close_tag(xml,0,"]")
+    wrt.write_close_tag(xml,0,"}")
     
     users_info.close()
     

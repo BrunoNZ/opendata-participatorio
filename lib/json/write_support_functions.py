@@ -160,51 +160,56 @@ def groupaccess_permission (db, group_guid):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_open_tag (xml, l, tag_name):
+def write_open_tag (xml, l, tag_name, sep):
     if len(tag_name) > 0:
-        name="\""+tag_name+"\""
-        xml.write(lvl(l)+name+":"+"["+"\n")
+        xml.write(lvl(l)+"\""+tag_name+"\""+":"+sep+"\n")
     else:
-        xml.write(lvl(l)+"{"+"\n")
+        xml.write(lvl(l)+sep+"\n")
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_close_tag (xml, l, tag_name):
-    if len(tag_name) > 0:
-        name="\""+tag_name+"\""
-        xml.write(lvl(l)+"]"+"\n")
-    else:
-        xml.write(lvl(l)+"}"+"\n")
+def write_close_tag (xml, l, sep):
+    xml.write(lvl(l)+sep+"\n")
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_tag (xml, l, tag_name, info_str):
-    level=lvl(l)
+def write_tag (xml, l, tag_name, info_str, comma):
     name="\""+tag_name+"\""
     info="\""+info_str+"\""
-    xml.write(level+name+":"+info+",\n")
+    xml.write(lvl(l)+name+":"+info+comma+"\n")
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def write_comments (db, xml, post_guid):
     post_comments = db.cursor()
     post_comments.execute(qry.qry_post_comments, (post_guid,))
-            
-    write_open_tag(xml,4,"comentarios")
-    for (user_id, user_name, user_username, string, time) in post_comments:
+    
+    row=0
+    
+    write_open_tag(xml,4,"comentarios","[")
+    for (user_id, user_name, user_username, string, time)\
+        in post_comments:
         
-        write_open_tag(xml,5,"")
+        write_open_tag(xml,5,"","{")
         
         prefix='profile/'
         user_attr=uidstr(urlparticipa(prefix,user_username))
-        write_tag(xml,6,"uid",user_attr)
-        write_tag(xml,6,"usuario",user_name)
-        write_tag(xml,6,"data",datestr(time))
-        write_tag(xml,6,"mensagem",cdata(string))
+        write_tag(xml,6,"uid",user_attr,",")
+        write_tag(xml,6,"usuario",user_name,",")
+        write_tag(xml,6,"data",datestr(time),",")
+        write_tag(xml,6,"mensagem",cdata(string),"")
         
-        write_close_tag(xml,5,"")
+        # Increment the row number to be able to know wheter is the last
+        # row or not.
+        row=row+1
+        if (row < post_comments.rowcount):
+            sep="},"
+        else:
+            sep="}"
         
-    write_close_tag(xml,4,"comentarios")
+        write_close_tag(xml,5,sep)
+        
+    write_close_tag(xml,4,"]")
     
     post_comments.close()
 #--------------------------------------------------------------------#
