@@ -74,7 +74,7 @@ def write_groupfiles_subsection (db, xml, group_guid):
     # 50 = select * from elgg_metastrings where string='file_enable';
     perm=wrt.postcontent_permission(db, group_guid, 50)
     
-    wrt.write_tag(xml,2,"habilitado",perm,",")
+    wrt.write_tag(xml,2,"arquivosHabilitado",perm,",")
     wrt.write_open_tag(xml,2,"arquivos","[")
     
     row=0
@@ -125,7 +125,7 @@ def write_groupforumtopics_subsection (db, xml, group_guid):
     # 52 = select * from elgg_metastrings where string='forum_enable';
     perm=wrt.postcontent_permission(db, group_guid, 52)
     
-    wrt.write_tag(xml,2,"habilitado",perm,",")
+    wrt.write_tag(xml,2,"debatesHabilitado",perm,",")
     wrt.write_open_tag(xml,2,"debates","[")
     
     row=0
@@ -172,7 +172,7 @@ def write_groupbookmarks_subsection (db, xml, group_guid):
     # 49 = select * from elgg_metastrings where string='bookmarks_enable';
     perm=wrt.postcontent_permission(db, group_guid, 49)
     
-    wrt.write_tag(xml,2,"habilitado",perm,",")
+    wrt.write_tag(xml,2,"favoritosHabilitado",perm,",")
     wrt.write_open_tag(xml,2,"favoritos","[")
     
     row=0
@@ -223,7 +223,7 @@ def write_grouppages_subsection (db, xml, group_guid):
     # 53 = select * from elgg_metastrings where string='pages_enable';
     perm=wrt.postcontent_permission(db, group_guid, 53)
     
-    wrt.write_tag(xml,2,"habilitado",perm,",")
+    wrt.write_tag(xml,2,"paginasHabilitado",perm,",")
     wrt.write_open_tag(xml,2,"paginas","[")
     
     row=0
@@ -270,7 +270,7 @@ def write_groupvideos_subsection (db, xml, group_guid):
     # 399 = select * from elgg_metastrings where string='videos_enable';
     perm=wrt.postcontent_permission(db, group_guid, 399)
     
-    wrt.write_tag(xml,2,"habilitado",perm,",")
+    wrt.write_tag(xml,2,"videosHabilitado",perm,",")
     wrt.write_open_tag(xml,2,"videos","[")
     
     row=0
@@ -321,7 +321,7 @@ def write_groupevents_subsection (db, xml, group_guid):
     # 54 = select * from elgg_metastrings where string='event_calendar_enable';
     perm=wrt.postcontent_permission(db, group_guid, 54)
     
-    wrt.write_tag(xml,2,"habilitado",perm,",")
+    wrt.write_tag(xml,2,"eventosHabilitado",perm,",")
     wrt.write_open_tag(xml,2,"eventos","[")
     
     row=0
@@ -368,9 +368,9 @@ def write_groupevents_subsection (db, xml, group_guid):
         wrt.write_tag(xml,4,"organizador",organizer,",")
         wrt.write_tag(xml,4,"contato",contact,",")
         wrt.write_tag(xml,4,"endereco",venue,",")
-        wrt.write_tag(xml,4,"data_inicio",wrt.datestr(time_start),",")
-        wrt.write_tag(xml,4,"data_fim",wrt.datestr(time_end),",")
-        wrt.write_tag(xml,4,"taxa_participacao",fees,",")
+        wrt.write_tag(xml,4,"dataInicio",wrt.datestr(time_start),",")
+        wrt.write_tag(xml,4,"dataFim",wrt.datestr(time_end),",")
+        wrt.write_tag(xml,4,"taxaParticipacao",fees,",")
         wrt.write_tag(xml,4,"descricao",post_desc,",")
         
         wrt.write_comments(db,xml,post_guid)
@@ -426,7 +426,7 @@ def write_groups_section(db, xml_file):
         else:
             comma=""
             
-        wrt.write_tag(xml,2,"breve_descricao",brief_desc,comma)
+        wrt.write_tag(xml,2,"breveDescricao",brief_desc,comma)
                                             
         if wrt.groupaccess_permission(db, guid) == 'public':
             

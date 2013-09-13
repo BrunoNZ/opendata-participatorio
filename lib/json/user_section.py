@@ -354,9 +354,9 @@ def write_userevents_subsection (db, xml, user_guid):
         wrt.write_tag(xml,4,"organizador",organizer,",")
         wrt.write_tag(xml,4,"contato",contact,",")
         wrt.write_tag(xml,4,"endereco",venue,",")
-        wrt.write_tag(xml,4,"data_inicio",time_start,",")
-        wrt.write_tag(xml,4,"data_fim",time_end,",")
-        wrt.write_tag(xml,4,"taxa_participacao",fees,",")
+        wrt.write_tag(xml,4,"dataInicio",time_start,",")
+        wrt.write_tag(xml,4,"dataFim",time_end,",")
+        wrt.write_tag(xml,4,"taxaParticipacao",fees,",")
         wrt.write_tag(xml,4,"descricao",post_desc,",")
         
         wrt.write_comments(db,xml,post_guid)
