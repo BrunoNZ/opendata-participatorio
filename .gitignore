@@ -1,1 +1,4 @@
 /copy_scripts/*
+*~
+/lib/xml/*~
+/lib/json/*~
