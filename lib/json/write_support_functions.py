@@ -24,6 +24,7 @@
 import MySQLdb
 import codecs
 import datetime
+import base64
 
 import queries_definition as qry
 
@@ -51,8 +52,17 @@ def lvl (l):
 #--------------------------------------------------------------------#    
 
 #--------------------------------------------------------------------#    
-def replacebadchars (string):
-    return "xyz"
+def substbadc (string):
+    string = string.replace('\\','\\\\')
+    string = string.replace('"','\\"')
+    string = string.replace('\t',' ')
+    return string
+#--------------------------------------------------------------------#    
+
+#--------------------------------------------------------------------#    
+def encb64 (string):
+    encoded_string = base64.standard_b64encode(string.encode('utf-8'))
+    return encoded_string
 #--------------------------------------------------------------------#    
 
 #--------------------------------------------------------------------#
@@ -204,11 +214,14 @@ def write_comments (db, xml, post_guid):
         
         prefix='profile/'
         user_attr=urlparticipa(prefix,user_username)
+                
+        write_open_tag(xml,6,"usuario","{")
+        write_tag(xml,7,"uid",user_attr,",")
+        write_tag(xml,7,"nome",substbadc(user_name),"")
+        write_close_tag(xml,6,"}",True)
         
-        write_tag(xml,6,"uid",user_attr,",")
-        write_tag(xml,6,"usuario",user_name,",")
         write_tag(xml,6,"data",datestr(time),",")
-        write_tag(xml,6,"mensagem",replacebadchars(string),"")
+        write_tag(xml,6,"mensagem",encb64(string),"")
         
         write_close_tag(xml,5,"}",(row < post_comments.rowcount))
         
