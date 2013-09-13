@@ -56,14 +56,10 @@ def substbadc (string):
     string = string.replace('\\','\\\\')
     string = string.replace('"','\\"')
     string = string.replace('\t',' ')
+    string = string.replace('\n',' ')
+    string = string.replace('\r',' ')
     return string
-#--------------------------------------------------------------------#    
-
-#--------------------------------------------------------------------#    
-def encb64 (string):
-    encoded_string = base64.standard_b64encode(string.encode('utf-8'))
-    return encoded_string
-#--------------------------------------------------------------------#    
+#--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def cdata (string):
@@ -193,7 +189,7 @@ def write_close_tag (xml, l, sep, comma_flag):
 #--------------------------------------------------------------------#
 def write_tag (xml, l, tag_name, info_str, comma):
     name="\""+tag_name+"\""
-    info="\""+info_str+"\""
+    info="\""+substbadc(info_str)+"\""
     xml.write(lvl(l)+name+":"+info+comma+"\n")
 #--------------------------------------------------------------------#
 
@@ -217,11 +213,11 @@ def write_comments (db, xml, post_guid):
                 
         write_open_tag(xml,6,"usuario","{")
         write_tag(xml,7,"uid",user_attr,",")
-        write_tag(xml,7,"nome",substbadc(user_name),"")
+        write_tag(xml,7,"nome",user_name,"")
         write_close_tag(xml,6,"}",True)
         
         write_tag(xml,6,"data",datestr(time),",")
-        write_tag(xml,6,"mensagem",encb64(string),"")
+        write_tag(xml,6,"mensagem",string,"")
         
         write_close_tag(xml,5,"}",(row < post_comments.rowcount))
         

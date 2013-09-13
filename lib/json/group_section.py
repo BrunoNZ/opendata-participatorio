@@ -54,7 +54,7 @@ def write_groupmembers_subsection (db, xml, group_guid):
         
         wrt.write_open_tag(xml,4,"usuario","{")
         wrt.write_tag(xml,5,"uid",user_attr,",")
-        wrt.write_tag(xml,5,"nome",wrt.substbadc(user_name),"")
+        wrt.write_tag(xml,5,"nome",user_name,"")
         wrt.write_close_tag(xml,4,"}",False)
         
         wrt.write_close_tag(xml,3,"}",(row < group_members.rowcount))
@@ -98,13 +98,13 @@ def write_groupfiles_subsection (db, xml, group_guid):
         
         wrt.write_open_tag(xml,4,"autor","{")
         wrt.write_tag(xml,5,"uid",owner_attr,",")
-        wrt.write_tag(xml,5,"nome",wrt.substbadc(owner_name),"")
+        wrt.write_tag(xml,5,"nome",owner_name,"")
         wrt.write_close_tag(xml,4,"}",True)
         
-        wrt.write_tag(xml,4,"titulo",wrt.substbadc(post_title),",")
+        wrt.write_tag(xml,4,"titulo",post_title,",")
         wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
         wrt.write_tag(xml,4,"link",file_link,",")
-        wrt.write_tag(xml,4,"descricao",wrt.encb64(post_desc),",")
+        wrt.write_tag(xml,4,"descricao",post_desc,",")
                     
         wrt.write_comments(db,xml,post_guid)
         
@@ -146,12 +146,12 @@ def write_groupforumtopics_subsection (db, xml, group_guid):
         
         wrt.write_open_tag(xml,4,"autor","{")
         wrt.write_tag(xml,5,"uid",owner_attr,",")
-        wrt.write_tag(xml,5,"nome",wrt.substbadc(owner_name),"")
+        wrt.write_tag(xml,5,"nome",owner_name,"")
         wrt.write_close_tag(xml,4,"}",True)
         
-        wrt.write_tag(xml,4,"titulo",wrt.substbadc(post_title),",")
+        wrt.write_tag(xml,4,"titulo",post_title,",")
         wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
-        wrt.write_tag(xml,4,"texto",wrt.encb64(post_desc),",")
+        wrt.write_tag(xml,4,"texto",post_desc,",")
             
         wrt.write_comments(db,xml,post_guid)
         
@@ -196,13 +196,13 @@ def write_groupbookmarks_subsection (db, xml, group_guid):
         
         wrt.write_open_tag(xml,4,"autor","{")
         wrt.write_tag(xml,5,"uid",owner_attr,",")
-        wrt.write_tag(xml,5,"nome",wrt.substbadc(owner_name),"")
+        wrt.write_tag(xml,5,"nome",owner_name,"")
         wrt.write_close_tag(xml,4,"}",True)
         
-        wrt.write_tag(xml,4,"titulo",wrt.substbadc(post_title),",")
+        wrt.write_tag(xml,4,"titulo",post_title,",")
         wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
         wrt.write_tag(xml,4,"link",bookmark_link,",")
-        wrt.write_tag(xml,4,"descricao",wrt.encb64(post_desc),",")
+        wrt.write_tag(xml,4,"descricao",post_desc,",")
                             
         wrt.write_comments(db,xml,post_guid)
         
@@ -244,12 +244,12 @@ def write_grouppages_subsection (db, xml, group_guid):
         
         wrt.write_open_tag(xml,4,"autor","{")
         wrt.write_tag(xml,5,"uid",owner_attr,",")
-        wrt.write_tag(xml,5,"nome",wrt.substbadc(owner_name),"")
+        wrt.write_tag(xml,5,"nome",owner_name,"")
         wrt.write_close_tag(xml,4,"}",True)
         
-        wrt.write_tag(xml,4,"titulo",wrt.substbadc(post_title),",")
+        wrt.write_tag(xml,4,"titulo",post_title,",")
         wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
-        wrt.write_tag(xml,4,"texto",wrt.encb64(post_desc),",")
+        wrt.write_tag(xml,4,"texto",post_desc,",")
                     
         wrt.write_comments(db,xml,post_guid)
         
@@ -294,13 +294,13 @@ def write_groupvideos_subsection (db, xml, group_guid):
         
         wrt.write_open_tag(xml,4,"autor","{")
         wrt.write_tag(xml,5,"uid",owner_attr,",")
-        wrt.write_tag(xml,5,"nome",wrt.substbadc(owner_name),"")
+        wrt.write_tag(xml,5,"nome",owner_name,"")
         wrt.write_close_tag(xml,4,"}",True)
         
-        wrt.write_tag(xml,4,"titulo",wrt.substbadc(post_title),",")
+        wrt.write_tag(xml,4,"titulo",post_title,",")
         wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
         wrt.write_tag(xml,4,"link",video_link,",")
-        wrt.write_tag(xml,4,"descricao",wrt.encb64(post_desc),",")
+        wrt.write_tag(xml,4,"descricao",post_desc,",")
             
         wrt.write_comments(db,xml,post_guid)
 
@@ -360,18 +360,18 @@ def write_groupevents_subsection (db, xml, group_guid):
         
         wrt.write_open_tag(xml,4,"autor","{")
         wrt.write_tag(xml,5,"uid",owner_attr,",")
-        wrt.write_tag(xml,5,"nome",wrt.substbadc(owner_name),"")
+        wrt.write_tag(xml,5,"nome",owner_name,"")
         wrt.write_close_tag(xml,4,"}",True)
         
-        wrt.write_tag(xml,4,"titulo",wrt.substbadc(post_title),",")
+        wrt.write_tag(xml,4,"titulo",post_title,",")
         wrt.write_tag(xml,4,"data",wrt.datestr(time),",")
-        wrt.write_tag(xml,4,"organizador",wrt.substbadc(organizer),",")
-        wrt.write_tag(xml,4,"contato",wrt.substbadc(contact),",")
-        wrt.write_tag(xml,4,"endereco",wrt.substbadc(venue),",")
+        wrt.write_tag(xml,4,"organizador",organizer,",")
+        wrt.write_tag(xml,4,"contato",contact,",")
+        wrt.write_tag(xml,4,"endereco",venue,",")
         wrt.write_tag(xml,4,"data_inicio",wrt.datestr(time_start),",")
         wrt.write_tag(xml,4,"data_fim",wrt.datestr(time_end),",")
-        wrt.write_tag(xml,4,"taxa_participacao",wrt.substbadc(fees),",")
-        wrt.write_tag(xml,4,"descricao",wrt.encb64(post_desc),",")
+        wrt.write_tag(xml,4,"taxa_participacao",fees,",")
+        wrt.write_tag(xml,4,"descricao",post_desc,",")
         
         wrt.write_comments(db,xml,post_guid)
         
@@ -414,19 +414,19 @@ def write_groups_section(db, xml_file):
         
         wrt.write_open_tag(xml,2,"proprietario","{")
         wrt.write_tag(xml,3,"uid",owner_attr,",")
-        wrt.write_tag(xml,3,"nome",wrt.substbadc(owner_name),"")
+        wrt.write_tag(xml,3,"nome",owner_name,"")
         wrt.write_close_tag(xml,2,"}",True)
                 
-        wrt.write_tag(xml,2,"titulo",wrt.substbadc(title),",")
+        wrt.write_tag(xml,2,"titulo",title,",")
         wrt.write_tag(xml,2,"data",wrt.datestr(time),",")
-        wrt.write_tag(xml,2,"descricao",wrt.encb64(desc),",")
+        wrt.write_tag(xml,2,"descricao",desc,",")
         
         if wrt.groupaccess_permission(db, guid) == 'public':
             comma=","
         else:
             comma=""
             
-        wrt.write_tag(xml,2,"breve_descricao",wrt.encb64(brief_desc),comma)
+        wrt.write_tag(xml,2,"breve_descricao",brief_desc,comma)
                                             
         if wrt.groupaccess_permission(db, guid) == 'public':
             
