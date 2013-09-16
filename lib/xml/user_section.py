@@ -22,8 +22,6 @@
 # USA.
 
 import MySQLdb
-import codecs
-import datetime
 
 import queries_definition as qry
 import write_support_functions as wrt
@@ -35,6 +33,9 @@ import write_support_functions as wrt
 def write_userfriends_subsection (db, xml, user_guid):
     friends_info = db.cursor()
     friends_info.execute(qry.qry_user_friends, (user_guid))
+    
+    qty=str(friends_info.rowcount)
+    wrt.write_tag(xml,2,"quantidade_amigos",qty,'')
     
     wrt.write_open_tag(xml,2,"amigos",'')
     for (friend_id, friend_name, friend_username) in friends_info:
@@ -302,11 +303,9 @@ def write_userevents_subsection (db, xml, user_guid):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#    
-def write_users_section (db, xml_file):
+def write_users_section (db, xml_filename):
     
-    xml = codecs.open(xml_file,'w',encoding='utf-8')
-    
-    xml.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+    xml = wrt.open_xml_file(xml_filename)
 
     wrt.write_open_tag(xml,0,"usuarios",'')
     

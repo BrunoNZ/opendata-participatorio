@@ -31,6 +31,13 @@ import queries_definition as qry
 # Support functions:
 
 #--------------------------------------------------------------------#
+def open_xml_file (xml_filename):
+    xml_file = codecs.open(xml_filename,'w',encoding='utf-8')
+    xml_file.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?")
+    return xml_file
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
 def lvl (l):
     if l == 1:
         return "\t"

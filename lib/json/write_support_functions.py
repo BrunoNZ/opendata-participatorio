@@ -32,6 +32,12 @@ import queries_definition as qry
 # Support functions:
 
 #--------------------------------------------------------------------#
+def open_json_file (json_filename):
+    json_file = codecs.open(json_filename,'w',encoding='utf-8')
+    return json_file
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
 def lvl (l):
     if l == 1:
         return "\t"

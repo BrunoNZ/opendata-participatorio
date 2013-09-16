@@ -22,8 +22,6 @@
 # USA.
 
 import MySQLdb
-import codecs
-import datetime
 
 import queries_definition as qry
 import write_support_functions as wrt
@@ -36,7 +34,8 @@ def write_groupmembers_subsection (db, xml, group_guid):
     group_members = db.cursor()
     group_members.execute(qry.qry_group_members, (group_guid,))
     
-    wrt.write_tag(xml,2,"quantidade_membros",str(group_members.rowcount),'')
+    qty=str(group_members.rowcount)
+    wrt.write_tag(xml,2,"quantidade_membros",qty,'')
                     
     wrt.write_open_tag(xml,2,"membros",'')
     for (user_id, user_name, user_username) in group_members:
@@ -301,11 +300,9 @@ def write_groupevents_subsection (db, xml, group_guid):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groups_section(db, xml_file):
-
-    xml = codecs.open(xml_file,'w',encoding='utf-8')
+def write_groups_section (db, xml_filename):
     
-    xml.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?")
+    xml = wrt.open_xml_file(xml_filename)
 
     wrt.write_open_tag(xml,0,"comunidades",'')
     
