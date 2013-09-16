@@ -303,8 +303,9 @@ def write_userevents_subsection (db, xml, user_guid):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#    
-def write_users_section (db, xml_filename):
+def write_users_section (db, dir_results):
     
+    xml_filename=dir_results+wrt.date_today()+"_usuarios"+".xml"
     xml = wrt.open_xml_file(xml_filename)
 
     wrt.write_open_tag(xml,0,"usuarios",'')

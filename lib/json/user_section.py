@@ -370,8 +370,9 @@ def write_userevents_subsection (db, json, user_guid):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#    
-def write_users_section (db, json_filename):
+def write_users_section (db, dir_results):
     
+    json_filename=dir_results+wrt.date_today()+"_usuarios"+".json"
     json = wrt.open_json_file(json_filename)
     
     wrt.write_open_tag(json,0,"","{")

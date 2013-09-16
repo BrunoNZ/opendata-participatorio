@@ -381,8 +381,9 @@ def write_groupevents_subsection (db, json, group_guid):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groups_section (db, json_filename):
+def write_groups_section (db, dir_results):
 
+    json_filename=dir_results+wrt.date_today()+"_comunidades"+".json"
     json = wrt.open_json_file(json_filename)
     
     wrt.write_open_tag(json,0,"","{")

@@ -37,17 +37,14 @@ def main():
                         charset='utf8')
     
     # Define directory and name of XML files
-    date_today=str(datetime.date.today())
     dir_results="/home/www/elgg/opendata_xmlfiles/"
-    user_xml_file=dir_results+date_today+"_usuarios"+".xml"
-    group_xml_file=dir_results+date_today+"_comunidades"+".xml"
-    
+       
     # Get the execution start time information
     time_script_start=datetime.datetime.now()
     
     # Call functions to write XML files
-    write_users_section(db,user_xml_file)
-    write_groups_section(db,group_xml_file)
+    write_users_section(db,dir_results)
+    write_groups_section(db,dir_results)
     
     # Calculate and Print script time duration
     script_duration=datetime.datetime.now()-time_script_start

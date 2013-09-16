@@ -300,8 +300,9 @@ def write_groupevents_subsection (db, xml, group_guid):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groups_section (db, xml_filename):
+def write_groups_section (db, dir_results):
     
+    xml_filename=dir_results+wrt.date_today()+"_comunidades"+".xml"
     xml = wrt.open_xml_file(xml_filename)
 
     wrt.write_open_tag(xml,0,"comunidades",'')
