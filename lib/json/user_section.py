@@ -93,7 +93,7 @@ def write_usermembergroup_subsection (db, json, user_guid):
     user_membergroups = db.cursor()
     user_membergroups.execute(qry.qry_user_membergroups, (user_guid, ))
         
-    wrt.write_open_tag(json,3,"membro","[")
+    wrt.write_open_tag(json,3,"participante","[")
     
     row=0
     for (group_id, group_title)\

@@ -67,12 +67,12 @@ def write_usermembergroup_subsection (db, xml, user_guid):
     user_membergroups = db.cursor()
     user_membergroups.execute(qry.qry_user_membergroups, (user_guid, ))
         
-    wrt.write_open_tag(xml,3,"membro",'')
+    wrt.write_open_tag(xml,3,"participante",'')
     for (group_id, group_title) in user_membergroups:
         prefix='groups/profile/'
         group_attr=wrt.cidstr(wrt.urlparticipa(prefix,str(group_id)))
         wrt.write_tag(xml,4,"comunidade",group_title,group_attr)
-    wrt.write_close_tag(xml,3,"membro")
+    wrt.write_close_tag(xml,3,"participante")
         
     user_membergroups.close()
 #--------------------------------------------------------------------#
