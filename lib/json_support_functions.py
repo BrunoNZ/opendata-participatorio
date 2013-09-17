@@ -26,6 +26,7 @@ import codecs
 import datetime
 import base64
 
+import string_functions as strf
 import queries_definition as qry
 
 ######################################################################
@@ -38,78 +39,26 @@ def open_json_file (json_filename):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def date_today():
-    date = str(datetime.date.today())
-    return date
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
-def lvl (l):
-    if l == 1:
-        return "\t"
-    elif l == 2:
-        return "\t\t"
-    elif l == 3:
-        return "\t\t\t"
-    elif l == 4:
-        return "\t\t\t\t"
-    elif l == 5:
-        return "\t\t\t\t\t"
-    elif l == 6:
-        return "\t\t\t\t\t\t"
-    elif l == 7:
-        return "\t\t\t\t\t\t\t"
-    else:
-        return ""
-#--------------------------------------------------------------------#    
-
-#--------------------------------------------------------------------#    
-def substbadc (string):
-    string = string.replace('\\','\\\\')
-    string = string.replace('"','\\"')
-    string = string.replace('\t',' ')
-    string = string.replace('\n',' ')
-    string = string.replace('\r',' ')
-    return string
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
-def urlparticipa (prefix, guid):
-    http_str="http://participatorio.juventude.gov.br/"
-    url_participa=http_str+prefix+guid
-    return url_participa
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
-def datestr (time):
-    if time != '':
-        date=str(datetime.datetime.fromtimestamp(int(time)))
-    else:
-        date=''
-    return date
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
 def write_open_tag (xml, l, tag_name, sep):
     if len(tag_name) > 0:
-        xml.write(lvl(l)+"\""+tag_name+"\""+":"+sep+"\n")
+        xml.write(strf.lvl(l)+"\""+tag_name+"\""+":"+sep+"\n")
     else:
-        xml.write(lvl(l)+sep+"\n")
+        xml.write(strf.lvl(l)+sep+"\n")
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def write_close_tag (xml, l, sep, comma_flag):
     if comma_flag == True:
-        xml.write(lvl(l)+sep+","+"\n")
+        xml.write(strf.lvl(l)+sep+","+"\n")
     else:
-        xml.write(lvl(l)+sep+"\n")    
+        xml.write(strf.lvl(l)+sep+"\n")    
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def write_tag (xml, l, tag_name, info_str, comma):
     name="\""+tag_name+"\""
-    info="\""+substbadc(info_str)+"\""
-    xml.write(lvl(l)+name+":"+info+comma+"\n")
+    info="\""+strf.substbadc(info_str)+"\""
+    xml.write(strf.lvl(l)+name+":"+info+comma+"\n")
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
@@ -128,14 +77,14 @@ def write_comments (db, xml, post_guid):
         write_open_tag(xml,5,"","{")
         
         prefix='profile/'
-        user_attr=urlparticipa(prefix,user_username)
+        user_attr=strf.urlparticipa(prefix,user_username)
                 
         write_open_tag(xml,6,"usuario","{")
         write_tag(xml,7,"uid",user_attr,",")
         write_tag(xml,7,"nome",user_name,"")
         write_close_tag(xml,6,"}",True)
         
-        write_tag(xml,6,"data",datestr(time),",")
+        write_tag(xml,6,"data",strf.datestr(time),",")
         write_tag(xml,6,"mensagem",string,"")
         
         write_close_tag(xml,5,"}",(row < post_comments.rowcount))

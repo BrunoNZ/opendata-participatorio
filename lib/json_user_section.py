@@ -24,6 +24,7 @@
 import MySQLdb
 
 import queries_definition as qry
+import string_functions as strf
 import json_support_functions as wrt
 
 ######################################################################
@@ -48,7 +49,7 @@ def write_userfriends_subsection (db, json, user_guid):
         wrt.write_open_tag(json,3,"","{")
         
         prefix='profile/'
-        friend_attr=wrt.urlparticipa(prefix,friend_username)
+        friend_attr=strf.urlparticipa(prefix,friend_username)
         
         wrt.write_tag(json,4,"uid",friend_attr,",")
         wrt.write_tag(json,4,"usuario",friend_name,"")
@@ -76,7 +77,7 @@ def write_userowngroup_subsection (db, json, user_guid):
         wrt.write_open_tag(json,4,"","{")
         
         prefix='groups/profile/'
-        group_attr=wrt.urlparticipa(prefix,str(group_id))
+        group_attr=strf.urlparticipa(prefix,str(group_id))
         
         wrt.write_tag(json,5,"cid",group_attr,",")
         wrt.write_tag(json,5,"titulo",group_title,"")
@@ -104,7 +105,7 @@ def write_usermembergroup_subsection (db, json, user_guid):
         wrt.write_open_tag(json,4,"","{")
         
         prefix='groups/profile/'
-        group_attr=wrt.urlparticipa(prefix,str(group_id))
+        group_attr=strf.urlparticipa(prefix,str(group_id))
         
         wrt.write_tag(json,5,"cid",group_attr,",")
         wrt.write_tag(json,5,"titulo",group_title,"")
@@ -140,16 +141,16 @@ def write_userfiles_subsection (db, json, user_guid):
         row=row+1
         
         prefix="file/download/"
-        file_link=wrt.urlparticipa(prefix,str(post_guid))
+        file_link=strf.urlparticipa(prefix,str(post_guid))
         
         prefix='file/view/'
-        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        post_attr=strf.urlparticipa(prefix,str(post_guid))
         
         wrt.write_open_tag(json,3,"","{")
         
         wrt.write_tag(json,4,"pid",post_attr,",")
         wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(json,4,"data",strf.datestr(time),",")
         wrt.write_tag(json,4,"link",file_link,",")
         wrt.write_tag(json,4,"descricao",post_desc,",")
             
@@ -183,12 +184,12 @@ def write_userblogs_subsection (db, json, user_guid):
         post_excerpt=qry.post_content(db,post_guid,64)
             
         prefix='blog/view/'
-        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        post_attr=strf.urlparticipa(prefix,str(post_guid))
         wrt.write_open_tag(json,3,"","{")
 
         wrt.write_tag(json,4,"pid",post_attr,",")
         wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(json,4,"data",strf.datestr(time),",")
         wrt.write_tag(json,4,"resumo",post_excerpt,",")
         wrt.write_tag(json,4,"texto",post_desc,",")
                     
@@ -220,12 +221,12 @@ def write_userbookmarks_subsection (db, json, user_guid):
         bookmark_link=qry.post_content(db,post_guid,90)
   
         prefix='bookmarks/view/'
-        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        post_attr=strf.urlparticipa(prefix,str(post_guid))
         wrt.write_open_tag(json,3,"","{")
     
         wrt.write_tag(json,4,"pid",post_attr,",")
         wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(json,4,"data",strf.datestr(time),",")
         wrt.write_tag(json,4,"link",bookmark_link,",")
         wrt.write_tag(json,4,"descricao",post_desc,",")
                     
@@ -254,13 +255,13 @@ def write_userpages_subsection (db, json, user_guid):
         row=row+1
         
         prefix='pages/view/'
-        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        post_attr=strf.urlparticipa(prefix,str(post_guid))
         
         wrt.write_open_tag(json,3,"","{")
 
         wrt.write_tag(json,4,"pid",post_attr,",")
         wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(json,4,"data",strf.datestr(time),",")
         wrt.write_tag(json,4,"texto",post_desc,",")
                     
         wrt.write_comments(db,json,post_guid)
@@ -291,13 +292,13 @@ def write_uservideos_subsection (db, json, user_guid):
         video_link=qry.post_content(db, post_guid, 477)
         
         prefix='videos/view/'
-        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        post_attr=strf.urlparticipa(prefix,str(post_guid))
         
         wrt.write_open_tag(json,3,"","{")
         
         wrt.write_tag(json,4,"pid",post_attr,",")
         wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(json,4,"data",strf.datestr(time),",")
         wrt.write_tag(json,4,"link",video_link,",")
         wrt.write_tag(json,4,"descricao",post_desc,",")
         
@@ -345,13 +346,13 @@ def write_userevents_subsection (db, json, user_guid):
         organizer=qry.post_content(db, post_guid, 30)
         
         prefix='event_calendar/view/'
-        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        post_attr=strf.urlparticipa(prefix,str(post_guid))
         
         wrt.write_open_tag(json,3,"","{")
         
         wrt.write_tag(json,4,"pid",post_attr,",")
         wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(json,4,"data",strf.datestr(time),",")
         wrt.write_tag(json,4,"organizador",organizer,",")
         wrt.write_tag(json,4,"contato",contact,",")
         wrt.write_tag(json,4,"endereco",venue,",")
@@ -374,7 +375,7 @@ def write_users_section (db, json, \
     guid, name, username):
 
     prefix='profile/'
-    user_attr=wrt.urlparticipa(prefix,username)
+    user_attr=strf.urlparticipa(prefix,username)
     
     # Write all user's information
     wrt.write_tag(json,2,"uid",user_attr,",")
@@ -401,9 +402,7 @@ def write_singlefile_users_section (db, dir_results):
     users_info = db.cursor()
     users_info.execute(qry.qry_users_info)
     
-    return
-
-    json_filename=dir_results+wrt.date_today()+"_usuarios"+".json"
+    json_filename=dir_results+strf.date_today()+"_usuarios"+".json"
     json = wrt.open_json_file(json_filename)
     
     wrt.write_open_tag(json,0,"","{")

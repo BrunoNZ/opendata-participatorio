@@ -24,6 +24,7 @@
 import MySQLdb
 
 import queries_definition as qry
+import string_functions as strf
 import json_support_functions as wrt
 
 ######################################################################
@@ -48,7 +49,7 @@ def write_groupmembers_subsection (db, json, group_guid):
         wrt.write_open_tag(json,3,"","{")
         
         prefix='profile/'
-        user_attr=wrt.urlparticipa(prefix,user_username)
+        user_attr=strf.urlparticipa(prefix,user_username)
         
         wrt.write_open_tag(json,4,"usuario","{")
         wrt.write_tag(json,5,"uid",user_attr,",")
@@ -85,14 +86,14 @@ def write_groupfiles_subsection (db, json, group_guid):
         wrt.write_open_tag(json,3,"","{")
         
         prefix='file/download/'
-        file_link=wrt.urlparticipa(prefix,str(post_guid))
+        file_link=strf.urlparticipa(prefix,str(post_guid))
         
         prefix='file/view/'
-        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        post_attr=strf.urlparticipa(prefix,str(post_guid))
         wrt.write_tag(json,4,"pid",post_attr,",")
 
         prefix='profile/'
-        owner_attr=wrt.urlparticipa(prefix,owner_username)
+        owner_attr=strf.urlparticipa(prefix,owner_username)
         
         wrt.write_open_tag(json,4,"autor","{")
         wrt.write_tag(json,5,"uid",owner_attr,",")
@@ -100,7 +101,7 @@ def write_groupfiles_subsection (db, json, group_guid):
         wrt.write_close_tag(json,4,"}",True)
         
         wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(json,4,"data",strf.datestr(time),",")
         wrt.write_tag(json,4,"link",file_link,",")
         wrt.write_tag(json,4,"descricao",post_desc,",")
                     
@@ -136,11 +137,11 @@ def write_groupforumtopics_subsection (db, json, group_guid):
         wrt.write_open_tag(json,3,"","{")
         
         prefix='discussion/view/'
-        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        post_attr=strf.urlparticipa(prefix,str(post_guid))
         wrt.write_tag(json,4,"pid",post_attr,",")
 
         prefix='profile/'
-        owner_attr=wrt.urlparticipa(prefix,owner_username)
+        owner_attr=strf.urlparticipa(prefix,owner_username)
         
         wrt.write_open_tag(json,4,"autor","{")
         wrt.write_tag(json,5,"uid",owner_attr,",")
@@ -148,7 +149,7 @@ def write_groupforumtopics_subsection (db, json, group_guid):
         wrt.write_close_tag(json,4,"}",True)
         
         wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(json,4,"data",strf.datestr(time),",")
         wrt.write_tag(json,4,"texto",post_desc,",")
             
         wrt.write_comments(db,json,post_guid)
@@ -186,11 +187,11 @@ def write_groupbookmarks_subsection (db, json, group_guid):
         bookmark_link=qry.post_content(db,post_guid,90)
         
         prefix='bookmarks/view/'
-        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        post_attr=strf.urlparticipa(prefix,str(post_guid))
         wrt.write_tag(json,4,"pid",post_attr,",")
 
         prefix='profile/'
-        owner_attr=wrt.urlparticipa(prefix,owner_username)
+        owner_attr=strf.urlparticipa(prefix,owner_username)
         
         wrt.write_open_tag(json,4,"autor","{")
         wrt.write_tag(json,5,"uid",owner_attr,",")
@@ -198,7 +199,7 @@ def write_groupbookmarks_subsection (db, json, group_guid):
         wrt.write_close_tag(json,4,"}",True)
         
         wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(json,4,"data",strf.datestr(time),",")
         wrt.write_tag(json,4,"link",bookmark_link,",")
         wrt.write_tag(json,4,"descricao",post_desc,",")
                             
@@ -234,11 +235,11 @@ def write_grouppages_subsection (db, json, group_guid):
         wrt.write_open_tag(json,3,"","{")
         
         prefix='pages/view/'
-        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        post_attr=strf.urlparticipa(prefix,str(post_guid))
         wrt.write_tag(json,4,"pid",post_attr,",")
 
         prefix='profile/'
-        owner_attr=wrt.urlparticipa(prefix,owner_username)
+        owner_attr=strf.urlparticipa(prefix,owner_username)
         
         wrt.write_open_tag(json,4,"autor","{")
         wrt.write_tag(json,5,"uid",owner_attr,",")
@@ -246,7 +247,7 @@ def write_grouppages_subsection (db, json, group_guid):
         wrt.write_close_tag(json,4,"}",True)
         
         wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(json,4,"data",strf.datestr(time),",")
         wrt.write_tag(json,4,"texto",post_desc,",")
                     
         wrt.write_comments(db,json,post_guid)
@@ -284,11 +285,11 @@ def write_groupvideos_subsection (db, json, group_guid):
         wrt.write_open_tag(json,3,"","{")
             
         prefix='videos/view/'
-        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        post_attr=strf.urlparticipa(prefix,str(post_guid))
         wrt.write_tag(json,4,"pid",post_attr,",")
         
         prefix='profile/'
-        owner_attr=wrt.urlparticipa(prefix,owner_username)
+        owner_attr=strf.urlparticipa(prefix,owner_username)
         
         wrt.write_open_tag(json,4,"autor","{")
         wrt.write_tag(json,5,"uid",owner_attr,",")
@@ -296,7 +297,7 @@ def write_groupvideos_subsection (db, json, group_guid):
         wrt.write_close_tag(json,4,"}",True)
         
         wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(json,4,"data",strf.datestr(time),",")
         wrt.write_tag(json,4,"link",video_link,",")
         wrt.write_tag(json,4,"descricao",post_desc,",")
             
@@ -350,11 +351,11 @@ def write_groupevents_subsection (db, json, group_guid):
         organizer=qry.post_content(db, post_guid, 30)
 
         prefix='event_calendar/view/'
-        post_attr=wrt.urlparticipa(prefix,str(post_guid))
+        post_attr=strf.urlparticipa(prefix,str(post_guid))
         wrt.write_tag(json,4,"pid",post_attr,",")
                 
         prefix='profile/'
-        owner_attr=wrt.urlparticipa(prefix,owner_username)
+        owner_attr=strf.urlparticipa(prefix,owner_username)
         
         wrt.write_open_tag(json,4,"autor","{")
         wrt.write_tag(json,5,"uid",owner_attr,",")
@@ -362,12 +363,12 @@ def write_groupevents_subsection (db, json, group_guid):
         wrt.write_close_tag(json,4,"}",True)
         
         wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",wrt.datestr(time),",")
+        wrt.write_tag(json,4,"data",strf.datestr(time),",")
         wrt.write_tag(json,4,"organizador",organizer,",")
         wrt.write_tag(json,4,"contato",contact,",")
         wrt.write_tag(json,4,"endereco",venue,",")
-        wrt.write_tag(json,4,"dataInicio",wrt.datestr(time_start),",")
-        wrt.write_tag(json,4,"dataFim",wrt.datestr(time_end),",")
+        wrt.write_tag(json,4,"dataInicio",strf.datestr(time_start),",")
+        wrt.write_tag(json,4,"dataFim",strf.datestr(time_end),",")
         wrt.write_tag(json,4,"taxaParticipacao",fees,",")
         wrt.write_tag(json,4,"descricao",post_desc,",")
         
@@ -388,12 +389,12 @@ def write_groups_section (db, json,\
     brief_desc=qry.post_content(db,guid, 45)
         
     prefix='groups/profile/'
-    group_attr=wrt.urlparticipa(prefix,str(guid))
+    group_attr=strf.urlparticipa(prefix,str(guid))
     wrt.write_tag(json,2,"cid",group_attr,",")
     
     # Write all group's information
     prefix='profile/'
-    owner_attr=wrt.urlparticipa(prefix,owner_username)
+    owner_attr=strf.urlparticipa(prefix,owner_username)
     
     wrt.write_open_tag(json,2,"proprietario","{")
     wrt.write_tag(json,3,"uid",owner_attr,",")
@@ -401,7 +402,7 @@ def write_groups_section (db, json,\
     wrt.write_close_tag(json,2,"}",True)
             
     wrt.write_tag(json,2,"titulo",title,",")
-    wrt.write_tag(json,2,"data",wrt.datestr(time),",")
+    wrt.write_tag(json,2,"data",strf.datestr(time),",")
     wrt.write_tag(json,2,"descricao",desc,",")
 
     group_access = qry.groupaccess_permission(db, guid)
@@ -433,7 +434,7 @@ def write_singlefile_groups_section (db, dir_results):
     groups_info = db.cursor()
     groups_info.execute(qry.qry_groups_info)
 
-    json_filename=dir_results+wrt.date_today()+"_comunidades"+".json"
+    json_filename=dir_results+strf.date_today()+"_comunidades"+".json"
     json = wrt.open_json_file(json_filename)
     
     wrt.write_open_tag(json,0,"","{")

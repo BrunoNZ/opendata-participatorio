@@ -25,6 +25,7 @@ import MySQLdb
 import codecs
 import datetime
 
+import string_functions as strf
 import queries_definition as qry
 
 ######################################################################
@@ -38,100 +39,23 @@ def open_xml_file (xml_filename):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def date_today():
-    return str(datetime.date.today())
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
-def lvl (l):
-    if l == 1:
-        return "\t"
-    elif l == 2:
-        return "\t\t"
-    elif l == 3:
-        return "\t\t\t"
-    elif l == 4:
-        return "\t\t\t\t"
-    elif l == 5:
-        return "\t\t\t\t\t"
-    elif l == 6:
-        return "\t\t\t\t\t\t"
-    elif l == 7:
-        return "\t\t\t\t\t\t\t"
-    else:
-        return ""
-#--------------------------------------------------------------------#    
-
-#--------------------------------------------------------------------#
-def cdata (string):
-    if len(string) > 0:
-        return "<![CDATA["+string+"]]>"
-    else:
-        return ""
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
-def uidstr (guid):
-    return " uid="+"\""+guid+"\""
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
-def cidstr (guid):
-    return " cid="+"\""+guid+"\""
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
-def pidstr (guid):
-    return " pid="+"\""+guid+"\""
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
-def permstr (perm):
-    return " habilitado="+"\""+str(perm)+"\""
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
-def qtystr (quantity):
-    return " quantidade="+"\""+str(quantity)+"\""
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
-def urlparticipa (prefix, guid):
-    return "http://participatorio.juventude.gov.br/"+prefix+guid
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
-def hrefstr (url):
-    return " href="+"\""+url+"\""
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
-def datestr (time):
-    if time != "":
-        return str(datetime.datetime.fromtimestamp(int(time)))
-    else:
-        return ""
-#--------------------------------------------------------------------#
-
-#--------------------------------------------------------------------#
 def write_open_tag (xml, l, tag_name, attr_str):
-    xml.write(lvl(l)+"<"+tag_name+attr_str+">"+"\n")
+    xml.write(strf.lvl(l)+"<"+tag_name+attr_str+">"+"\n")
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def write_close_tag (xml, l, tag_name):
-    xml.write(lvl(l)+"</"+tag_name+">"+"\n")
+    xml.write(strf.lvl(l)+"</"+tag_name+">"+"\n")
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def write_tag (xml, l, tag_name, info_str, attr_str):
-    level=lvl(l)
     if len(info_str) > 0:
         tag_begin=("<"+tag_name+attr_str+">")
         tag_end=("</"+tag_name+">")
-        xml.write(level+tag_begin+info_str+tag_end+"\n")
+        xml.write(strf.lvl(l)+tag_begin+info_str+tag_end+"\n")
     else:
-        xml.write(level+"<"+tag_name+attr_str+"/>"+"\n")
+        xml.write(strf.lvl(l)+"<"+tag_name+attr_str+"/>"+"\n")
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
@@ -145,10 +69,10 @@ def write_comments (db, xml, post_guid):
         write_open_tag(xml,5,"comentario",'')
         
         prefix='profile/'
-        user_attr=uidstr(urlparticipa(prefix,user_username))
+        user_attr=strf.uidstr(strf.urlparticipa(prefix,user_username))
         write_tag(xml,6,"usuario",user_name,user_attr)
-        write_tag(xml,6,"data",datestr(time),'')
-        write_tag(xml,6,"mensagem",cdata(string),'')
+        write_tag(xml,6,"data",strf.datestr(time),'')
+        write_tag(xml,6,"mensagem",strf.cdata(string),'')
         
         write_close_tag(xml,5,"comentario")
         
