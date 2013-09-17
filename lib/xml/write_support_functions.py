@@ -33,7 +33,7 @@ import queries_definition as qry
 #--------------------------------------------------------------------#
 def open_xml_file (xml_filename):
     xml_file = codecs.open(xml_filename,'w',encoding='utf-8')
-    xml_file.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?")
+    xml_file.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
     return xml_file
 #--------------------------------------------------------------------#
 
