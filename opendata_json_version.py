@@ -24,11 +24,11 @@
 import MySQLdb
 import datetime
 
-from lib.json.user_section import write_singlefile_users_section
-from lib.json.group_section import write_singlefile_groups_section
+from lib.json_user_section import write_singlefile_users_section
+from lib.json_group_section import write_singlefile_groups_section
 
-from lib.json.user_section import write_multifile_users_section
-from lib.json.group_section import write_multifile_groups_section
+from lib.json_user_section import write_multifile_users_section
+from lib.json_group_section import write_multifile_groups_section
 
 def main():
     
@@ -50,8 +50,8 @@ def main():
     write_singlefile_groups_section(db,dir_results)    
     
     # Call functions to write Multiple Dumps JSON files
-    write_multifile_users_section(db,dir_results)
-    write_multifile_groups_section(db,dir_results)
+    #write_multifile_users_section(db,dir_results)
+    #write_multifile_groups_section(db,dir_results)
     
     # Calculate and Print script time duration
     script_duration=datetime.datetime.now()-time_script_start

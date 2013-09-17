@@ -24,11 +24,11 @@
 import MySQLdb
 import datetime
 
-from lib.xml.user_section import write_singlefile_users_section
-from lib.xml.group_section import write_singlefile_groups_section
+from lib.xml_user_section import write_singlefile_users_section
+from lib.xml_group_section import write_singlefile_groups_section
 
-from lib.xml.user_section import write_multifile_users_section
-from lib.xml.group_section import write_multifile_groups_section
+from lib.xml_user_section import write_multifile_users_section
+from lib.xml_group_section import write_multifile_groups_section
 
 def main():
     
@@ -50,8 +50,8 @@ def main():
     write_singlefile_groups_section(db,dir_results)
     
     # Call functions to write Multiple Dump XML files
-    write_multifile_users_section(db,dir_results)
-    write_multifile_groups_section(db,dir_results)
+    #write_multifile_users_section(db,dir_results)
+    #write_multifile_groups_section(db,dir_results)
     
     # Calculate and Print script time duration
     script_duration=datetime.datetime.now()-time_script_start
