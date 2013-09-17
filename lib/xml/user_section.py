@@ -303,46 +303,75 @@ def write_userevents_subsection (db, xml, user_guid):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#    
-def write_users_section (db, dir_results):
+def write_users_section (db, xml, \
+    guid, name, username):
+
+    prefix='profile/'
+    user_attr=wrt.uidstr(wrt.urlparticipa(prefix,username))
+    wrt.write_open_tag(xml,1,"usuario",user_attr)
+    
+    # Write all user's information
+    wrt.write_tag(xml,2,"nome",name,'')
+        
+    # Write a list of user friend's names
+    write_userfriends_subsection(db, xml, guid)
+    
+    # Write a list of all groups that the user owns or belongs
+    write_usergroups_subsection(db, xml, guid)
+    
+    # Write a list, and all the info, of all posts made by the user
+    write_userfiles_subsection(db, xml, guid)
+    write_userblogs_subsection(db, xml, guid)
+    write_userbookmarks_subsection(db, xml, guid)
+    write_userpages_subsection(db, xml, guid)
+    write_uservideos_subsection(db, xml, guid)
+    write_userevents_subsection(db, xml, guid)
+    
+    wrt.write_close_tag(xml,1,"usuario")
+#--------------------------------------------------------------------#    
+
+#--------------------------------------------------------------------#    
+def write_singlefile_users_section (db, dir_results):
+   
+    users_info = db.cursor()
+    users_info.execute(qry.qry_users_info)
     
     xml_filename=dir_results+wrt.date_today()+"_usuarios"+".xml"
     xml = wrt.open_xml_file(xml_filename)
 
     wrt.write_open_tag(xml,0,"usuarios",'')
     
-    users_info = db.cursor()
-    users_info.execute(qry.qry_users_info)
-    
-    for (guid, name, username) in users_info:
-        
-        prefix='profile/'
-        user_attr=wrt.uidstr(wrt.urlparticipa(prefix,username))
-        wrt.write_open_tag(xml,1,"usuario",user_attr)
-        
-        # Write all user's information
-        wrt.write_tag(xml,2,"nome",name,'')
+    for (guid, name, username)\
+        in users_info:
             
-        # Write a list of user friend's names
-        write_userfriends_subsection(db, xml, guid)
-        
-        # Write a list of all groups that the user owns or belongs
-        write_usergroups_subsection(db, xml, guid)
-        
-        # Write a list, and all the info, of all posts made by the user
-        write_userfiles_subsection(db, xml, guid)
-        write_userblogs_subsection(db, xml, guid)
-        write_userbookmarks_subsection(db, xml, guid)
-        write_userpages_subsection(db, xml, guid)
-        write_uservideos_subsection(db, xml, guid)
-        write_userevents_subsection(db, xml, guid)
-        
-        wrt.write_close_tag(xml,1,"usuario")
+        write_users_section(db,xml,\
+            guid,name,username)        
     
     wrt.write_close_tag(xml,0,"usuarios")
     
     users_info.close()
     
     xml.close()
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#    
+def write_multifile_users_section (db, dir_results):
+   
+    users_info = db.cursor()
+    users_info.execute(qry.qry_users_info)
+    
+    for (guid, name, username)\
+        in users_info:
+        
+        xml_filename=dir_results+'/users/'+str(guid)+'.xml'
+        xml = wrt.open_xml_file(xml_filename)
+    
+        write_users_section(db,xml,\
+            guid,name,username)        
+        
+        xml.close()
+    
+    users_info.close()
 #--------------------------------------------------------------------#
 
 ######################################################################

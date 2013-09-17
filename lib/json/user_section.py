@@ -369,17 +369,43 @@ def write_userevents_subsection (db, json, user_guid):
     user_events.close()
 #--------------------------------------------------------------------#
 
-#--------------------------------------------------------------------#    
-def write_users_section (db, dir_results):
+#--------------------------------------------------------------------#
+def write_users_section (db, json, \
+    guid, name, username):
+
+    prefix='profile/'
+    user_attr=wrt.urlparticipa(prefix,username)
     
+    # Write all user's information
+    wrt.write_tag(json,2,"uid",user_attr,",")
+    wrt.write_tag(json,2,"nome",name,",")
+    
+    # Write a list of user friend's names
+    write_userfriends_subsection(db, json, guid)
+    
+    # Write a list of all groups that the user owns or belongs
+    write_usergroups_subsection(db, json, guid)
+    
+    # Write a list, and all the info, of all posts made by the user
+    write_userfiles_subsection(db, json, guid)
+    write_userblogs_subsection(db, json, guid)
+    write_userbookmarks_subsection(db, json, guid)
+    write_userpages_subsection(db, json, guid)
+    write_uservideos_subsection(db, json, guid)
+    write_userevents_subsection(db, json, guid)
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#    
+def write_singlefile_users_section (db, dir_results):
+    
+    users_info = db.cursor()
+    users_info.execute(qry.qry_users_info)
+
     json_filename=dir_results+wrt.date_today()+"_usuarios"+".json"
     json = wrt.open_json_file(json_filename)
     
     wrt.write_open_tag(json,0,"","{")
     wrt.write_open_tag(json,0,"usuarios","[")
-    
-    users_info = db.cursor()
-    users_info.execute(qry.qry_users_info)
     
     row=0
     for (guid, name, username)\
@@ -387,28 +413,10 @@ def write_users_section (db, dir_results):
             
         row=row+1
         
-        prefix='profile/'
-        user_attr=wrt.urlparticipa(prefix,username)
-        
         wrt.write_open_tag(json,1,"","{")
         
-        # Write all user's information
-        wrt.write_tag(json,2,"uid",user_attr,",")
-        wrt.write_tag(json,2,"nome",name,",")
-            
-        # Write a list of user friend's names
-        write_userfriends_subsection(db, json, guid)
-        
-        # Write a list of all groups that the user owns or belongs
-        write_usergroups_subsection(db, json, guid)
-        
-        # Write a list, and all the info, of all posts made by the user
-        write_userfiles_subsection(db, json, guid)
-        write_userblogs_subsection(db, json, guid)
-        write_userbookmarks_subsection(db, json, guid)
-        write_userpages_subsection(db, json, guid)
-        write_uservideos_subsection(db, json, guid)
-        write_userevents_subsection(db, json, guid)
+        write_users_section(db,json,\
+            guid,name,username)
         
         wrt.write_close_tag(json,1,"}",(row < users_info.rowcount))
     
@@ -418,6 +426,32 @@ def write_users_section (db, dir_results):
     users_info.close()
     
     json.close()
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#    
+def write_multifile_users_section (db, dir_results):
+
+    users_info = db.cursor()
+    users_info.execute(qry.qry_users_info)
+        
+    for (guid, name, username)\
+        in users_info:
+            
+        json_filename=dir_results+'/users/'+str(guid)+'.json'
+        json = wrt.open_json_file(json_filename)
+            
+        wrt.write_open_tag(json,0,"","{")
+        wrt.write_open_tag(json,1,"usuario","{")
+                
+        write_users_section(db,json,\
+            guid,name,username)
+        
+        wrt.write_close_tag(json,1,"}",False)
+        wrt.write_close_tag(json,0,"}",False)
+        
+        json.close()
+    
+    users_info.close()
 #--------------------------------------------------------------------#
 
 ######################################################################

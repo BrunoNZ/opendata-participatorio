@@ -381,7 +381,57 @@ def write_groupevents_subsection (db, json, group_guid):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groups_section (db, dir_results):
+def write_groups_section (db, json,\
+    guid, title, desc, owner_id, owner_name, owner_username, time):
+    
+    # 45 = select * from elgg_metastrings where string='briefdescription';
+    brief_desc=wrt.post_content(db,guid, 45)
+        
+    prefix='groups/profile/'
+    group_attr=wrt.urlparticipa(prefix,str(guid))
+    wrt.write_tag(json,2,"cid",group_attr,",")
+    
+    # Write all group's information
+    prefix='profile/'
+    owner_attr=wrt.urlparticipa(prefix,owner_username)
+    
+    wrt.write_open_tag(json,2,"proprietario","{")
+    wrt.write_tag(json,3,"uid",owner_attr,",")
+    wrt.write_tag(json,3,"nome",owner_name,"")
+    wrt.write_close_tag(json,2,"}",True)
+            
+    wrt.write_tag(json,2,"titulo",title,",")
+    wrt.write_tag(json,2,"data",wrt.datestr(time),",")
+    wrt.write_tag(json,2,"descricao",desc,",")
+
+    group_access = wrt.groupaccess_permission(db, guid)
+    
+    if group_access == 'public':
+        comma=","
+    else:
+        comma=""
+        
+    wrt.write_tag(json,2,"breveDescricao",brief_desc,comma)
+                                        
+    if group_access == 'public':
+        
+        # Write a list of group member's name
+        write_groupmembers_subsection(db, json, guid)
+    
+        # Write a list, and all the info, of all posts made on the group.
+        write_groupfiles_subsection(db, json, guid)
+        write_groupforumtopics_subsection(db, json, guid)
+        write_groupbookmarks_subsection(db, json, guid)
+        write_grouppages_subsection(db, json, guid)
+        write_groupvideos_subsection(db, json, guid)
+        write_groupevents_subsection(db, json, guid)
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
+def write_singlefile_groups_section (db, dir_results):
+
+    groups_info = db.cursor()
+    groups_info.execute(qry.qry_groups_info)
 
     json_filename=dir_results+wrt.date_today()+"_comunidades"+".json"
     json = wrt.open_json_file(json_filename)
@@ -389,56 +439,16 @@ def write_groups_section (db, dir_results):
     wrt.write_open_tag(json,0,"","{")
     wrt.write_open_tag(json,0,"comunidades","[")
     
-    groups_info = db.cursor()
-    groups_info.execute(qry.qry_groups_info)
-    
     row=0
     for (guid, title, desc, owner_id, owner_name, owner_username, time)\
         in groups_info:
             
         row=row+1
-            
-        # 45 = select * from elgg_metastrings where string='briefdescription';
-        brief_desc=wrt.post_content(db,guid, 45)
         
         wrt.write_open_tag(json,1,"","{")
-        
-        prefix='groups/profile/'
-        group_attr=wrt.urlparticipa(prefix,str(guid))
-        wrt.write_tag(json,2,"cid",group_attr,",")
-
-        # Write all group's information
-        prefix='profile/'
-        owner_attr=wrt.urlparticipa(prefix,owner_username)
-        
-        wrt.write_open_tag(json,2,"proprietario","{")
-        wrt.write_tag(json,3,"uid",owner_attr,",")
-        wrt.write_tag(json,3,"nome",owner_name,"")
-        wrt.write_close_tag(json,2,"}",True)
-                
-        wrt.write_tag(json,2,"titulo",title,",")
-        wrt.write_tag(json,2,"data",wrt.datestr(time),",")
-        wrt.write_tag(json,2,"descricao",desc,",")
-        
-        if wrt.groupaccess_permission(db, guid) == 'public':
-            comma=","
-        else:
-            comma=""
             
-        wrt.write_tag(json,2,"breveDescricao",brief_desc,comma)
-                                            
-        if wrt.groupaccess_permission(db, guid) == 'public':
-            
-            # Write a list of group member's name
-            write_groupmembers_subsection(db, json, guid)
-        
-            # Write a list, and all the info, of all posts made on the group.
-            write_groupfiles_subsection(db, json, guid)
-            write_groupforumtopics_subsection(db, json, guid)
-            write_groupbookmarks_subsection(db, json, guid)
-            write_grouppages_subsection(db, json, guid)
-            write_groupvideos_subsection(db, json, guid)
-            write_groupevents_subsection(db, json, guid)
+        write_groups_section(db,json,\
+            guid,title,desc,owner_id,owner_name,owner_username,time)
             
         wrt.write_close_tag(json,1,"}",(row < groups_info.rowcount))
         
@@ -448,6 +458,32 @@ def write_groups_section (db, dir_results):
     groups_info.close()
     
     json.close()
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
+def write_multifile_groups_section (db, dir_results):
+
+    groups_info = db.cursor()
+    groups_info.execute(qry.qry_groups_info)
+
+    for (guid, title, desc, owner_id, owner_name, owner_username, time)\
+        in groups_info:
+    
+        json_filename=dir_results+'/groups/'+str(guid)+'.json'
+        json = wrt.open_json_file(json_filename)
+        
+        wrt.write_open_tag(json,0,"","{")
+        wrt.write_open_tag(json,1,"usuario","{")
+            
+        write_groups_section(db,json,\
+            guid,title,desc,owner_id,owner_name,owner_username,time)
+            
+        wrt.write_close_tag(json,1,"}",False)
+        wrt.write_close_tag(json,0,"}",False)
+        
+        json.close()
+    
+    groups_info.close()
 #--------------------------------------------------------------------#
 
 ######################################################################

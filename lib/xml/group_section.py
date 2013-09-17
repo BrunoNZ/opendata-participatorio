@@ -300,55 +300,83 @@ def write_groupevents_subsection (db, xml, group_guid):
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groups_section (db, dir_results):
+def write_groups_section(db, xml, \
+    guid, title, desc, owner_id, owner_name, owner_username, time):
+
+    # 45 = select * from elgg_metastrings where string='briefdescription';
+    brief_desc=wrt.post_content(db,guid, 45)
     
+    prefix='groups/profile/'
+    group_attr=wrt.cidstr(wrt.urlparticipa(prefix,str(guid)))
+    wrt.write_open_tag(xml,1,"comunidade",group_attr)
+    
+    # Write all group's information
+    prefix='profile/'
+    owner_attr=wrt.uidstr(wrt.urlparticipa(prefix,owner_username))
+    wrt.write_tag(xml,2,"proprietario",owner_name,owner_attr)
+    wrt.write_tag(xml,2,"titulo",title,'')
+    wrt.write_tag(xml,2,"data",wrt.datestr(time),'')
+    wrt.write_tag(xml,2,"descricao",wrt.cdata(desc),'')
+    wrt.write_tag(xml,2,"breve_descricao",wrt.cdata(brief_desc),'')
+                                
+    if wrt.groupaccess_permission(db, guid) == 'public':
+            
+        # Write a list of group member's name
+        write_groupmembers_subsection(db, xml, guid)
+        
+        # Write a list, and all the info, of all posts made on the group.
+        write_groupfiles_subsection(db, xml, guid)
+        write_groupforumtopics_subsection(db, xml, guid)
+        write_groupbookmarks_subsection(db, xml, guid)
+        write_grouppages_subsection(db, xml, guid)
+        write_groupvideos_subsection(db, xml, guid)
+        write_groupevents_subsection(db, xml, guid)
+        
+    wrt.write_close_tag(xml,1,"comunidade")
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
+def write_singlefile_groups_section (db, dir_results):
+    
+    groups_info = db.cursor()
+    groups_info.execute(qry.qry_groups_info)
+
     xml_filename=dir_results+wrt.date_today()+"_comunidades"+".xml"
     xml = wrt.open_xml_file(xml_filename)
 
     wrt.write_open_tag(xml,0,"comunidades",'')
     
-    groups_info = db.cursor()
-    groups_info.execute(qry.qry_groups_info)
-    
     for (guid, title, desc, owner_id, owner_name, owner_username, time)\
         in groups_info:
         
-        # 45 = select * from elgg_metastrings where string='briefdescription';
-        brief_desc=wrt.post_content(db,guid, 45)
-        
-        prefix='groups/profile/'
-        group_attr=wrt.cidstr(wrt.urlparticipa(prefix,str(guid)))
-        wrt.write_open_tag(xml,1,"comunidade",group_attr)
-
-        # Write all group's information
-        prefix='profile/'
-        owner_attr=wrt.uidstr(wrt.urlparticipa(prefix,owner_username))
-        wrt.write_tag(xml,2,"proprietario",owner_name,owner_attr)
-        wrt.write_tag(xml,2,"titulo",title,'')
-        wrt.write_tag(xml,2,"data",wrt.datestr(time),'')
-        wrt.write_tag(xml,2,"descricao",wrt.cdata(desc),'')
-        wrt.write_tag(xml,2,"breve_descricao",wrt.cdata(brief_desc),'')
-                                    
-        if wrt.groupaccess_permission(db, guid) == 'public':
-            
-            # Write a list of group member's name
-            write_groupmembers_subsection(db, xml, guid)
-        
-            # Write a list, and all the info, of all posts made on the group.
-            write_groupfiles_subsection(db, xml, guid)
-            write_groupforumtopics_subsection(db, xml, guid)
-            write_groupbookmarks_subsection(db, xml, guid)
-            write_grouppages_subsection(db, xml, guid)
-            write_groupvideos_subsection(db, xml, guid)
-            write_groupevents_subsection(db, xml, guid)
-        
-        wrt.write_close_tag(xml,1,"comunidade")
-        
+        write_groups_section(db,xml,\
+            guid,title,desc,owner_id,owner_name,owner_username,time)
+    
     wrt.write_close_tag(xml,0,"comunidades")
     
     groups_info.close()
     
     xml.close()
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
+def write_multifile_groups_section (db, dir_results):
+
+    groups_info = db.cursor()
+    groups_info.execute(qry.qry_groups_info)
+
+    for (guid, title, desc, owner_id, owner_name, owner_username, time)\
+        in groups_info:
+            
+        xml_filename=dir_results+'/groups/'+str(guid)+'.xml'
+        xml = wrt.open_xml_file(xml_filename)
+        
+        write_groups_section(db,xml,\
+            guid,title,desc,owner_id,owner_name,owner_username,time)
+            
+        xml.close()
+        
+    groups_info.close()
 #--------------------------------------------------------------------#
 
 ######################################################################
