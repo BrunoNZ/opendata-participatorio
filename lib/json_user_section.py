@@ -435,7 +435,7 @@ def write_singlefile_users_section (db, dir_results):
 #--------------------------------------------------------------------#    
 def write_multifile_users_section (db, dir_results):
 
-    users_info = json.database.cursor()
+    users_info = db.cursor()
     users_info.execute(qry.qry_users_info)
     
     for (guid, name, username)\
@@ -449,7 +449,7 @@ def write_multifile_users_section (db, dir_results):
         json.write_open_tag("","{")
         json.write_open_tag("usuario","{")
                 
-        write_users_section(json.database,json,\
+        write_users_section(json,\
             guid,name,username)
         
         json.write_close_tag("}",False)

@@ -432,11 +432,11 @@ def write_groups_section (json,\
 #--------------------------------------------------------------------#
 def write_singlefile_groups_section (db, dir_results):
 
-    json_filename=dir_results+strf.date_today()+"_comunidades"+".json"
-    json = OpendataJSON(db,dir_results,json_filename)
-    
     groups_info = json.database.cursor()
     groups_info.execute(qry.qry_groups_info)
+
+    json_filename=dir_results+strf.date_today()+"_comunidades"+".json"
+    json = OpendataJSON(db,dir_results,json_filename)
     
     json.open_file()
     
@@ -464,17 +464,19 @@ def write_singlefile_groups_section (db, dir_results):
     groups_info.close()
 #--------------------------------------------------------------------#
 
-#--------------------------------------------------------------------#
+#-----------------------------------------------------------------w---#
 def write_multifile_groups_section (db, dir_results):
 
-    groups_info = json.database.cursor()
+    groups_info = db.cursor()
     groups_info.execute(qry.qry_groups_info)
 
     for (guid, title, desc, owner_id, owner_name, owner_username, time)\
         in groups_info:
     
         json_filename=dir_results+'/groups/'+str(guid)+'.json'
-        json = wrt.open_json_file(json_filename)
+        json = OpendataJSON(db,dir_results,json_filename)
+        
+        json.open_file()
         
         json.write_open_tag("","{")
         json.write_open_tag("usuario","{")
