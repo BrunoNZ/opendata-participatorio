@@ -23,42 +23,43 @@
 
 import MySQLdb
 
-import queries_definition as qry
-import string_functions as strf
-import xml_support_functions as wrt
+from opendata_xml_class import OpendataXML
+
+import opendata_queries_definition as qry
+import opendata_string_functions as strf
 
 ######################################################################
 # Functions that write on XML file
 
 #-------------------------------------------------------------------#
-def write_groupmembers_subsection (db, xml, group_guid):
-    group_members = db.cursor()
+def write_groupmembers_subsection (xml, group_guid):
+    group_members = xml.database.cursor()
     group_members.execute(qry.qry_group_members, (group_guid,))
     
     qty=str(group_members.rowcount)
-    wrt.write_tag(xml,2,"quantidade_membros",qty,'')
+    xml.write_tag("quantidade_membros",qty,'')
                     
-    wrt.write_open_tag(xml,2,"membros",'')
+    xml.write_open_tag("membros",'')
     for (user_id, user_name, user_username) in group_members:
         prefix='profile/'
         user_attr=strf.uidstr(strf.urlparticipa(prefix,user_username))
-        wrt.write_tag(xml,3,"usuario",user_name,user_attr)
-    wrt.write_close_tag(xml,2,"membros")
+        xml.write_tag("usuario",user_name,user_attr)
+    xml.write_close_tag("membros")
     
     group_members.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groupfiles_subsection (db, xml, group_guid):
-    group_files = db.cursor()
+def write_groupfiles_subsection (xml, group_guid):
+    group_files = xml.database.cursor()
     
     # 1 = select * from elgg_entity_subtypes where subtype='file';
     group_files.execute(qry.qry_group_posts, (group_guid, 1,))
     
     # 50 = select * from elgg_metastrings where string='file_enable';
-    perm=qry.postcontent_permission(db, group_guid, 50)
+    perm=qry.postcontent_permission(xml.database, group_guid, 50)
     
-    wrt.write_open_tag(xml,2,"arquivos",strf.permstr(perm))
+    xml.write_open_tag("arquivos",strf.permstr(perm))
     
     for (post_guid, post_title, post_desc, \
             owner_id, owner_name, owner_username, time)\
@@ -69,36 +70,36 @@ def write_groupfiles_subsection (db, xml, group_guid):
         
         prefix='file/view/'
         post_attr=strf.pidstr(strf.urlparticipa(prefix,str(post_guid)))
-        wrt.write_open_tag(xml,3,"arquivo",post_attr)
+        xml.write_open_tag("arquivo",post_attr)
 
         prefix='profile/'
         owner_attr=strf.uidstr(strf.urlparticipa(prefix,owner_username))
-        wrt.write_tag(xml,4,"autor",owner_name,owner_attr)
-        wrt.write_tag(xml,4,"titulo",post_title,'')
-        wrt.write_tag(xml,4,"data",strf.datestr(time),'')
-        wrt.write_tag(xml,4,"link",'',strf.hrefstr(file_link))
-        wrt.write_tag(xml,4,"descricao",strf.cdata(post_desc),'')
+        xml.write_tag("autor",owner_name,owner_attr)
+        xml.write_tag("titulo",post_title,'')
+        xml.write_tag("data",strf.datestr(time),'')
+        xml.write_tag("link",'',strf.hrefstr(file_link))
+        xml.write_tag("descricao",strf.cdata(post_desc),'')
                     
-        wrt.write_comments(db,xml,post_guid)
+        xml.write_comments(post_guid)
         
-        wrt.write_close_tag(xml,3,"arquivo")
+        xml.write_close_tag("arquivo")
         
-    wrt.write_close_tag(xml,2,"arquivos")
+    xml.write_close_tag("arquivos")
     
     group_files.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groupforumtopics_subsection (db, xml, group_guid):
-    group_forumtopics = db.cursor()
+def write_groupforumtopics_subsection (xml, group_guid):
+    group_forumtopics = xml.database.cursor()
     
     # 7 = select * from elgg_entity_subtypes where subtype='groupforumtopic';
     group_forumtopics.execute(qry.qry_group_posts, (group_guid, 7,))
     
     # 52 = select * from elgg_metastrings where string='forum_enable';
-    perm=qry.postcontent_permission(db, group_guid, 52)
+    perm=qry.postcontent_permission(xml.database, group_guid, 52)
     
-    wrt.write_open_tag(xml,2,"debates",strf.permstr(perm))
+    xml.write_open_tag("debates",strf.permstr(perm))
     
     for (post_guid, post_title, post_desc, \
         owner_id, owner_name, owner_username, time)\
@@ -106,75 +107,75 @@ def write_groupforumtopics_subsection (db, xml, group_guid):
         
         prefix='discussion/view/'
         post_attr=strf.pidstr(strf.urlparticipa(prefix,str(post_guid)))
-        wrt.write_open_tag(xml,3,"debate",post_attr)
+        xml.write_open_tag("debate",post_attr)
 
         prefix='profile/'
         owner_attr=strf.uidstr(strf.urlparticipa(prefix,owner_username))
-        wrt.write_tag(xml,4,"autor",owner_name,owner_attr)
-        wrt.write_tag(xml,4,"titulo",post_title,'')
-        wrt.write_tag(xml,4,"data",strf.datestr(time),'')
-        wrt.write_tag(xml,4,"texto",strf.cdata(post_desc),'')
+        xml.write_tag("autor",owner_name,owner_attr)
+        xml.write_tag("titulo",post_title,'')
+        xml.write_tag("data",strf.datestr(time),'')
+        xml.write_tag("texto",strf.cdata(post_desc),'')
             
-        wrt.write_comments(db,xml,post_guid)
+        xml.write_comments(post_guid)
         
-        wrt.write_close_tag(xml,3,"debate")
+        xml.write_close_tag("debate")
         
-    wrt.write_close_tag(xml,2,"debates")
+    xml.write_close_tag("debates")
     
     group_forumtopics.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groupbookmarks_subsection (db, xml, group_guid):
-    group_bookmarks = db.cursor()
+def write_groupbookmarks_subsection (xml, group_guid):
+    group_bookmarks = xml.database.cursor()
     
     # 13 = select * from elgg_entity_subtypes where subtype='bookmarks';
     group_bookmarks.execute(qry.qry_group_posts, (group_guid, 13,))
     
     # 49 = select * from elgg_metastrings where string='bookmarks_enable';
-    perm=qry.postcontent_permission(db, group_guid, 49)
+    perm=qry.postcontent_permission(xml.database, group_guid, 49)
     
-    wrt.write_open_tag(xml,2,"favoritos",strf.permstr(perm))
+    xml.write_open_tag("favoritos",strf.permstr(perm))
     
     for (post_guid, post_title, post_desc, \
             owner_id, owner_name, owner_username, time)\
         in group_bookmarks:
             
         # 90 = select * from elgg_metastrings where string='address';
-        bookmark_link=qry.post_content(db,post_guid,90)
+        bookmark_link=qry.post_content(xml.database, post_guid, 90)
         
         prefix='bookmarks/view/'
         post_attr=strf.pidstr(strf.urlparticipa(prefix,str(post_guid)))
-        wrt.write_open_tag(xml,3,"favorito",post_attr)
+        xml.write_open_tag("favorito",post_attr)
 
         prefix='profile/'
         owner_attr=strf.uidstr(strf.urlparticipa(prefix,owner_username))
-        wrt.write_tag(xml,4,"autor",owner_name,owner_attr)
-        wrt.write_tag(xml,4,"titulo",post_title,'')
-        wrt.write_tag(xml,4,"data",strf.datestr(time),'')
-        wrt.write_tag(xml,4,"link",'',strf.hrefstr(bookmark_link))
-        wrt.write_tag(xml,4,"descricao",strf.cdata(post_desc),'')
+        xml.write_tag("autor",owner_name,owner_attr)
+        xml.write_tag("titulo",post_title,'')
+        xml.write_tag("data",strf.datestr(time),'')
+        xml.write_tag("link",'',strf.hrefstr(bookmark_link))
+        xml.write_tag("descricao",strf.cdata(post_desc),'')
                             
-        wrt.write_comments(db,xml,post_guid)
+        xml.write_comments(post_guid)
         
-        wrt.write_close_tag(xml,3,"favorito")
+        xml.write_close_tag("favorito")
     
-    wrt.write_close_tag(xml,2,"favoritos")
+    xml.write_close_tag("favoritos")
     
     group_bookmarks.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_grouppages_subsection (db, xml, group_guid):
-    group_pages = db.cursor()
+def write_grouppages_subsection (xml, group_guid):
+    group_pages = xml.database.cursor()
     
     # 14 = select * from elgg_entity_subtypes where subtype='page_top';
     group_pages.execute(qry.qry_group_posts, (group_guid, 14,))
     
     # 53 = select * from elgg_metastrings where string='pages_enable';
-    perm=qry.postcontent_permission(db, group_guid, 53)
+    perm=qry.postcontent_permission(xml.database, group_guid, 53)
     
-    wrt.write_open_tag(xml,2,"paginas",strf.permstr(perm))
+    xml.write_open_tag("paginas",strf.permstr(perm))
     
     for (post_guid, post_title, post_desc,
             owner_id, owner_name, owner_username, time)\
@@ -182,158 +183,158 @@ def write_grouppages_subsection (db, xml, group_guid):
         
         prefix='pages/view/'
         post_attr=strf.pidstr(strf.urlparticipa(prefix,str(post_guid)))
-        wrt.write_open_tag(xml,3,"pagina",post_attr)
+        xml.write_open_tag("pagina",post_attr)
 
         prefix='profile/'
         owner_attr=strf.uidstr(strf.urlparticipa(prefix,owner_username))
-        wrt.write_tag(xml,4,"autor",owner_name,owner_attr)
-        wrt.write_tag(xml,4,"titulo",post_title,'')
-        wrt.write_tag(xml,4,"data",strf.datestr(time),'')
-        wrt.write_tag(xml,4,"texto",strf.cdata(post_desc),'')
+        xml.write_tag("autor",owner_name,owner_attr)
+        xml.write_tag("titulo",post_title,'')
+        xml.write_tag("data",strf.datestr(time),'')
+        xml.write_tag("texto",strf.cdata(post_desc),'')
                     
-        wrt.write_comments(db,xml,post_guid)
+        xml.write_comments(post_guid)
         
-        wrt.write_close_tag(xml,3,"pagina")
+        xml.write_close_tag("pagina")
         
-    wrt.write_close_tag(xml,2,"paginas")
+    xml.write_close_tag("paginas")
     
     group_pages.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groupvideos_subsection (db, xml, group_guid):
-    group_videos = db.cursor()
+def write_groupvideos_subsection (xml, group_guid):
+    group_videos = xml.database.cursor()
     
     # 12 = select * from elgg_entity_subtypes where subtype='videos';
     group_videos.execute(qry.qry_group_posts, (group_guid, 12,))
     
     # 399 = select * from elgg_metastrings where string='videos_enable';
-    perm=qry.postcontent_permission(db, group_guid, 399)
+    perm=qry.postcontent_permission(xml.database, group_guid, 399)
     
-    wrt.write_open_tag(xml,2,"videos",strf.permstr(perm))
+    xml.write_open_tag("videos",strf.permstr(perm))
     
     for (post_guid, post_title, post_desc, \
             owner_id, owner_name, owner_username, time)\
         in group_videos:
             
         # 477 = select * from elgg_metastrings where string='video_url';
-        video_link=qry.post_content(db,post_guid, 477)
+        video_link=qry.post_content(xml.database, post_guid, 477)
             
         prefix='videos/view/'
         post_attr=strf.pidstr(strf.urlparticipa(prefix,str(post_guid)))
-        wrt.write_open_tag(xml,3,"video",post_attr)
+        xml.write_open_tag("video",post_attr)
 
         prefix='profile/'
         owner_attr=strf.uidstr(strf.urlparticipa(prefix,owner_username))
-        wrt.write_tag(xml,4,"autor",owner_name,owner_attr)
-        wrt.write_tag(xml,4,"titulo",post_title,'')
-        wrt.write_tag(xml,4,"data",strf.datestr(time),'')
-        wrt.write_tag(xml,4,"link",'',strf.hrefstr(video_link))
-        wrt.write_tag(xml,4,"descricao",strf.cdata(post_desc),'')
+        xml.write_tag("autor",owner_name,owner_attr)
+        xml.write_tag("titulo",post_title,'')
+        xml.write_tag("data",strf.datestr(time),'')
+        xml.write_tag("link",'',strf.hrefstr(video_link))
+        xml.write_tag("descricao",strf.cdata(post_desc),'')
             
-        wrt.write_comments(db,xml,post_guid)
+        xml.write_comments(post_guid)
         
-        wrt.write_close_tag(xml,3,"video")
+        xml.write_close_tag("video")
         
-    wrt.write_close_tag(xml,2,"videos")
+    xml.write_close_tag("videos")
     
     group_videos.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groupevents_subsection (db, xml, group_guid):
-    group_events = db.cursor()
+def write_groupevents_subsection (xml, group_guid):
+    group_events = xml.database.cursor()
     
     # 6 = select * from elgg_entity_subtypes where subtype='calendar_event';
     group_events.execute(qry.qry_group_posts, (group_guid, 6,))
     
     # 54 = select * from elgg_metastrings where string='event_calendar_enable';
-    perm=qry.postcontent_permission(db, group_guid, 54)
+    perm=qry.postcontent_permission(xml.database, group_guid, 54)
     
-    wrt.write_open_tag(xml,2,"eventos",strf.permstr(perm))
+    xml.write_open_tag("eventos",strf.permstr(perm))
     
     for (post_guid, post_title, post_desc, \
             owner_id, owner_name, owner_username, time)\
         in group_events:
             
         # 18 = select * from elgg_metastrings where string='venue';
-        venue=qry.post_content(db, post_guid, 18)
+        venue=qry.post_content(xml.database, post_guid, 18)
         
         # 20 = select * from elgg_metastrings where string='start_date';
-        time_start=qry.post_content(db, post_guid, 20)
+        time_start=qry.post_content(xml.database, post_guid, 20)
 
         # 22 = select * from elgg_metastrings where string='end_date';
-        time_end=qry.post_content(db, post_guid, 22)
+        time_end=qry.post_content(xml.database, post_guid, 22)
         
         # 26 = select * from elgg_metastrings where string='fees';
-        fees=qry.post_content(db, post_guid, 26)
+        fees=qry.post_content(xml.database, post_guid, 26)
         
         # 28 = select * from elgg_metastrings where string='contact';
-        contact=qry.post_content(db, post_guid, 28)
+        contact=qry.post_content(xml.database, post_guid, 28)
         
         # 30 = select * from elgg_metastrings where string='organizer';
-        organizer=qry.post_content(db, post_guid, 30)
+        organizer=qry.post_content(xml.database, post_guid, 30)
 
         prefix='event_calendar/view/'
         post_attr=strf.pidstr(strf.urlparticipa(prefix,str(post_guid)))
-        wrt.write_open_tag(xml,3,"evento",post_attr)
+        xml.write_open_tag("evento",post_attr)
         
         prefix='profile/'
         owner_attr=strf.uidstr(strf.urlparticipa(prefix,owner_username))
-        wrt.write_tag(xml,4,"autor",owner_name,owner_attr)
-        wrt.write_tag(xml,4,"titulo",post_title,'')
-        wrt.write_tag(xml,4,"data",strf.datestr(time),'')
-        wrt.write_tag(xml,4,"organizador",organizer,'')
-        wrt.write_tag(xml,4,"contato",contact,'')
-        wrt.write_tag(xml,4,"endereco",venue,'')
-        wrt.write_tag(xml,4,"data_inicio",strf.datestr(time_start),'')
-        wrt.write_tag(xml,4,"data_fim",strf.datestr(time_end),'')
-        wrt.write_tag(xml,4,"taxa_participacao",fees,'')
-        wrt.write_tag(xml,4,"descricao",strf.cdata(post_desc),'')
+        xml.write_tag("autor",owner_name,owner_attr)
+        xml.write_tag("titulo",post_title,'')
+        xml.write_tag("data",strf.datestr(time),'')
+        xml.write_tag("organizador",organizer,'')
+        xml.write_tag("contato",contact,'')
+        xml.write_tag("endereco",venue,'')
+        xml.write_tag("data_inicio",strf.datestr(time_start),'')
+        xml.write_tag("data_fim",strf.datestr(time_end),'')
+        xml.write_tag("taxa_participacao",fees,'')
+        xml.write_tag("descricao",strf.cdata(post_desc),'')
         
-        wrt.write_close_tag(xml,3,"evento")
+        xml.write_close_tag("evento")
         
-        wrt.write_comments(db,xml,post_guid)
+        xml.write_comments(post_guid)
     
-    wrt.write_close_tag(xml,2,"eventos")
+    xml.write_close_tag("eventos")
     
     group_events.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groups_section(db, xml, \
+def write_groups_section(xml, \
     guid, title, desc, owner_id, owner_name, owner_username, time):
 
     # 45 = select * from elgg_metastrings where string='briefdescription';
-    brief_desc=qry.post_content(db,guid, 45)
+    brief_desc=qry.post_content(xml.database, guid, 45)
     
     prefix='groups/profile/'
     group_attr=strf.cidstr(strf.urlparticipa(prefix,str(guid)))
-    wrt.write_open_tag(xml,1,"comunidade",group_attr)
+    xml.write_open_tag("comunidade",group_attr)
     
     # Write all group's information
     prefix='profile/'
     owner_attr=strf.uidstr(strf.urlparticipa(prefix,owner_username))
-    wrt.write_tag(xml,2,"proprietario",owner_name,owner_attr)
-    wrt.write_tag(xml,2,"titulo",title,'')
-    wrt.write_tag(xml,2,"data",strf.datestr(time),'')
-    wrt.write_tag(xml,2,"descricao",strf.cdata(desc),'')
-    wrt.write_tag(xml,2,"breve_descricao",strf.cdata(brief_desc),'')
+    xml.write_tag("proprietario",owner_name,owner_attr)
+    xml.write_tag("titulo",title,'')
+    xml.write_tag("data",strf.datestr(time),'')
+    xml.write_tag("descricao",strf.cdata(desc),'')
+    xml.write_tag("breve_descricao",strf.cdata(brief_desc),'')
                                 
-    if qry.groupaccess_permission(db, guid) == 'public':
+    if qry.groupaccess_permission(xml.database, guid) == 'public':
             
         # Write a list of group member's name
-        write_groupmembers_subsection(db, xml, guid)
+        write_groupmembers_subsection(xml, guid)
         
         # Write a list, and all the info, of all posts made on the group.
-        write_groupfiles_subsection(db, xml, guid)
-        write_groupforumtopics_subsection(db, xml, guid)
-        write_groupbookmarks_subsection(db, xml, guid)
-        write_grouppages_subsection(db, xml, guid)
-        write_groupvideos_subsection(db, xml, guid)
-        write_groupevents_subsection(db, xml, guid)
+        write_groupfiles_subsection(xml, guid)
+        write_groupforumtopics_subsection(xml, guid)
+        write_groupbookmarks_subsection(xml, guid)
+        write_grouppages_subsection(xml, guid)
+        write_groupvideos_subsection(xml, guid)
+        write_groupevents_subsection(xml, guid)
         
-    wrt.write_close_tag(xml,1,"comunidade")
+    xml.write_close_tag("comunidade")
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
@@ -343,21 +344,23 @@ def write_singlefile_groups_section (db, dir_results):
     groups_info.execute(qry.qry_groups_info)
 
     xml_filename=dir_results+strf.date_today()+"_comunidades"+".xml"
-    xml = wrt.open_xml_file(xml_filename)
+    xml = OpendataXML(db,dir_results,xml_filename)
+    
+    xml.open_file()
 
-    wrt.write_open_tag(xml,0,"comunidades",'')
+    xml.write_open_tag("comunidades",'')
     
     for (guid, title, desc, owner_id, owner_name, owner_username, time)\
         in groups_info:
         
-        write_groups_section(db,xml,\
+        write_groups_section(xml,\
             guid,title,desc,owner_id,owner_name,owner_username,time)
     
-    wrt.write_close_tag(xml,0,"comunidades")
+    xml.write_close_tag("comunidades")
+    
+    xml.close_file()
     
     groups_info.close()
-    
-    xml.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
@@ -370,12 +373,14 @@ def write_multifile_groups_section (db, dir_results):
         in groups_info:
             
         xml_filename=dir_results+'/groups/'+str(guid)+'.xml'
-        xml = wrt.open_xml_file(xml_filename)
+        xml = OpendataXML(db,dir_results,xml_filename)
         
-        write_groups_section(db,xml,\
+        xml.open_file()
+        
+        write_groups_section(xml,\
             guid,title,desc,owner_id,owner_name,owner_username,time)
             
-        xml.close()
+        xml.close_file()
         
     groups_info.close()
 #--------------------------------------------------------------------#

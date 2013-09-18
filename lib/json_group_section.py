@@ -23,22 +23,23 @@
 
 import MySQLdb
 
-import queries_definition as qry
-import string_functions as strf
-import json_support_functions as wrt
+from opendata_json_class import OpendataJSON
+
+import opendata_queries_definition as qry
+import opendata_string_functions as strf
 
 ######################################################################
 # Functions that write on JSON file
 
 #-------------------------------------------------------------------#
-def write_groupmembers_subsection (db, json, group_guid):
-    group_members = db.cursor()
+def write_groupmembers_subsection (json, group_guid):
+    group_members = json.database.cursor()
     group_members.execute(qry.qry_group_members, (group_guid,))
     
     qty=str(group_members.rowcount)
-    wrt.write_tag(json,2,"quantidadeMembros",qty,",")
+    json.write_tag("quantidadeMembros",qty,",")
                 
-    wrt.write_open_tag(json,2,"membros","[")
+    json.write_open_tag("membros","[")
     
     row=0
     for (user_id, user_name, user_username)\
@@ -46,35 +47,35 @@ def write_groupmembers_subsection (db, json, group_guid):
             
         row=row+1
             
-        wrt.write_open_tag(json,3,"","{")
+        json.write_open_tag("","{")
         
         prefix='profile/'
         user_attr=strf.urlparticipa(prefix,user_username)
         
-        wrt.write_open_tag(json,4,"usuario","{")
-        wrt.write_tag(json,5,"uid",user_attr,",")
-        wrt.write_tag(json,5,"nome",user_name,"")
-        wrt.write_close_tag(json,4,"}",False)
+        json.write_open_tag("usuario","{")
+        json.write_tag("uid",user_attr,",")
+        json.write_tag("nome",user_name,"")
+        json.write_close_tag("}",False)
         
-        wrt.write_close_tag(json,3,"}",(row < group_members.rowcount))
+        json.write_close_tag("}",(row < group_members.rowcount))
         
-    wrt.write_close_tag(json,2,"]",True)
+    json.write_close_tag("]",True)
     
     group_members.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groupfiles_subsection (db, json, group_guid):
-    group_files = db.cursor()
+def write_groupfiles_subsection (json, group_guid):
+    group_files = json.database.cursor()
     
     # 1 = select * from elgg_entity_subtypes where subtype='file';
     group_files.execute(qry.qry_group_posts, (group_guid, 1,))
     
     # 50 = select * from elgg_metastrings where string='file_enable';
-    perm=qry.postcontent_permission(db, group_guid, 50)
+    perm=qry.postcontent_permission(json.database, group_guid, 50)
     
-    wrt.write_tag(json,2,"arquivosHabilitado",perm,",")
-    wrt.write_open_tag(json,2,"arquivos","[")
+    json.write_tag("arquivosHabilitado",perm,",")
+    json.write_open_tag("arquivos","[")
     
     row=0
     for (post_guid, post_title, post_desc, \
@@ -83,49 +84,49 @@ def write_groupfiles_subsection (db, json, group_guid):
             
         row=row+1
         
-        wrt.write_open_tag(json,3,"","{")
+        json.write_open_tag("","{")
         
         prefix='file/download/'
         file_link=strf.urlparticipa(prefix,str(post_guid))
         
         prefix='file/view/'
         post_attr=strf.urlparticipa(prefix,str(post_guid))
-        wrt.write_tag(json,4,"pid",post_attr,",")
+        json.write_tag("pid",post_attr,",")
 
         prefix='profile/'
         owner_attr=strf.urlparticipa(prefix,owner_username)
         
-        wrt.write_open_tag(json,4,"autor","{")
-        wrt.write_tag(json,5,"uid",owner_attr,",")
-        wrt.write_tag(json,5,"nome",owner_name,"")
-        wrt.write_close_tag(json,4,"}",True)
+        json.write_open_tag("autor","{")
+        json.write_tag("uid",owner_attr,",")
+        json.write_tag("nome",owner_name,"")
+        json.write_close_tag("}",True)
         
-        wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",strf.datestr(time),",")
-        wrt.write_tag(json,4,"link",file_link,",")
-        wrt.write_tag(json,4,"descricao",post_desc,",")
+        json.write_tag("titulo",post_title,",")
+        json.write_tag("data",strf.datestr(time),",")
+        json.write_tag("link",file_link,",")
+        json.write_tag("descricao",post_desc,",")
                     
-        wrt.write_comments(db,json,post_guid)
+        json.write_comments(post_guid)
         
-        wrt.write_close_tag(json,3,"}",(row < group_files.rowcount))
+        json.write_close_tag("}",(row < group_files.rowcount))
         
-    wrt.write_close_tag(json,2,"]",True)
+    json.write_close_tag("]",True)
     
     group_files.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groupforumtopics_subsection (db, json, group_guid):
-    group_forumtopics = db.cursor()
+def write_groupforumtopics_subsection (json, group_guid):
+    group_forumtopics = json.database.cursor()
     
     # 7 = select * from elgg_entity_subtypes where subtype='groupforumtopic';
     group_forumtopics.execute(qry.qry_group_posts, (group_guid, 7,))
     
     # 52 = select * from elgg_metastrings where string='forum_enable';
-    perm=qry.postcontent_permission(db, group_guid, 52)
+    perm=qry.postcontent_permission(json.database, group_guid, 52)
     
-    wrt.write_tag(json,2,"debatesHabilitado",perm,",")
-    wrt.write_open_tag(json,2,"debates","[")
+    json.write_tag("debatesHabilitado",perm,",")
+    json.write_open_tag("debates","[")
     
     row=0
     for (post_guid, post_title, post_desc, \
@@ -134,45 +135,45 @@ def write_groupforumtopics_subsection (db, json, group_guid):
             
         row=row+1
         
-        wrt.write_open_tag(json,3,"","{")
+        json.write_open_tag("","{")
         
         prefix='discussion/view/'
         post_attr=strf.urlparticipa(prefix,str(post_guid))
-        wrt.write_tag(json,4,"pid",post_attr,",")
+        json.write_tag("pid",post_attr,",")
 
         prefix='profile/'
         owner_attr=strf.urlparticipa(prefix,owner_username)
         
-        wrt.write_open_tag(json,4,"autor","{")
-        wrt.write_tag(json,5,"uid",owner_attr,",")
-        wrt.write_tag(json,5,"nome",owner_name,"")
-        wrt.write_close_tag(json,4,"}",True)
+        json.write_open_tag("autor","{")
+        json.write_tag("uid",owner_attr,",")
+        json.write_tag("nome",owner_name,"")
+        json.write_close_tag("}",True)
         
-        wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",strf.datestr(time),",")
-        wrt.write_tag(json,4,"texto",post_desc,",")
+        json.write_tag("titulo",post_title,",")
+        json.write_tag("data",strf.datestr(time),",")
+        json.write_tag("texto",post_desc,",")
             
-        wrt.write_comments(db,json,post_guid)
+        json.write_comments(post_guid)
         
-        wrt.write_close_tag(json,3,"}",(row < group_forumtopics.rowcount))
+        json.write_close_tag("}",(row < group_forumtopics.rowcount))
         
-    wrt.write_close_tag(json,2,"]",True)
+    json.write_close_tag("]",True)
     
     group_forumtopics.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groupbookmarks_subsection (db, json, group_guid):
-    group_bookmarks = db.cursor()
+def write_groupbookmarks_subsection (json, group_guid):
+    group_bookmarks = json.database.cursor()
     
     # 13 = select * from elgg_entity_subtypes where subtype='bookmarks';
     group_bookmarks.execute(qry.qry_group_posts, (group_guid, 13,))
     
     # 49 = select * from elgg_metastrings where string='bookmarks_enable';
-    perm=qry.postcontent_permission(db, group_guid, 49)
+    perm=qry.postcontent_permission(json.database, group_guid, 49)
     
-    wrt.write_tag(json,2,"favoritosHabilitado",perm,",")
-    wrt.write_open_tag(json,2,"favoritos","[")
+    json.write_tag("favoritosHabilitado",perm,",")
+    json.write_open_tag("favoritos","[")
     
     row=0
     for (post_guid, post_title, post_desc, \
@@ -181,49 +182,49 @@ def write_groupbookmarks_subsection (db, json, group_guid):
             
         row=row+1
         
-        wrt.write_open_tag(json,3,"","{")
+        json.write_open_tag("","{")
         
         # 90 = select * from elgg_metastrings where string='address';
-        bookmark_link=qry.post_content(db,post_guid,90)
+        bookmark_link=qry.post_content(json.database, post_guid, 90)
         
         prefix='bookmarks/view/'
         post_attr=strf.urlparticipa(prefix,str(post_guid))
-        wrt.write_tag(json,4,"pid",post_attr,",")
+        json.write_tag("pid",post_attr,",")
 
         prefix='profile/'
         owner_attr=strf.urlparticipa(prefix,owner_username)
         
-        wrt.write_open_tag(json,4,"autor","{")
-        wrt.write_tag(json,5,"uid",owner_attr,",")
-        wrt.write_tag(json,5,"nome",owner_name,"")
-        wrt.write_close_tag(json,4,"}",True)
+        json.write_open_tag("autor","{")
+        json.write_tag("uid",owner_attr,",")
+        json.write_tag("nome",owner_name,"")
+        json.write_close_tag("}",True)
         
-        wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",strf.datestr(time),",")
-        wrt.write_tag(json,4,"link",bookmark_link,",")
-        wrt.write_tag(json,4,"descricao",post_desc,",")
+        json.write_tag("titulo",post_title,",")
+        json.write_tag("data",strf.datestr(time),",")
+        json.write_tag("link",bookmark_link,",")
+        json.write_tag("descricao",post_desc,",")
                             
-        wrt.write_comments(db,json,post_guid)
+        json.write_comments(post_guid)
         
-        wrt.write_close_tag(json,3,"}",(row < group_bookmarks.rowcount))
+        json.write_close_tag("}",(row < group_bookmarks.rowcount))
     
-    wrt.write_close_tag(json,2,"]",True)
+    json.write_close_tag("]",True)
     
     group_bookmarks.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_grouppages_subsection (db, json, group_guid):
-    group_pages = db.cursor()
+def write_grouppages_subsection (json, group_guid):
+    group_pages = json.database.cursor()
     
     # 14 = select * from elgg_entity_subtypes where subtype='page_top';
     group_pages.execute(qry.qry_group_posts, (group_guid, 14,))
     
     # 53 = select * from elgg_metastrings where string='pages_enable';
-    perm=qry.postcontent_permission(db, group_guid, 53)
+    perm=qry.postcontent_permission(json.database, group_guid, 53)
     
-    wrt.write_tag(json,2,"paginasHabilitado",perm,",")
-    wrt.write_open_tag(json,2,"paginas","[")
+    json.write_tag("paginasHabilitado",perm,",")
+    json.write_open_tag("paginas","[")
     
     row=0
     for (post_guid, post_title, post_desc,
@@ -232,45 +233,45 @@ def write_grouppages_subsection (db, json, group_guid):
             
         row=row+1
         
-        wrt.write_open_tag(json,3,"","{")
+        json.write_open_tag("","{")
         
         prefix='pages/view/'
         post_attr=strf.urlparticipa(prefix,str(post_guid))
-        wrt.write_tag(json,4,"pid",post_attr,",")
+        json.write_tag("pid",post_attr,",")
 
         prefix='profile/'
         owner_attr=strf.urlparticipa(prefix,owner_username)
         
-        wrt.write_open_tag(json,4,"autor","{")
-        wrt.write_tag(json,5,"uid",owner_attr,",")
-        wrt.write_tag(json,5,"nome",owner_name,"")
-        wrt.write_close_tag(json,4,"}",True)
+        json.write_open_tag("autor","{")
+        json.write_tag("uid",owner_attr,",")
+        json.write_tag("nome",owner_name,"")
+        json.write_close_tag("}",True)
         
-        wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",strf.datestr(time),",")
-        wrt.write_tag(json,4,"texto",post_desc,",")
+        json.write_tag("titulo",post_title,",")
+        json.write_tag("data",strf.datestr(time),",")
+        json.write_tag("texto",post_desc,",")
                     
-        wrt.write_comments(db,json,post_guid)
+        json.write_comments(post_guid)
         
-        wrt.write_close_tag(json,3,"}",(row < group_pages.rowcount))
+        json.write_close_tag("}",(row < group_pages.rowcount))
         
-    wrt.write_close_tag(json,2,"]",True)
+    json.write_close_tag("]",True)
     
     group_pages.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groupvideos_subsection (db, json, group_guid):
-    group_videos = db.cursor()
+def write_groupvideos_subsection (json, group_guid):
+    group_videos = json.database.cursor()
     
     # 12 = select * from elgg_entity_subtypes where subtype='videos';
     group_videos.execute(qry.qry_group_posts, (group_guid, 12,))
     
     # 399 = select * from elgg_metastrings where string='videos_enable';
-    perm=qry.postcontent_permission(db, group_guid, 399)
+    perm=qry.postcontent_permission(json.database, group_guid, 399)
     
-    wrt.write_tag(json,2,"videosHabilitado",perm,",")
-    wrt.write_open_tag(json,2,"videos","[")
+    json.write_tag("videosHabilitado",perm,",")
+    json.write_open_tag("videos","[")
     
     row=0
     for (post_guid, post_title, post_desc, \
@@ -280,48 +281,48 @@ def write_groupvideos_subsection (db, json, group_guid):
         row=row+1
             
         # 477 = select * from elgg_metastrings where string='video_url';
-        video_link=qry.post_content(db,post_guid, 477)
+        video_link=qry.post_content(json.database, post_guid, 477)
         
-        wrt.write_open_tag(json,3,"","{")
+        json.write_open_tag("","{")
             
         prefix='videos/view/'
         post_attr=strf.urlparticipa(prefix,str(post_guid))
-        wrt.write_tag(json,4,"pid",post_attr,",")
+        json.write_tag("pid",post_attr,",")
         
         prefix='profile/'
         owner_attr=strf.urlparticipa(prefix,owner_username)
         
-        wrt.write_open_tag(json,4,"autor","{")
-        wrt.write_tag(json,5,"uid",owner_attr,",")
-        wrt.write_tag(json,5,"nome",owner_name,"")
-        wrt.write_close_tag(json,4,"}",True)
+        json.write_open_tag("autor","{")
+        json.write_tag("uid",owner_attr,",")
+        json.write_tag("nome",owner_name,"")
+        json.write_close_tag("}",True)
         
-        wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",strf.datestr(time),",")
-        wrt.write_tag(json,4,"link",video_link,",")
-        wrt.write_tag(json,4,"descricao",post_desc,",")
+        json.write_tag("titulo",post_title,",")
+        json.write_tag("data",strf.datestr(time),",")
+        json.write_tag("link",video_link,",")
+        json.write_tag("descricao",post_desc,",")
             
-        wrt.write_comments(db,json,post_guid)
+        json.write_comments(post_guid)
 
-        wrt.write_close_tag(json,3,"}",(row < group_videos.rowcount))
+        json.write_close_tag("}",(row < group_videos.rowcount))
         
-    wrt.write_close_tag(json,2,"]",True)
+    json.write_close_tag("]",True)
     
     group_videos.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groupevents_subsection (db, json, group_guid):
-    group_events = db.cursor()
+def write_groupevents_subsection (json, group_guid):
+    group_events = json.database.cursor()
     
     # 6 = select * from elgg_entity_subtypes where subtype='calendar_event';
     group_events.execute(qry.qry_group_posts, (group_guid, 6,))
     
     # 54 = select * from elgg_metastrings where string='event_calendar_enable';
-    perm=qry.postcontent_permission(db, group_guid, 54)
+    perm=qry.postcontent_permission(json.database, group_guid, 54)
     
-    wrt.write_tag(json,2,"eventosHabilitado",perm,",")
-    wrt.write_open_tag(json,2,"eventos","[")
+    json.write_tag("eventosHabilitado",perm,",")
+    json.write_open_tag("eventos","[")
     
     row=0
     for (post_guid, post_title, post_desc, \
@@ -330,115 +331,117 @@ def write_groupevents_subsection (db, json, group_guid):
             
         row=row+1
             
-        wrt.write_open_tag(json,3,"","{")
+        json.write_open_tag("","{")
             
         # 18 = select * from elgg_metastrings where string='venue';
-        venue=qry.post_content(db, post_guid, 18)
+        venue=qry.post_content(json.database, post_guid, 18)
         
         # 20 = select * from elgg_metastrings where string='start_date';
-        time_start=qry.post_content(db, post_guid, 20)
+        time_start=qry.post_content(json.database, post_guid, 20)
 
         # 22 = select * from elgg_metastrings where string='end_date';
-        time_end=qry.post_content(db, post_guid, 22)
+        time_end=qry.post_content(json.database, post_guid, 22)
         
         # 26 = select * from elgg_metastrings where string='fees';
-        fees=qry.post_content(db, post_guid, 26)
+        fees=qry.post_content(json.database, post_guid, 26)
         
         # 28 = select * from elgg_metastrings where string='contact';
-        contact=qry.post_content(db, post_guid, 28)
+        contact=qry.post_content(json.database, post_guid, 28)
         
         # 30 = select * from elgg_metastrings where string='organizer';
-        organizer=qry.post_content(db, post_guid, 30)
+        organizer=qry.post_content(json.database, post_guid, 30)
 
         prefix='event_calendar/view/'
         post_attr=strf.urlparticipa(prefix,str(post_guid))
-        wrt.write_tag(json,4,"pid",post_attr,",")
+        json.write_tag("pid",post_attr,",")
                 
         prefix='profile/'
         owner_attr=strf.urlparticipa(prefix,owner_username)
         
-        wrt.write_open_tag(json,4,"autor","{")
-        wrt.write_tag(json,5,"uid",owner_attr,",")
-        wrt.write_tag(json,5,"nome",owner_name,"")
-        wrt.write_close_tag(json,4,"}",True)
+        json.write_open_tag("autor","{")
+        json.write_tag("uid",owner_attr,",")
+        json.write_tag("nome",owner_name,"")
+        json.write_close_tag("}",True)
         
-        wrt.write_tag(json,4,"titulo",post_title,",")
-        wrt.write_tag(json,4,"data",strf.datestr(time),",")
-        wrt.write_tag(json,4,"organizador",organizer,",")
-        wrt.write_tag(json,4,"contato",contact,",")
-        wrt.write_tag(json,4,"endereco",venue,",")
-        wrt.write_tag(json,4,"dataInicio",strf.datestr(time_start),",")
-        wrt.write_tag(json,4,"dataFim",strf.datestr(time_end),",")
-        wrt.write_tag(json,4,"taxaParticipacao",fees,",")
-        wrt.write_tag(json,4,"descricao",post_desc,",")
+        json.write_tag("titulo",post_title,",")
+        json.write_tag("data",strf.datestr(time),",")
+        json.write_tag("organizador",organizer,",")
+        json.write_tag("contato",contact,",")
+        json.write_tag("endereco",venue,",")
+        json.write_tag("dataInicio",strf.datestr(time_start),",")
+        json.write_tag("dataFim",strf.datestr(time_end),",")
+        json.write_tag("taxaParticipacao",fees,",")
+        json.write_tag("descricao",post_desc,",")
         
-        wrt.write_comments(db,json,post_guid)
+        json.write_comments(post_guid)
         
-        wrt.write_close_tag(json,3,"}",(row < group_events.rowcount))
+        json.write_close_tag("}",(row < group_events.rowcount))
     
-    wrt.write_close_tag(json,2,"]",False)
+    json.write_close_tag("]",False)
     
     group_events.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
-def write_groups_section (db, json,\
+def write_groups_section (json,\
     guid, title, desc, owner_id, owner_name, owner_username, time):
     
     # 45 = select * from elgg_metastrings where string='briefdescription';
-    brief_desc=qry.post_content(db,guid, 45)
+    brief_desc=qry.post_content(json.database, guid, 45)
         
     prefix='groups/profile/'
     group_attr=strf.urlparticipa(prefix,str(guid))
-    wrt.write_tag(json,2,"cid",group_attr,",")
+    json.write_tag("cid",group_attr,",")
     
     # Write all group's information
     prefix='profile/'
     owner_attr=strf.urlparticipa(prefix,owner_username)
     
-    wrt.write_open_tag(json,2,"proprietario","{")
-    wrt.write_tag(json,3,"uid",owner_attr,",")
-    wrt.write_tag(json,3,"nome",owner_name,"")
-    wrt.write_close_tag(json,2,"}",True)
+    json.write_open_tag("proprietario","{")
+    json.write_tag("uid",owner_attr,",")
+    json.write_tag("nome",owner_name,"")
+    json.write_close_tag("}",True)
             
-    wrt.write_tag(json,2,"titulo",title,",")
-    wrt.write_tag(json,2,"data",strf.datestr(time),",")
-    wrt.write_tag(json,2,"descricao",desc,",")
+    json.write_tag("titulo",title,",")
+    json.write_tag("data",strf.datestr(time),",")
+    json.write_tag("descricao",desc,",")
 
-    group_access = qry.groupaccess_permission(db, guid)
+    group_access = qry.groupaccess_permission(json.database, guid)
     
     if group_access == 'public':
         comma=","
     else:
         comma=""
         
-    wrt.write_tag(json,2,"breveDescricao",brief_desc,comma)
+    json.write_tag("breveDescricao",brief_desc,comma)
                                         
     if group_access == 'public':
         
         # Write a list of group member's name
-        write_groupmembers_subsection(db, json, guid)
+        write_groupmembers_subsection(json, guid)
     
         # Write a list, and all the info, of all posts made on the group.
-        write_groupfiles_subsection(db, json, guid)
-        write_groupforumtopics_subsection(db, json, guid)
-        write_groupbookmarks_subsection(db, json, guid)
-        write_grouppages_subsection(db, json, guid)
-        write_groupvideos_subsection(db, json, guid)
-        write_groupevents_subsection(db, json, guid)
+        write_groupfiles_subsection(json, guid)
+        write_groupforumtopics_subsection(json, guid)
+        write_groupbookmarks_subsection(json, guid)
+        write_grouppages_subsection(json, guid)
+        write_groupvideos_subsection(json, guid)
+        write_groupevents_subsection(json, guid)
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def write_singlefile_groups_section (db, dir_results):
 
-    groups_info = db.cursor()
-    groups_info.execute(qry.qry_groups_info)
-
     json_filename=dir_results+strf.date_today()+"_comunidades"+".json"
-    json = wrt.open_json_file(json_filename)
+    json = OpendataJSON(db,dir_results,json_filename)
     
-    wrt.write_open_tag(json,0,"","{")
-    wrt.write_open_tag(json,0,"comunidades","[")
+    groups_info = json.database.cursor()
+    groups_info.execute(qry.qry_groups_info)
+    
+    json.open_file()
+    
+    json.write_open_tag("","{")
+    json.write_open_tag("comunidades","[")
     
     row=0
     for (guid, title, desc, owner_id, owner_name, owner_username, time)\
@@ -446,25 +449,25 @@ def write_singlefile_groups_section (db, dir_results):
             
         row=row+1
         
-        wrt.write_open_tag(json,1,"","{")
+        json.write_open_tag("","{")
             
-        write_groups_section(db,json,\
+        write_groups_section(json,\
             guid,title,desc,owner_id,owner_name,owner_username,time)
             
-        wrt.write_close_tag(json,1,"}",(row < groups_info.rowcount))
+        json.write_close_tag("}",(row < groups_info.rowcount))
         
-    wrt.write_close_tag(json,0,"]",False)
-    wrt.write_close_tag(json,0,"}",False)
+    json.write_close_tag("]",False)
+    json.write_close_tag("}",False)
+    
+    json.close_file()
     
     groups_info.close()
-    
-    json.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
 def write_multifile_groups_section (db, dir_results):
 
-    groups_info = db.cursor()
+    groups_info = json.database.cursor()
     groups_info.execute(qry.qry_groups_info)
 
     for (guid, title, desc, owner_id, owner_name, owner_username, time)\
@@ -473,16 +476,16 @@ def write_multifile_groups_section (db, dir_results):
         json_filename=dir_results+'/groups/'+str(guid)+'.json'
         json = wrt.open_json_file(json_filename)
         
-        wrt.write_open_tag(json,0,"","{")
-        wrt.write_open_tag(json,1,"usuario","{")
+        json.write_open_tag("","{")
+        json.write_open_tag("usuario","{")
             
-        write_groups_section(db,json,\
+        write_groups_section(json,\
             guid,title,desc,owner_id,owner_name,owner_username,time)
             
-        wrt.write_close_tag(json,1,"}",False)
-        wrt.write_close_tag(json,0,"}",False)
+        json.write_close_tag("}",False)
+        json.write_close_tag("}",False)
         
-        json.close()
+        json.close_file()
     
     groups_info.close()
 #--------------------------------------------------------------------#

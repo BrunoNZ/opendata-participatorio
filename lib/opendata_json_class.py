@@ -57,7 +57,7 @@ class OpendataJSON:
         
     #--------------------------------------------------------------------#
     def open_file (self):
-        self.out_file=codecs.open(self.out_filename,'w',encoding='utf-8')
+        self.out_file=codecs.open(self.filename,'w',encoding='utf-8')
     #--------------------------------------------------------------------#
 
     #--------------------------------------------------------------------#
@@ -80,14 +80,14 @@ class OpendataJSON:
         if comma_flag == True:
             self.out_file.write(self.level+sep+","+"\n")
         else:
-            print(self.level+sep+"\n")
+            self.out_file.write(self.level+sep+"\n")
     #--------------------------------------------------------------------#
 
     #--------------------------------------------------------------------#
     def write_tag (self, tag_name, info_str, comma):
         name="\""+tag_name+"\""
         info="\""+strf.substbadc(info_str)+"\""
-        print(self.level+name+":"+info+comma+"\n")
+        self.out_file.write(self.level+name+":"+info+comma+"\n")
     #--------------------------------------------------------------------#
 
     #--------------------------------------------------------------------#

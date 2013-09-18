@@ -47,7 +47,7 @@ class OpendataXML:
         self.dir_results = dir_results
         self.filename = filename
     #--------------------------------------------------------------------#
-    
+
     #--------------------------------------------------------------------#
     def update_indentation(self, increment):
         self.indentation=self.indentation+(increment)
@@ -55,11 +55,11 @@ class OpendataXML:
     #--------------------------------------------------------------------#
 
     #--------------------------------------------------------------------#
-    def open_file (xml_filename):
-        self.out_file = codecs.open(xml_filename,'w',encoding='utf-8')
+    def open_file (self):
+        self.out_file = codecs.open(self.filename,'w',encoding='utf-8')
         self.out_file.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
     #--------------------------------------------------------------------#
-    
+
     #--------------------------------------------------------------------#
     def close_file (self):
         self.out_file.close()
@@ -89,7 +89,7 @@ class OpendataXML:
 
     #--------------------------------------------------------------------#
     def write_comments (self, post_guid):
-        post_comments = db.cursor()
+        post_comments = self.database.cursor()
         post_comments.execute(qry.qry_post_comments, (post_guid,))
                 
         self.write_open_tag("comentarios",'')
