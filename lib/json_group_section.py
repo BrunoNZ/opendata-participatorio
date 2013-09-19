@@ -432,7 +432,7 @@ def write_groups_section (json,\
 #--------------------------------------------------------------------#
 def write_singlefile_groups_section (db, dir_results):
 
-    groups_info = json.database.cursor()
+    groups_info = db.cursor()
     groups_info.execute(qry.qry_groups_info)
 
     json_filename=dir_results+strf.date_today()+"_comunidades"+".json"

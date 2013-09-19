@@ -400,7 +400,7 @@ def write_users_section (json, \
 #--------------------------------------------------------------------#    
 def write_singlefile_users_section (db, dir_results):
 
-    users_info = json.database.cursor()
+    users_info = db.cursor()
     users_info.execute(qry.qry_users_info)
     
     json_filename=dir_results+strf.date_today()+"_usuarios"+".json"
