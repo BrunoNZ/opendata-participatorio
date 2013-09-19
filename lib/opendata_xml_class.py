@@ -31,8 +31,8 @@ import opendata_queries_definition as qry
 class OpendataXML:
     
     database = None
-    indentation = None
-    level = None
+    indentation_lvl = None
+    indent = None
     dir_results = None
     filename = None
     out_file = None
@@ -41,17 +41,17 @@ class OpendataXML:
     def __init__ (self, database, dir_results, filename):
         self.database = database
         
-        self.indentation = 0
-        self.level = strf.lvl(self.indentation)
+        self.indentation_lvl = 0
+        self.indent = strf.lvl(self.indentation_lvl)
         
         self.dir_results = dir_results
         self.filename = filename
     #--------------------------------------------------------------------#
 
     #--------------------------------------------------------------------#
-    def update_indentation(self, increment):
-        self.indentation=self.indentation+(increment)
-        self.level = strf.lvl(self.indentation)
+    def update_indentation_lvl(self, increment):
+        self.indentation_lvl=self.indentation_lvl+(increment)
+        self.indent = strf.lvl(self.indentation_lvl)
     #--------------------------------------------------------------------#
 
     #--------------------------------------------------------------------#
@@ -67,14 +67,14 @@ class OpendataXML:
 
     #--------------------------------------------------------------------#
     def write_open_tag (self, tag_name, attr_str):
-        self.out_file.write(self.level+"<"+tag_name+attr_str+">"+"\n")
-        self.update_indentation(+1)
+        self.out_file.write(self.indent+"<"+tag_name+attr_str+">"+"\n")
+        self.update_indentation_lvl(+1)
     #--------------------------------------------------------------------#
 
     #--------------------------------------------------------------------#
     def write_close_tag (self, tag_name):
-        self.update_indentation(-1)
-        self.out_file.write(self.level+"</"+tag_name+">"+"\n")
+        self.update_indentation_lvl(-1)
+        self.out_file.write(self.indent+"</"+tag_name+">"+"\n")
     #--------------------------------------------------------------------#
 
     #--------------------------------------------------------------------#
@@ -82,9 +82,9 @@ class OpendataXML:
         if len(info_str) > 0:
             tag_begin=("<"+tag_name+attr_str+">")
             tag_end=("</"+tag_name+">")
-            self.out_file.write(self.level+tag_begin+info_str+tag_end+"\n")
+            self.out_file.write(self.indent+tag_begin+info_str+tag_end+"\n")
         else:
-            self.out_file.write(self.level+"<"+tag_name+attr_str+"/>"+"\n")
+            self.out_file.write(self.indent+"<"+tag_name+attr_str+"/>"+"\n")
     #--------------------------------------------------------------------#
 
     #--------------------------------------------------------------------#

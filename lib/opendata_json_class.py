@@ -32,8 +32,8 @@ import opendata_queries_definition as qry
 class OpendataJSON:
 
     database = None
-    indentation = None
-    level = None
+    indentation_lvl = None
+    indent = None
     dir_results = None
     filename = None
     out_file = None
@@ -42,17 +42,17 @@ class OpendataJSON:
     def __init__ (self, database, dir_results, filename):
         self.database = database
         
-        self.indentation = 0
-        self.level = strf.lvl(self.indentation)
+        self.indentation_lvl = 0
+        self.indent = strf.lvl(self.indentation_lvl)
         
         self.dir_results = dir_results
         self.filename = filename
     #--------------------------------------------------------------------#
 
     #--------------------------------------------------------------------#
-    def update_indentation(self, increment):
-        self.indentation=self.indentation+(increment)
-        self.level = strf.lvl(self.indentation)
+    def update_indentation_lvl(self, increment):
+        self.indentation_lvl=self.indentation_lvl+(increment)
+        self.indent = strf.lvl(self.indentation_lvl)
     #--------------------------------------------------------------------#
         
     #--------------------------------------------------------------------#
@@ -68,26 +68,26 @@ class OpendataJSON:
     #--------------------------------------------------------------------#
     def write_open_tag (self, tag_name, sep):
         if len(tag_name) > 0:
-            self.out_file.write(self.level+"\""+tag_name+"\""+":"+sep+"\n")
+            self.out_file.write(self.indent+"\""+tag_name+"\""+":"+sep+"\n")
         else:
-            self.out_file.write(self.level+sep+"\n")
-        self.update_indentation(+1)
+            self.out_file.write(self.indent+sep+"\n")
+        self.update_indentation_lvl(+1)
     #--------------------------------------------------------------------#
 
     #--------------------------------------------------------------------#
     def write_close_tag (self, sep, comma_flag):
-        self.update_indentation(-1)
+        self.update_indentation_lvl(-1)
         if comma_flag == True:
-            self.out_file.write(self.level+sep+","+"\n")
+            self.out_file.write(self.indent+sep+","+"\n")
         else:
-            self.out_file.write(self.level+sep+"\n")
+            self.out_file.write(self.indent+sep+"\n")
     #--------------------------------------------------------------------#
 
     #--------------------------------------------------------------------#
     def write_tag (self, tag_name, info_str, comma):
         name="\""+tag_name+"\""
         info="\""+strf.substbadc(info_str)+"\""
-        self.out_file.write(self.level+name+":"+info+comma+"\n")
+        self.out_file.write(self.indent+name+":"+info+comma+"\n")
     #--------------------------------------------------------------------#
 
     #--------------------------------------------------------------------#
