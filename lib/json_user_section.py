@@ -383,7 +383,7 @@ def write_users_section (json, \
     json.write_tag("nome",name,",")
     
     # Write a list of user friend's names
-    write_userfriends_subsection(json, guid)
+    #write_userfriends_subsection(json, guid)
     
     # Write a list of all groups that the user owns or belongs
     write_usergroups_subsection(json, guid)

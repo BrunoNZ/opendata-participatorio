@@ -316,7 +316,7 @@ def write_users_section (xml, \
     xml.write_tag("nome",name,'')
         
     # Write a list of user friend's names
-    write_userfriends_subsection(xml, guid)
+    #write_userfriends_subsection(xml, guid)
     
     # Write a list of all groups that the user owns or belongs
     write_usergroups_subsection(xml, guid)
