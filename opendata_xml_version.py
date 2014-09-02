@@ -40,7 +40,7 @@ def main():
                         charset='utf8')
     
     # Define directory and name of XML files
-    dir_results="/home/www/elgg/opendata_xmlfiles/"
+    dir_results="/var/www/elgg/opendata_xmlfiles/"
        
     # Get the execution start time information
     time_script_start=datetime.datetime.now()
