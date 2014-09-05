@@ -1,47 +1,47 @@
 {"usuarios": [
 	{
-		"uid": "xyz",
+		"uid": "",
 		
-		"nome": "xyz",
+		"nome": "",
 
-		"quantidade_amigos": "xyz",
+		"quantidade_amigos": "",
 		"amigos": [
 			{
-				"uid": "xyz",
-				"nome": "xyz"
+				"uid": "",
+				"nome": ""
 			}
 		],
 
 		"comunidades": {
 			"dono": [
 				{
-					"cid": "xyz",
-					"nome": "xyz"
+					"cid": "",
+					"nome": ""
 				}
 			],
 			"participante": [
 				{
-					"cid": "xyz",
-					"nome": "xyz"
+					"cid": "",
+					"nome": ""
 				}
 			]
 		},
 
 		"arquivos": [
 			{
-				"pid": "xyz",
-				"titulo": "xyz",
-				"data": "xyz",
-				"link": "xyz",
-				"descricao": "xyz",
+				"pid": "",
+				"titulo": "",
+				"data": "",
+				"link": "",
+				"descricao": "",
 				"comentarios": [
 					{
 						"usuario": {
-							"uid": "xyz",
-							"nome": "xyz"
+							"uid": "",
+							"nome": ""
 						},
-						"data": "xyz",
-						"mensagem": "xyz"
+						"data": "",
+						"mensagem": ""
 					}
 				]
 			}
@@ -49,20 +49,20 @@
 
 		"blogs": [
 			{
-				"pid": "xyz",
-				"titulo": "xyz",
-				"data": "xyz",
-				"resumo": "xyz",
-				"texto": "xyz",
-				"permissao_comentarios": "xyz",
+				"pid": "",
+				"titulo": "",
+				"data": "",
+				"resumo": "",
+				"texto": "",
+				"permissao_comentarios": "",
 				"comentarios": [
 					{
 						"usuario": {
-							"uid": "xyz",
-							"nome": "xyz"
+							"uid": "",
+							"nome": ""
 						},
-						"data": "xyz",
-						"mensagem": "xyz"
+						"data": "",
+						"mensagem": ""
 					}
 				]
 			}
@@ -70,19 +70,19 @@
 		
 		"favoritos": [
 			{
-				"pid": "xyz",
-				"titulo": "xyz",
-				"data": "xyz",
-				"link": "xyz",
-				"descricao": "xyz",
+				"pid": "",
+				"titulo": "",
+				"data": "",
+				"link": "",
+				"descricao": "",
 				"comentarios": [
 					{
 						"usuario": {
-							"uid": "xyz",
-							"nome": "xyz"
+							"uid": "",
+							"nome": ""
 						},
-						"data": "xyz",
-						"mensagem": "xyz"
+						"data": "",
+						"mensagem": ""
 					}
 				]
 			}
@@ -90,19 +90,19 @@
 
 		"paginas": [
 			{
-				"pid": "xyz",
-				"titulo": "xyz",
-				"data": "xyz",
-				"permissao_escrita": "xyz",
-				"texto": "xyz",
+				"pid": "",
+				"titulo": "",
+				"data": "",
+				"permissao_escrita": "",
+				"texto": "",
 				"comentarios": [
 					{
 						"usuario": {
-							"uid": "xyz",
-							"nome": "xyz"
+							"uid": "",
+							"nome": ""
 						},
-						"data": "xyz",
-						"mensagem": "xyz"
+						"data": "",
+						"mensagem": ""
 					}
 				]
 			}
@@ -110,19 +110,19 @@
 
 		"videos": [
 			{
-				"pid": "xyz",
-				"titulo": "xyz",
-				"data": "xyz",
-				"link": "xyz",
-				"descricao": "xyz",
+				"pid": "",
+				"titulo": "",
+				"data": "",
+				"link": "",
+				"descricao": "",
 				"comentarios": [
 					{
 						"usuario": {
-							"uid": "xyz",
-							"nome": "xyz"
+							"uid": "",
+							"nome": ""
 						},
-						"data": "xyz",
-						"mensagem": "xyz"
+						"data": "",
+						"mensagem": ""
 					}
 				]
 			}
@@ -130,24 +130,24 @@
 
 		"eventos": [
 			{
-				"pid": "xyz",
-				"titulo": "xyz",
-				"data": "xyz",
-				"organizador": "xyz",
-				"contato": "xyz",
-				"endereco": "xyz",
-				"data_inicio": "xyz",
-				"data_fim": "xyz",
-				"taxa_de_participacao": "xyz",
-				"descricao": "xyz",
+				"pid": "",
+				"titulo": "",
+				"data": "",
+				"organizador": "",
+				"contato": "",
+				"endereco": "",
+				"data_inicio": "",
+				"data_fim": "",
+				"taxa_de_participacao": "",
+				"descricao": "",
 				"comentarios": [
 					{
 						"usuario": {
-							"uid": "xyz",
-							"nome": "xyz"
+							"uid": "",
+							"nome": ""
 						},
-						"data": "xyz",
-						"mensagem": "xyz"
+						"data": "",
+						"mensagem": ""
 					}
 				]
 			}
