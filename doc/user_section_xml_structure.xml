@@ -4,11 +4,6 @@
 
 		<nome>''</nome>
 
-		<quantidade_amigos>''</quantidade_amigos>
-		<amigos>
-			<usuario uid='' href=''>''</usuario>
-		</amigos>
-
 		<comunidades>
 			<dono>
 				<comunidade cid='' href=''>''</comunidade>

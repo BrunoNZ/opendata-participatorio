@@ -4,14 +4,6 @@
 		
 		"nome": "",
 
-		"quantidade_amigos": "",
-		"amigos": [
-			{
-				"uid": "",
-				"nome": ""
-			}
-		],
-
 		"comunidades": {
 			"dono": [
 				{
