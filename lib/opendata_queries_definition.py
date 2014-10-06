@@ -35,6 +35,24 @@ qry_users_info = \
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
+# Argument: Post_ID / InfoType_ID
+# Return: Essential information about the group or post, such as
+#   blog's excerpts and bookmark's link
+qry_user_acctype = \
+("  SELECT \
+    CASE \
+        WHEN s.string = '1' THEN 'Ativista' \
+        WHEN s.string = '2' THEN 'Pesquisador' \
+        WHEN s.string = '3' THEN 'Usuario' \
+        ELSE 'Desconhecido' \
+    END \
+    FROM elgg_metadata d, elgg_metastrings s \
+    WHERE d.value_id = s.id \
+    AND d.entity_guid = %s AND d.name_id = %s \
+    AND (d.access_id = 1 OR d.access_id = 2); ");
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
 # Argument: Group_ID / InfoType_ID
 # Return: All InfoTypes' posts made by this group.
 qry_user_posts = \
@@ -160,7 +178,27 @@ qry_post_content = \
 ("  SELECT s.string\
     FROM elgg_metadata d, elgg_metastrings s \
     WHERE d.value_id = s.id \
-    AND d.entity_guid = %s AND d.name_id = %s; ")
+    AND d.entity_guid = %s AND d.name_id = %s \
+    AND (d.access_id = 1 OR d.access_id = 2); ")
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
+def user_acctype (db, user_guid):
+    
+    content = db.cursor()
+    
+    # 51477 = select * from elgg_metastrings where string='accType';
+    content.execute(qry_user_acctype, (user_guid, 51477,))
+    
+    if content.rowcount == 1:
+        user_acctype = content.fetchone()[0]
+    else:
+        user_acctype=''
+        print "ERRO! Nenhum ou Mais do que um resultado para a query"
+        
+    content.close()
+    
+    return user_acctype
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#

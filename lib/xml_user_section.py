@@ -315,6 +315,9 @@ def write_users_section (xml, \
     # Write all user's information
     xml.write_tag("nome",name,'')
         
+    accType=qry.user_acctype(xml.database, guid)
+    xml.write_tag("tipo_perfil",accType,'')
+    
     # Write a list of user friend's names
     #write_userfriends_subsection(xml, guid)
     

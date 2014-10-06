@@ -382,6 +382,9 @@ def write_users_section (json, \
     json.write_tag("uid",user_attr,",")
     json.write_tag("nome",name,",")
     
+    accType=qry.user_acctype(json.database, guid)
+    json.write_tag("tipo_perfil",accType,",")
+    
     # Write a list of user friend's names
     #write_userfriends_subsection(json, guid)
     
