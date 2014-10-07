@@ -3,6 +3,8 @@
 	<usuario uid='' href=''>
 
 		<nome>''</nome>
+        
+        <tipo_perfil>''</tipo_perfil>
 
 		<comunidades>
 			<dono>
