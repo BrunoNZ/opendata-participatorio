@@ -3,6 +3,8 @@
 		"uid": "",
 		
 		"nome": "",
+        
+        "tipo_perfil":"",
 
 		"comunidades": {
 			"dono": [
