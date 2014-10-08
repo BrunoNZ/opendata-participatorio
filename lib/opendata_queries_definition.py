@@ -183,22 +183,47 @@ qry_post_content = \
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
+# ID of metastring for acctype
+acctype_id = None
+#--------------------------------------------------------------------#
+
 def user_acctype (db, user_guid):
+    user_acctype = ''
     
     content = db.cursor()
     
-    # 51477 = select * from elgg_metastrings where string='accType';
-    content.execute(qry_user_acctype, (user_guid, 51477,))
+    if acctype_id == None:
+        find_acctype_id(db)
+    if acctype_id == 0:
+        return user_acctype
+    
+    content.execute(qry_user_acctype, (user_guid, acctype_id,))
     
     if content.rowcount == 1:
         user_acctype = content.fetchone()[0]
     else:
-        user_acctype=''
         print "ERRO! Nenhum ou Mais do que um resultado para a query"
         
     content.close()
     
     return user_acctype
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
+def find_acctype_id (db):
+    acctype_query = db.cursor()
+    acctype_query.execute("SELECT id FROM elgg_metastrings WHERE string='accType' LIMIT 1")
+
+    global acctype_id
+    if acctype_query.rowcount == 1:
+        acctype_id = acctype_query.fetchone()[0]
+    else:
+        acctype_id = 0
+        print "ERRO! Não existe 'tipo de usuário' no sistema"
+
+    acctype_query.close()
 #--------------------------------------------------------------------#
 
 #--------------------------------------------------------------------#
